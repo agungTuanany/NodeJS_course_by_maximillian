@@ -3,7 +3,7 @@
 ## Table of Contents
 1. [How The Web Works](#how-the-web-works)
 2. [NodeJS Program Lifecycle](#nodejs-program-lifecycle)
-
+3. [Understanding Request](#understanding-request)
 
 
 
@@ -53,13 +53,10 @@ HTTPS is simply as same with SSL encryption turned on where all the data that is
 **transmitted** is actually encrypted so that if anyone is spoofing your
 connection, they can't read your data.
 
-
-
 ### What is headers
 
 Is some meta information which is attached to `request` and `response`
 describing what's inside of data that come from your server or API.
-
 
 ### What is event driven
 
@@ -74,6 +71,10 @@ certain actions in response to user input.
 In an `event driven` application, there is generally a **main loop** that
 listens for events, and then triggers a callback function when one of those
 event detected.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
 
 
 ## NodeJS Program Lifecycle
@@ -149,12 +150,55 @@ If you eventually were to unregister, you can do this by `process.exit()` it wou
 end all process. The server is still running and `createServer()` function never executed
 cause had no **incoming** request yet.  But if we reload `localhost:8088` it's
 still log the `request` but then our `server` has quit the `createServer()`
-function. Typically you don't call `process.exit` because you don't want to quit
+function. Typically you don't call `process.exit()` because you don't want to quit
 your server, if it quit people will not be able to reach your webpage anymore.
 But this is important for understanding; `process.exit()` basically **hard
 exited** `event loop` and therefore the program shut down because there was no
 more work to do, NodeJS saw that there's no more work to do, an basically close
 the program and gave control back to terminal.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Understanding Request
+
+There's quite interesting on `request` object we have called `headers`, but
+there are only a few important fields as developer typically need. The first
+important or interesting field is the `request.url`, `request.method`
+`request.headers`
+
+```javascript
+const http = require("http");
 
 
+const server = http.createServer((request, response) => {
+
+    console.log("=======================================================")
+    console.log("URL:", request.url);
+    console.log("=======================================================")
+    console.log("METHOD:", request.method)
+    console.log("=======================================================")
+    console.log("HEADERS:", request.headers)
+    process.exit();
+});
+
+server.listen(8088);
+
+
+=======================================================
+URL: /
+=======================================================
+METHOD: GET
+=======================================================
+HEADERS: {
+  host: 'localhost:8088',
+  'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-language': 'en-US,en;q=0.5',
+  'accept-encoding': 'gzip, deflate',
+  connection: 'keep-alive',
+  cookie: 'io=qgIo3ExwAF8lrxvmAAAA',
+  'upgrade-insecure-requests': '1'
+}
+```
