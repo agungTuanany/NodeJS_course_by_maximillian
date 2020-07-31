@@ -7,6 +7,7 @@
 4. [Sending Response](#sending-response)
 5. [Routing Request](#routing-request)
 6. [Redirecting Request](#redirecting-request)
+7. [Parsing Request Body](#parsing-request-body)
 
 
 
@@ -385,15 +386,157 @@ const server = http.createServer((request, response) => {
    `);
 
     response.end();
-
-    // console.log("=================================")
-    // console.log("RESPONSE HEADERS:", response._header)
-    // console.log("=================================")
-    // console.log("REQUEST HEADERS:", request.headers)
-    // console.log("=================================")
 });
 
 server.listen(8088);
 ```
 
+**[⬆ back to top](#table-of-contents)**
+<br />
+<br />
 
+## Parsing Request Body
+<br />
+
+![chapter-3-5.gif](./images/gif/chapter-3-5.gif "Parsing Request Body")
+
+So time to parse the **incoming request**  and get the data that is part of the
+`request` because that data should be whatever we entered in `localhost://8088`.
+Now how we get access to that ?; we get `request.url` and `request.method` you
+might there is something `request.data` ? But there isn't.
+
+Instead the incoming data is basically sent as a `stream` of data and that is
+**special construct** JavaScript in general knows and NodeJS uses a lot.
+
+### What is such a stream of data though ?
+
+There is a connected concept `buffer`. We have **incoming request**; `stream` is
+basically an ongoing process; the `request` is simply read by Node in chunks
+(portion) or in simple word Node read in multiple parts; and in the end at some
+point it's done.
+
+We can working on the individual chunks without having to **wait** for the full
+`request` being read.
+
+Consider like a file being **uploaded**, this will take considerably longer and
+therefore `streaming` that data make sense because it could allow developer to
+start writing this your disk, on your hard drive where your Node apps runs on
+server while the data is coming in.
+
+You don't have to parse the entire file which is of course taking amount of time
+to wait for it to being fully uploaded before you can do anything with it.
+
+This is how NodeJS handles all `request` because it doesn't know in advance how
+complex and big the data was in `stream`.
+
+You can **start working on the Data earlier**; the problem is with `your code`,
+you can't arbitrarily try to work with these chunks. Instead to organized to
+organized this incoming chunks, you use a so-called `buffer`.
+
+A `buffer` is like a buss stop; if you consider buses, they're always driving,
+but for users or customers being able to work with bus, customer or user try to
+climb on the bus and leave the bus in **bus stops** where you can track the bus
+basically and that is what a `buffer` is.
+
+### What is buffer ?
+
+Is simply a **construct** which allow you to hold multiple `chunks` and works
+with them before they are released once you're done and you work with that
+`buffer`.
+
+Lets take a look the code
+
+```javascript
+"use strict";
+
+const http = require("http");
+const fs   = require("fs");
+
+
+const server = http.createServer((request, response) => {
+
+    const url = request.url;
+    const method = request.method;
+
+    if (url === "/") {
+        response.setHeader("Content-Type", "text/html")
+        response.write(`
+            <html lang="en">
+                <head>
+                    <title>Enter Message</title>
+                </head>
+                <body>
+                    <form action="/message" method="POST">
+                        <input type="text" name="message" placeholder="write some data...">
+                        <button type="submit">submit</button>
+                    </form>
+                </body>
+            </html>
+        `);
+
+        return response.end(); // It set cause we should not call any response.write() or response.setHeader() after.
+    };
+
+    if (url === "/message" && method === "POST") {
+
+        const body = [];
+        request.on("data", (chunk) => {                                 // We instantiate chunk in stream
+
+            console.log("======================");
+            console.log("chunk from request.on('data'):", chunk);
+            console.log("======================");
+            body.push(chunk);                                           // Put chunk into an array
+        });
+
+        request.on("end", () => {
+
+            const parsedBody = Buffer.concat(body).toString();
+            console.log("parsed chunk:", parsedBody)
+            console.log("======================");
+
+            const message = parsedBody.split("=")[1];
+            console.log("parsedBody.split:", message)
+            console.log("======================");
+
+            fs.writeFileSync("message.txt", message);
+        });
+
+        response.statusCode = 302; // Redirection
+        response.setHeader("location", "/");
+
+        return response.end();
+    };
+
+    response.setHeader("Content-Type", "text/html");
+    response.write(`
+       <html lang="en">
+           <head>
+               <title>My firts Page</title>
+           </head>
+           <body>
+               <h1>Hello from Node.JS server!</h1>
+           </body>
+       </html>
+   `);
+
+    response.end();
+});
+
+server.listen(8088);
+
+======================
+chunk from request.on('data'): <Buffer 6d 65 73 73 61 67 65 3d 68 65 6c 6c 6f>
+======================
+parsed chunk: message=hello
+======================
+parsedBody.split: hello
+======================
+
+
+
+
+```
+
+**[⬆ back to top](#table-of-contents)**
+<br />
+<br />
