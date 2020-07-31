@@ -4,6 +4,7 @@
 1. [How The Web Works](#how-the-web-works)
 2. [NodeJS Program Lifecycle](#nodejs-program-lifecycle)
 3. [Understanding Request](#understanding-request)
+4. [Sending Response](#sending-response)
 
 
 
@@ -163,7 +164,7 @@ the program and gave control back to terminal.
 
 ## Understanding Request
 
-There's quite interesting on `request` object we have called `headers`, but
+There's quite interesting on `request` object, but
 there are only a few important fields as developer typically need. The first
 important or interesting field is the `request.url`, `request.method`
 `request.headers`
@@ -202,3 +203,70 @@ HEADERS: {
   'upgrade-insecure-requests': '1'
 }
 ```
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+
+## Sending Response
+
+```javascript
+const http = require("http");
+
+
+const server = http.createServer((request, response) => {
+
+   response.setHeader("Content-Type", "text/html")
+   response.write(`
+       <html lang="en">
+           <head>
+               <title>My firts Page</title>
+           </head>
+           <body>
+               <h1>Hello from Node.JS server!</h1>
+           </body>
+       </html>
+       `);
+
+   response.end()
+
+   console.log("=================================")
+   console.log("RESPONSE HEADERS:", response._header)
+   console.log("=================================")
+   console.log("REQUEST HEADERS:", request.headers)
+   console.log("=================================")
+
+});
+
+server.listen(8088);
+
+
+=================================
+RESPONSE HEADERS: HTTP/1.1 200 OK
+Content-Type: text/html
+Date: Fri, 31 Jul 2020 13:22:16 GMT
+Connection: keep-alive
+Transfer-Encoding: chunked
+
+=================================
+REQUEST HEADERS: {
+  host: 'localhost:8088',
+  'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-language': 'en-US,en;q=0.5',
+  'accept-encoding': 'gzip, deflate',
+  connection: 'keep-alive',
+  cookie: 'io=qgIo3ExwAF8lrxvmAAAA',
+  'upgrade-insecure-requests': '1',
+  'cache-control': 'max-age=0'
+}
+=================================
+```
+
+**[⬆ back to top](#table-of-contents)**
+<br />
+<br />
+
+
+
