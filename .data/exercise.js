@@ -1,5 +1,6 @@
 /*
- * uncoment the block of code to run.
+ * uncoment the block of "//" code to run.
+ *
  */
 const person = {
     name: "Anton",
