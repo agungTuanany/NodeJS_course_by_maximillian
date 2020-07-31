@@ -6,6 +6,7 @@
 3. [Understanding Request](#understanding-request)
 4. [Sending Response](#sending-response)
 5. [Routing Request](#routing-request)
+6. [Redirecting Request](#redirecting-request)
 
 
 
@@ -97,6 +98,7 @@ that **incoming** request listener we passed or we setup with the help
 create server.
 
 ```javascript
+"use strict";
 const http = require("http");
 
 const server = http.createServer((request, response) => {
@@ -136,6 +138,7 @@ basically has an `ongoing loop` as long as there are `listeners` and
 `createServer()` create a `listener` which never stops.
 
 ```javascript
+"use strict";
 const http = require("http");
 
 const server = http.createServer((request, response) => {
@@ -144,7 +147,7 @@ const server = http.createServer((request, response) => {
     process.exit();         // added
 });
 
-sever.listen(8088)
+sever.listen(8088);
 ```
 
 If you eventually were to unregister, you can do this by `process.exit()` it would
@@ -170,6 +173,7 @@ important or interesting field is the `request.url`, `request.method`
 `request.headers`
 
 ```javascript
+"use strict";
 const http = require("http");
 
 
@@ -211,6 +215,7 @@ HEADERS: {
 ## Sending Response
 
 ```javascript
+"use strict"
 const http = require("http");
 
 
@@ -270,16 +275,73 @@ REQUEST HEADERS: {
 ## Routing Request
 <br />
 
-![chapter3.3.gif](./images/gif/chapter-3-3.gif)
-
+![chapter3.3.gif](./images/gif/chapter-3-3.gif "Routing request")
 
 ```javascript
+"use strict";
 const http = require("http");
 
 
 const server = http.createServer((request, response) => {
 
     const url = request.url;
+
+    if (url === "/") {
+        response.setHeader("Content-Type", "text/html");
+        response.write(`
+            <html lang="en">
+                <head>
+                    <title>Enter Message</title>
+                </head>
+                <body>
+                    <form action="/message" method="POST">
+                        <input type="text" name="message" placeholder="write some data...">
+                        <button type="submit">submit</button>
+                    </form>
+                </body>
+            </html>
+        `);
+        return response.end(); // It set cause we should not call any response.write() or response.setHeader() after.
+    };
+
+    response.setHeader("Content-Type", "text/html");
+    response.write(`
+       <html lang="en">
+           <head>
+               <title>My firts Page</title>
+           </head>
+           <body>
+               <h1>Hello from Node.JS server!</h1>
+           </body>
+       </html>
+   `);
+
+    response.end();
+});
+
+server.listen(8088);
+```
+
+**[⬆ back to top](#table-of-contents)**
+<br />
+<br />
+
+## Redirecting Request
+<br />
+
+![chapter-3-4.gif](./images/gif/chapter-3-4.gif "Redirecting request")
+
+```javascript
+"use strict";
+
+const http = require("http");
+const fs   = require("fs");
+
+
+const server = http.createServer((request, response) => {
+
+    const url = request.url;
+    const method = request.method;
 
     if (url === "/") {
         response.setHeader("Content-Type", "text/html")
@@ -296,12 +358,21 @@ const server = http.createServer((request, response) => {
                 </body>
             </html>
         `);
-        return response.end() // It set cause we should not call any response.write() or response.setHeader() after.
+        return response.end(); // It set cause we should not call any response.write() or response.setHeader() after.
+    };
+
+    if (url === "/message" && method === "POST") {
+
+        fs.writeFileSync("message.txt", "DUMMY");
+        response.statusCode = 302; // Redirection
+        response.setHeader("location", "/");
+
+        return response.end()
 
 
-    }
+    };
 
-    response.setHeader("Content-Type", "text/html")
+    response.setHeader("Content-Type", "text/html");
     response.write(`
        <html lang="en">
            <head>
@@ -313,14 +384,16 @@ const server = http.createServer((request, response) => {
        </html>
    `);
 
-    response.end()
+    response.end();
+
+    // console.log("=================================")
+    // console.log("RESPONSE HEADERS:", response._header)
+    // console.log("=================================")
+    // console.log("REQUEST HEADERS:", request.headers)
+    // console.log("=================================")
 });
 
 server.listen(8088);
 ```
-
-**[⬆ back to top](#table-of-contents)**
-<br />
-<br />
 
 
