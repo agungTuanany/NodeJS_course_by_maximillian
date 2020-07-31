@@ -5,6 +5,7 @@
 2. [NodeJS Program Lifecycle](#nodejs-program-lifecycle)
 3. [Understanding Request](#understanding-request)
 4. [Sending Response](#sending-response)
+5. [Routing Request](#routing-request)
 
 
 
@@ -76,7 +77,6 @@ event detected.
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>
-
 
 ## NodeJS Program Lifecycle
 <br/>
@@ -175,11 +175,11 @@ const http = require("http");
 
 const server = http.createServer((request, response) => {
 
-    console.log("=======================================================")
+    console.log("=======================================================");
     console.log("URL:", request.url);
-    console.log("=======================================================")
-    console.log("METHOD:", request.method)
-    console.log("=======================================================")
+    console.log("=======================================================");
+    console.log("METHOD:", request.method);
+    console.log("=======================================================");
     console.log("HEADERS:", request.headers)
     process.exit();
 });
@@ -208,7 +208,6 @@ HEADERS: {
 <br/>
 <br/>
 
-
 ## Sending Response
 
 ```javascript
@@ -217,7 +216,7 @@ const http = require("http");
 
 const server = http.createServer((request, response) => {
 
-   response.setHeader("Content-Type", "text/html")
+   response.setHeader("Content-Type", "text/html");
    response.write(`
        <html lang="en">
            <head>
@@ -229,13 +228,13 @@ const server = http.createServer((request, response) => {
        </html>
        `);
 
-   response.end()
+   response.end();
 
-   console.log("=================================")
-   console.log("RESPONSE HEADERS:", response._header)
-   console.log("=================================")
-   console.log("REQUEST HEADERS:", request.headers)
-   console.log("=================================")
+   console.log("=================================");
+   console.log("RESPONSE HEADERS:", response._header);
+   console.log("=================================");
+   console.log("REQUEST HEADERS:", request.headers);
+   console.log("=================================");
 
 });
 
@@ -268,5 +267,60 @@ REQUEST HEADERS: {
 <br />
 <br />
 
+## Routing Request
+<br />
+
+![chapter3.3.gif](./images/gif/chapter-3-3.gif)
+
+
+```javascript
+const http = require("http");
+
+
+const server = http.createServer((request, response) => {
+
+    const url = request.url;
+
+    if (url === "/") {
+        response.setHeader("Content-Type", "text/html")
+        response.write(`
+            <html lang="en">
+                <head>
+                    <title>Enter Message</title>
+                </head>
+                <body>
+                    <form action="/message" method="POST">
+                        <input type="text" name="message" placeholder="write some data...">
+                        <button type="submit">submit</button>
+                    </form>
+                </body>
+            </html>
+        `);
+        return response.end() // It set cause we should not call any response.write() or response.setHeader() after.
+
+
+    }
+
+    response.setHeader("Content-Type", "text/html")
+    response.write(`
+       <html lang="en">
+           <head>
+               <title>My firts Page</title>
+           </head>
+           <body>
+               <h1>Hello from Node.JS server!</h1>
+           </body>
+       </html>
+   `);
+
+    response.end()
+});
+
+server.listen(8088);
+```
+
+**[⬆ back to top](#table-of-contents)**
+<br />
+<br />
 
 
