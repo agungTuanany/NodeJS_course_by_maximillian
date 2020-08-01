@@ -8,7 +8,7 @@
 5. [Routing Request](#routing-request)
 6. [Redirecting Request](#redirecting-request)
 7. [Parsing Request Body](#parsing-request-body)
-8. [Understanding Event Driven Code Execution](#understanding-event-driven-code-wexecution)
+8. [Understanding Event Driven Code Execution](#understanding-event-driven-code-execution)
 
 
 
@@ -445,7 +445,7 @@ Is simply a **construct** which allow you to hold multiple `chunks` and works
 with them before they are released once you're done and you work with that
 `buffer`.
 
-Lets take a look the code
+Lets take a look the code,
 
 ```javascript
 "use strict";
@@ -544,7 +544,7 @@ parsedBody.split: hello
 It a crucial concept that you can register code function which run sometime in
 the future but not necessarily run right now.
 
-Let see the pieces of code
+Let see the pieces of code,
 
 ```javascript
 const server = http.createServer((request, response) => {
@@ -555,7 +555,7 @@ const server = http.createServer((request, response) => {
     if (url === "/message" && method === "POST") {
 
         const body = [];
-        request.on("data", (chunk) => {                                 // We instantiate chunk in stream
+        request.on("data", (chunk) => {                                 // Instantiate chunk in stream
 
             console.log("======================");
             console.log("chunk from request.on('data'):", chunk);
@@ -596,7 +596,7 @@ const server = http.createServer((request, response) => {
    `);
 }
 
-server.listen(8088)
+server.listen(8088);
 ```
 
 `[1]` The code will run before `[2]`; simply cause `[2]` just a **callback** to
@@ -607,7 +607,7 @@ it's done, **pause** until  it run `fs.writeFileSync()`; if it does that it will
 simply **slow** the server performance and server not able to handle `incoming
 request` or do anything of that kind until it's done. That what is not developer
 want. Developer should never write a code that will result **block code
-execution.**.
+execution.**
 
 Developer always want to be in the state to wait for new `event loop`; and then
 only execute code once it's to be executed; and never block that `event loop`
@@ -634,9 +634,9 @@ const server = http.createServer((request, response) => {
 
     ....
     ....
-}
+};
 
-server.listen(8088)
+server.listen(8088);
 ```
 
 **[⬆ back to top](#table-of-contents)**

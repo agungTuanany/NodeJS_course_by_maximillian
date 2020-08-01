@@ -41,12 +41,17 @@ const server = http.createServer((request, response) => {
             const parsedBody = Buffer.concat(body).toString();
             const message = parsedBody.split("=")[1];
 
-            fs.writeFileSync("message.txt", message);
+            // Caused non block I/O
+            fs.writeFile("message.txt", message, err => {
 
-            response.statusCode = 302; // Redirection
-            response.setHeader("location", "/");
+                if (err) return console.log("Error on fs.writeFile:", err)
 
-            return response.end();
+                // The response should be done while working with the 'fs'
+                response.statusCode = 302; // Redirection
+                response.setHeader("location", "/");
+
+                return response.end();
+            });
         });
     };
 
