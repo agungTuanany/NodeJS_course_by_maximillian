@@ -1,15 +1,16 @@
 # Chapter-3 Understanding The Basic
 
 ## Table of Contents
-1. [How The Web Works](#how-the-web-works)
-2. [NodeJS Program Lifecycle](#nodejs-program-lifecycle)
-3. [Understanding Request](#understanding-request)
-4. [Sending Response](#sending-response)
-5. [Routing Request](#routing-request)
-6. [Redirecting Request](#redirecting-request)
-7. [Parsing Request Body](#parsing-request-body)
-8. [Understanding Event Driven Code Execution](#understanding-event-driven-code-execution)
-9. [NodeJS Looking Behind the Scene](#nodejs-looking-behind-the-scene)
+1.  [How The Web Works](#how-the-web-works)
+2.  [NodeJS Program Lifecycle](#nodejs-program-lifecycle)
+3.  [Understanding Request](#understanding-request)
+4.  [Sending Response](#sending-response)
+5.  [Routing Request](#routing-request)
+6.  [Redirecting Request](#redirecting-request)
+7.  [Parsing Request Body](#parsing-request-body)
+8.  [Understanding Event Driven Code Execution](#understanding-event-driven-code-execution)
+9.  [NodeJS Looking Behind the Scene](#nodejs-looking-behind-the-scene)
+10. [Module Summary](#module-summary)
 
 
 ## How The Web Works
@@ -787,6 +788,92 @@ Since in server environment, we create a server with `createServer()` and listen
 to incoming request with `listen()` method. The two event is **never** finished
 by default and therefore, we always have at least one reference; and therefore
 we don't exit in a normal Node web server program.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+<br/>
+
+![chapter-3-8.gif](./images/gif/chapter-3-8.gif "Module summary")
+</br>
+
+Let's brief what we learn in this chapter,
+
+1. Client in browser send a request to the server, the server does some magic,
+   reaches out to a database, works with files, send back the response. Response
+   can be an HTML, can be something different and sends it back to the client;
+   the browser which then can display that.
+
+2. Regarding `lifecycle`, there is one important concept and that is that
+   so-called `event loop`;
+
+   - NodeJS code runs in a **Non-Blocking** way which means we **only**
+     `register` a  bunck of `callbacks` and `events`; therefore NodeJS will
+     eventually trigger that code once a certain task is done; So that the
+     JavaScript `threat` is always free to handle new `events`, new `incoming
+     request`;
+
+   - NodeJS program can `exit` if there is no more work to do; but on the
+     server, this well should at least **never happen** because `createServer()`
+     registers an `event listner` for an `event` which is never done cause
+     loops; if there's an incoming request or registered `events`; or if a new
+     `event` triggered; if a new `request` is recieved. This does not mean that
+     Node unregisteres the `event listener` instad we keep on listening for more
+     `request` and that is of course how server should behave.
+
+   - The loop always keeps on going, keeps on waiting for new `events` and which
+    does something does something when some `event` happens and then basically
+    dispatch (delegate) some actions to the `OS` for the examples and then again
+    frees up the `threat`.
+
+3. Most of the code involves a lot of `asynchronous` code which we saw with all
+   the `callbacks`.
+
+   - The JavaScript code should be **Non-Blocking**. So we have this `callback`
+     and `event driven approach` where we are able to `register` some code to be
+     executed in the **future** instead running right away and blocking the
+     **main** `threat` because this has to be **avoided**  under all
+     circumstances;
+
+   - NodeJS is built around **Non-Blocking** concept and use `asynchronous` for
+     avoiding this issue.
+
+4. We also work with `requests` and `responses` with NodeJS way.
+
+   - Parsing the `request data` which arrives in `chunks` and we can use this
+     concept of `streams` and `buffers`; that we should avoid **sending double
+     response**; So after the `response` is end you must not send another
+     `response`; this can happen easily if you forget about `asynchronous`
+     nature and the line of code you write might not execute **immediately**.
+
+   - Depending on code writing, if it's in an `event listener` it will not
+     execute immediately.
+
+5. We also learn the NodeJS about **built in functionalities**; and whilst there
+   are some `global variables` e.g:`Body` we can use, this also mean developer
+   should use NodeJS core modules.
+
+   - Core module are things like `http`, `fs`, `path`, etc; this all core module
+     give developer a couple of different functionalities that allow to
+     basically do whatever developer could want to do an a server; like create
+     new server with the help of the `http` module.
+
+   - The code imported via the `require` syntax; and `require` syntax can only
+     use in the file into which we `import` them; if we want to use the code in
+     two different files, we have to `import` them in both files separately.
+
+6. Last but not least with NodeJS **module system**; this basically work with
+   the help of this `require` keyword, which pulls some functionality from one
+   of files, if started with `/` or `./` or from a core third party module.
+
+   - Basically pulls in whatever we `export` there and store in in a new
+     variable or `const`.
+
+   - `exports` is an important keyword; cause we do `exports` with the help of
+     `module.exports`; or mulitple `exports` with the `exports` shortcut.
+
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
