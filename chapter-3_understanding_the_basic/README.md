@@ -8,6 +8,7 @@
 5. [Routing Request](#routing-request)
 6. [Redirecting Request](#redirecting-request)
 7. [Parsing Request Body](#parsing-request-body)
+8. [Understanding Event Driven Code Execution](#understanding-event-driven-code-wexecution)
 
 
 
@@ -531,10 +532,111 @@ parsed chunk: message=hello
 ======================
 parsedBody.split: hello
 ======================
+```
+
+**[⬆ back to top](#table-of-contents)**
+<br />
+<br />
 
 
+## Understanding Event Driven Code Execution
 
+It a crucial concept that you can register code function which run sometime in
+the future but not necessarily run right now.
 
+Let see the pieces of code
+
+```javascript
+const server = http.createServer((request, response) => {
+
+    ...
+    ...
+
+    if (url === "/message" && method === "POST") {
+
+        const body = [];
+        request.on("data", (chunk) => {                                 // We instantiate chunk in stream
+
+            console.log("======================");
+            console.log("chunk from request.on('data'):", chunk);
+            console.log("======================");
+            body.push(chunk);                                           // Put chunk into an array
+        });
+
+        request.on("end", () => {
+
+            const parsedBody = Buffer.concat(body).toString();
+            const message = parsedBody.split("=")[1];
+
+            fs.writeFileSync("message.txt", message);
+
+            response.statusCode = 302;                                  // Redirection
+            response.setHeader("location", "/");
+
+            // The response will not end                                // [2]
+            return response.end();
+        });
+
+        // Fails to run cause not return anythings                      // [3]
+        // Only register the event; not execute any of the events.
+        ...
+    };
+
+    // XXX This code executed 1st XXX                                   // [1]
+    response.setHeader("Content-Type", "text/html");
+    response.write(`
+       <html lang="en">
+           <head>
+               <title>My firts Page</title>
+           </head>
+           <body>
+               <h1>Hello from Node.JS server!</h1>
+           </body>
+       </html>
+   `);
+}
+
+server.listen(8088)
+```
+
+`[1]` The code will run before `[2]`; simply cause `[2]` just a **callback** to
+be called sometime in the future.
+
+This setup is important because otherwise NodeJS would have to **pause** until
+it's done, **pause** until  it run `fs.writeFileSync()`; if it does that it will
+simply **slow** the server performance and server not able to handle `incoming
+request` or do anything of that kind until it's done. That what is not developer
+want. Developer should never write a code that will result **block code
+execution.**.
+
+Developer always want to be in the state to wait for new `event loop`; and then
+only execute code once it's to be executed; and never block that `event loop`
+for too long of period time.
+
+To resolve this, just simply to return an `event`,
+
+```javascript
+const server = http.createServer((request, response) => {
+
+    ...
+    ...
+
+    if (url === "/message" && method === "POST") {
+
+        ....
+        ....
+        return request.on("end", () => {            // return keyword
+
+            ....
+            ....
+        });
+    };
+
+    ....
+    ....
+}
+
+server.listen(8088)
 ```
 
 **[⬆ back to top](#table-of-contents)**
