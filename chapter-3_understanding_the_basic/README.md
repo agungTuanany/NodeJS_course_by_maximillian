@@ -9,7 +9,7 @@
 6. [Redirecting Request](#redirecting-request)
 7. [Parsing Request Body](#parsing-request-body)
 8. [Understanding Event Driven Code Execution](#understanding-event-driven-code-execution)
-9. [NodeJS Looking Behind the Scene] (#nodejs-looking-behind-the-scene)
+9. [NodeJS Looking Behind the Scene](#nodejs-looking-behind-the-scene)
 
 
 ## How The Web Works
@@ -644,6 +644,7 @@ server.listen(8088);
 <br />
 
 ## NodeJS Looking Behind the Scenes
+<br />
 
 ![chapter-3-6.gif](./images/gif/chapter-3-6.gif "Single Threadm Event Loop & Blocking code")
 
