@@ -9,7 +9,7 @@
 6. [Redirecting Request](#redirecting-request)
 7. [Parsing Request Body](#parsing-request-body)
 8. [Understanding Event Driven Code Execution](#understanding-event-driven-code-execution)
-
+9. [NodeJS Looking Behind the Scene] (#nodejs-looking-behind-the-scene)
 
 
 ## How The Web Works
@@ -94,7 +94,7 @@ functions`.
 Then something important happened, we never **left** that program. The reason
 for this is an important concept in NodeJS called `event-loop`, this is
 basically a loop process which is managed by NodeJS which keeps on running as
-there is work to do. It keeps on running as log as there are `event listenrers`
+there is work to do. It keeps on running as log as there are `event listeners`
 registered and one `event listener` we did register and we never unregistered is
 that **incoming** request listener we passed or we setup with the help
 create server.
@@ -642,3 +642,151 @@ server.listen(8088);
 **[⬆ back to top](#table-of-contents)**
 <br />
 <br />
+
+## NodeJS Looking Behind the Scenes
+
+![chapter-3-6.gif](./images/gif/chapter-3-6.gif "Single Threadm Event Loop & Blocking code")
+
+### What is thread ?
+
+Is basically like a process in your operation system.
+
+### How NodeJS be able to handle multiple request
+
+If NodeJS were not able to assign a new thread for each request, the ultimately
+end up all running in one on the same thread; and this **poses** a security
+question; Can you the access data from **request A**, from **request B**; and
+most important at this point in **performance**; there's of course also
+a question, the **request A** is still doing work, **request B** can't be
+handled ? Well both is taken care of with NodeJS.
+
+### How is NodeJS performance
+
+Let's say we have some code which access the `fs` (file system). Working with
+files often is **task takes longer** because file can very big and it doesn't
+necessarily complete instantly.
+
+Therefore if we're doing this upon an incoming request, a second request might
+have to wait because we're not able to handle it yet or it even gets declined,
+MEAN: the webpage is down because the request cannot handled by the user in the
+same amount of time.
+
+Now one important construct (concept) is `event loop`. The `event loop` is
+automatically started by NodeJS when your program starts, you don't have to
+instantiate `event loop` explicitly; NodeJS does that when start running the
+code.
+
+`event loop` is **responsible** for `Handle Event Callback`; all the function
+developer build added in creating server handled by `event loop` when a certain
+`event` occurs. `event loop` aware of all `callback` caused code doesn't taking
+long handling `fs` operation.
+
+It's important to understand that this `fs` operation is not handled by the
+`event loop`, just only the `callback` that might have defined on write file
+(`fs.writeFile()`) once it's done; that code will be handled in `event loop`
+caused the process finish fast.
+
+So basically the `event loop` will only handle `callback` that contain **fast
+finishing code**.
+
+Instead our `fs` operation and a couple of other long taking operations are sent
+to a `worker pool`; which is spun up and managed by NodeJS automatically.
+A `worker pool` is responsible for all the **heavy lifting**.
+
+This `worker pool` is kind of totally **detached** from your JavaScript code;
+it runs on different `threads`; it can spin up `multiple threads`; it's closely
+intervened with `OS` your running the app on.
+
+If you doing something with the **file**; well a `worker` from that poll will
+take care and will do its job totally detached from your code and from the
+`request` and from the `event loop`.
+
+The one connection to the `event loop` we will have though is once the `worker`
+is done; e.g: we **read**  a file, it will trigger the `callback` for that
+**read file** operation; and since the `event loop` is responsible for the
+`events` and the `callback`, this will in the end; end up in the `event loop`.
+So there NodeJS will then basically execute the appropriate `callback`.
+
+### The Event Loop
+<br />
+
+![chapter-3-7.gif](./images/gif/chapter-3-7.gif "NodeJS event loop")
+
+Is a loop which is run or started by NodeJS that keep the NodeJS process running
+and handles all the `callbacks`; and it has certain **order** in which it goes
+through the `callbaks`.
+
+At the beginning of each new iteration it **checks** if there are any `timer
+callback` it should execute. In NodeJS you can also set a `timer` and basically
+you set a `timer` and **always** pass a `method` (a function should be executed
+once that `timer` complete); NodeJS is aware of this; and at the beginning of
+each new `loop iteration`, it execute any due `timer` `callbacks`; MEAN: any
+`callback` that have to be executed because a `timer` completes.
+
+Then as a next step, it checks other `callback`, e.g: if we had **write** or
+**read** a file, we might have a `callback` because that operation finished and
+it will then also execute these `callbacks`.
+
+Be aware with `I/O` here, generally any **input-output** operations that
+typically is `file operations` if `network operations` in general **blocking
+long taking operation**.
+
+It's important to understand that NodeJS will leave that phase at a certain
+point of time and that can also mean that **if** there are too many outstanding
+`callbacks`; it will continue it's `loop iteration` and **postpone** these
+`callbacks` to the next iteration to execute them.
+
+After working on these `open callbacks` and finishing them all, it will enter
+a `poll` phase.
+
+
+### What is Poll phase
+
+The `poll` phase is basically a phase where NodeJS will look for new `I/O`
+events and basically do its best to execute their `callbacks` immediately if
+possible; If that's **not** possible, it will defer (postpone) the execution and
+basically register this as a `pending callback`.
+
+Important, it also check if there are any `timer callbacks` due to be executed;
+if its the case, it will jump to that `timer` phase and execute `timer` right
+
+Important, `poll` phase also check if there any `timer callbacks` due to be
+executed; if its the case, it will jump to that `timer` phase and execute timer
+right away; So it actually jump back there and not finish the `iteration`
+otherwise it will continue.
+
+Next `setImmediate()` callbacks, will be executed in a so-called **check
+phase**.  `setImmediate()` is a bite like `setTimeout()` or `setInterval()`,
+just that it will execute immediately but always **after** any `open callbacks`
+has been executed. It is faster than `setTimeout()` with one millisecond of open
+duration after the current finished `open callbacks` that were due to be handled
+in that current iteration.
+
+Now we're entering a highly theoretical terrain (zone); nearing the end of each
+`iteration cycle` and now NodeJS will execute all `close event calbacks`. If you
+registered any `close event` this would be the point of time where NodeJS
+executes their appropriate `callbacks`.
+
+Roughly spoken we have `timer callbacks`, `I/O` related `callback`, and `other
+callbacks`, `setImmediate()`, `close event callbacks`.
+
+`close event callback` are basically handled separately or their `callback`.
+
+Then we might exit the whole NodeJS program with `process.exit()` only if there
+are no remaining `event handlers` which are registered; that what mean `refs ==
+0`.
+
+Internally NodeJS keep **track** of `open event listeners`; it has
+a **counter**, references which increments by '1' for every new `callback` that
+is registered; or every new `event listener` that is registered; every new
+future work that it has to do; and it **reduces** that counter by `1` for every
+`event listener` that it doesn't  need anymore; or ever `callback` it finished.
+
+Since in server environment, we create a server with `createServer()` and listen
+to incoming request with `listen()` method. The two event is **never** finished
+by default and therefore, we always have at least one reference; and therefore
+we don't exit in a normal Node web server program.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
