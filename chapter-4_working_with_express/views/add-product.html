@@ -5,20 +5,122 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Add Product Page</title>
+        <style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, arial, sans-serif;
+}
+
+main {
+    padding: 1rem;
+}
+
+.main-header {
+    width: 100%;
+    height: 56px;
+    background-color: #DBC441;
+    padding: 0 1.5rem;
+}
+
+.main-header__nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.main-header__item-list {
+    list-style: 0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style-type: none;
+}
+
+.main-header__item {
+    margin: 0 1rem;
+    padding: 3px;
+}
+
+.main-header__item a {
+    text-decoration: none;
+    color: white;
+}
+
+.main-header__item a:hover,
+.main-header__item a:active,
+.main-header__item a.active {
+    color: #6200FF;
+}
+
+.product-form {
+    width: 30rem;
+    max-width: 90%;
+    margin: auto;
+}
+
+.form-control label,
+.form-control input {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.form-control label {
+    font-size: 1.5rem;
+}
+
+.form-control input {
+    border: 1px solid #DBC441;
+    border-radius: 5px;
+    padding: 15px;
+    font: inherit;
+}
+
+button {
+    font: inherit;
+    padding: 5px;
+    border: 1px solid #DBC441;
+    background: #DBC441;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+}
+
+button:active,
+button:hover {
+    color: #FFF;
+    background-color: #6200FF;
+}
+
+
+        </style>
     </head>
     <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="/">Shop</a></li>
-                    <li><a href="/admin/add-product">Add Product</a></li>
+        <header class="main-header">
+            <nav class="main-header__nav">
+                <ul class="main-header__item-list">
+                    <li class="main-header__item"><a href="/">Shop</a></li>
+                    <li class="main-header__item"><a class="active" href="/admin/add-product">Add Product</a></li>
                 </ul>
             </nav>
         </header>
 
         <main>
-            <form action="/add-product" method="POST">
-                <input type="text" name="title" placeholder="Enter the product.." />
+            <form class="product-form" action="/admin/add-product" method="POST">
+                <div class="form-control">
+                    <label for="title">Title</label>
+                    <input id="title" type="text" name="title" placeholder="Enter the product.." />
+                </div>
                 <button type="submit">Add Product</button>
             </form>
         </main>
