@@ -17,6 +17,9 @@ const app = express();
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Serve Static file
+app.use(express.static(path.join(__dirname, "public")));
+
 // Admin routes handlers
 app.use("/admin", adminRoutes);
 
