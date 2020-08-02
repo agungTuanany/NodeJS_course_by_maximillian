@@ -159,7 +159,7 @@ Commonly in convention; developer use to `export` the **logic** of code in
 different files and `import` it when in needed to use. ExpressJS give developer
 a pretty nice way of **outsourcing** `routing` into other files.
 
-Therefore u make in root folder a new folder named as `./routes/`;It's
+Therefore you make in root folder a new folder named as `./routes/`; It's
 a convention that developer put `routing` related code into separate folder, so
 your code that should execute for different `path` and `http methods`.
 

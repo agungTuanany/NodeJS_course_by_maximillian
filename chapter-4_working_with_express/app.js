@@ -22,5 +22,12 @@ app.use(adminRoutes);
 // Shop router handlers
 app.use(shopRoutes);
 
+// 404 handlers
+app.use((request, response, next) => {
+
+    response
+        .status(404)
+        .send(`<h1>Page not Found</h1>`);
+});
 
 app.listen(8088);
