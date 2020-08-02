@@ -17,7 +17,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Admin routes handlers
-app.use(adminRoutes);
+app.use("/admin", adminRoutes);
 
 // Shop router handlers
 app.use(shopRoutes);
