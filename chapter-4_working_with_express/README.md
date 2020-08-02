@@ -5,6 +5,7 @@
 2. [Parsing Incoming Request](#parsing-incoming-request)
 3. [Limiting Middleware to Post Request](#limiting-middleware-to-post-request)
 4. [Using Express Routing](#using-express-routing)
+5. [Module Summary]($module-summary)
 
 ## Adding Middleware
 <br />
@@ -167,6 +168,82 @@ your code that should execute for different `path` and `http methods`.
 
 Is like a mini Express app tied to other Express app or pluggable into the other
 Express app.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+<br/>
+
+![chapter-4-1.gif](./images/gif/chapter-4-1.gif "Chapter-4 Module summary")
+
+After this chapter you know how powerful ExpressJS is, but doesn't mean you
+depend on framework.
+
+You still use NodeJS, example we use NodeJS core module `path`; but you build up
+on it and get bunch utility functions and a clear set of `rules` on how
+developer should structure the app.
+
+ExpressJS it's all about `middleware`; understanding flow of `request` through
+all the `middleware` functions is really helpful . You can visit in
+[ExpressJS-Middleware](http://expressjs.com/en/guide/using-middleware.html) by
+how to using it with appropriate rules; if not your code will end up in
+disaster **middleware rabbit hole**.
+
+ExpressJS is popular because it's highly extensible; as you already saw with the
+`body-parser`; you can easily plug some packages into an ExpressJS app, because
+they just expose such `middleware` functions and as developer  you can therefore
+easily add the `middleware-packages` and the request gets **funneled** through
+`middleware`.
+
+`middleware functions` are these functions that took `reqeust-object`,
+`response-object` that help developer with **sending** a `response`; and that
+`next()` argument which turns out to be a function should call to **forward**
+a `reqeust` to the **next** `middleware`**in line**; and **in line** means from
+**top** to **bottom** in your root file (`app.js`).
+
+This is a crucial point to understand, that as developer should **always** call
+`next()`unless you are sending a `response`; in which case you should **never**
+call `next()` and that you can therefore cleverly structure your `middleware` to
+transform a `reqeust`; read something from it, and send different `response`
+depending the `route` you're accessing; depending on the `path`; depending on
+`method` you're sending.
+
+You learn that you can **filter** `request` by `path` and `method` easily with
+`app.use()` by adding a `path` (`app.use("/admin")`); or by use `app.get()`,
+`app.post()`; and if you **filter** by `method`, like you had `app.get()`; that
+`paths` would then be matched exactly otherwise with `app.use()`, the `path` you
+passed would only be matched with the beginning of the `url`, the part after
+`localhost:8080/..`.
+
+You also can use the ExpressJS `router` package instead of `app.use()`,
+`app.get()` because this allow you to elegantly split your `routes` across
+multiple files since the `router` you `export` there can be added as
+a `middleware` function into app.use() in your root file.
+
+Last but not least, we also server some file; It's important to know that you're
+**not limited** to serving dummy text or anything like that; You can send files
+for examples like `.html`; and if a `request` directly made for a file like
+    a `.css` or `.js`
+
+Last but not least, we also serve some file; It's important to know that you're
+**not limited** to serving dummy text or anything like that; You can send files
+for examples like `.html`; and if a `request` directly made for a file like a
+`.css` or `.js` or `images extensions`; you can enable **static serving** for
+such file.
+
+With the help of Express static; which is crucial part of any web application
+you're building; because developer typically have such files that are
+dependencies of your `.html` files for example.
+
+This all **CORE BASIC KNOWLEDGE** you should have about ExpressJS. This is what
+we will now build up on and this is where we will now dive deeper into; to learn
+how to `render` **dynamic** content, how to **access databases**, **enable
+authentication**, **manage data on the server** and so much more.
+
+
+
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
