@@ -1,7 +1,7 @@
 "use strict";
 
 // Core Dependencies
-//...
+const path = require("path");
 
 // 3rd party Dependencies
 const express = require("express");
@@ -25,9 +25,10 @@ app.use(shopRoutes);
 // 404 handlers
 app.use((request, response, next) => {
 
-    response
-        .status(404)
-        .send(`<h1>Page not Found</h1>`);
+    return response.sendFile(path.join(__dirname, "./views/", "page-not-found.html"));
+    // response
+    //     .status(404)
+    //     .send(`<h1>Page not Found</h1>`);
 });
 
 app.listen(8088);
