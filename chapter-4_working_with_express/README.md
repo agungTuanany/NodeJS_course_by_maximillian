@@ -4,6 +4,7 @@
 1. [Adding Middleware](#adding-middleware)
 2. [Parsing Incoming Request](#parsing-incoming-request)
 3. [Limiting Middleware to Post Request](#limiting-middleware-to-post-request)
+4. [Using Express Routing](#using-express-routing)
 
 ## Adding Middleware
 <br />
@@ -152,3 +153,21 @@ with in `localhost:8088/product` path. Not trigger for `GET` request.
 <br/>
 <br/>
 
+## Using Express Routing
+
+Commonly in convention; developer use to `export` the **logic** of code in
+different files and `import` it when in needed to use. ExpressJS give developer
+a pretty nice way of **outsourcing** `routing` into other files.
+
+Therefore u make in root folder a new folder named as `./routes/`;It's
+a convention that developer put `routing` related code into separate folder, so
+your code that should execute for different `path` and `http methods`.
+
+### What is express.Router()
+
+Is like a mini Express app tied to other Express app or pluggable into the other
+Express app.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
