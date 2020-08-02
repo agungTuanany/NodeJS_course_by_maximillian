@@ -13,7 +13,7 @@ ExpressJS is all about `middleware` as diagram above. Instead of just having one
 `request` handler, you will have a possibility of hooking (connect) in multiple
 functions which the `request` will go through until you send a `response`.
 
-`middleware` allows developer o split the code into multiple blocks or pieces;
+`middleware` allows developer to split the code into multiple blocks or pieces;
 instead of having one huge function that does everything.
 
 `middleware` is pluggable nature of express, where developer can easily add
@@ -21,7 +21,7 @@ other third party packages; which simply happen to give developer such
 `middleware` functions that can plug into ExpressJS and add certain
 functionalities.
 
-This is a **Core** concept of ExpressJS.
+This is a **core** concept of ExpressJS.
 
 ### What is Middleware
 

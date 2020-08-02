@@ -1,30 +1,33 @@
-// Core Dependencies
-const http = require("http");
+"use strict";
 
-// 3rd Dependencies
+// Core Dependencies
+//...
+
+// 3rd party Dependencies
 const express = require("express");
 
 // Internal Dependencies
 //...
 
-
 const app = express();
 
-// A method from ExpressJS to allow middleware
-app.use((request, response, next) => {
+app.use("/", (request, response, next) => {
 
-    console.log("In the middleware!");
-    next(); // A function to allow the request to continue to the next middleware in line
+    console.log("This always runs!!");
+    next();
 });
 
-app.use((request, response, next) => {
+app.use("/add-product", (request, response, next) => {
 
-    console.log("In another middleware");
+    console.log("In another middleware!");
+    return response.send("<h1>The Add-Product page</h1>")
+
+})
+
+app.use("/", (request, response, next) => {
+
+    console.log("In another middleware!");
+    return response.send('<h1>Hello from Express!</h1>');
 });
 
-const server = http.createServer(app);
-
-
-server.listen = (8088);
-
-
+app.listen(8088);
