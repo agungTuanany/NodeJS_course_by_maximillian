@@ -12,7 +12,9 @@ const rootDir = require("./lib/path.js");
 const adminRoutes = require("./routes/admin.js");
 const shopRoutes = require("./routes/shop.js");
 
+// Global variables
 const app = express();
+const port = 8080;
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,4 +36,4 @@ app.use((request, response, next) => {
         .sendFile(path.join(rootDir, "views", "page-not-found.html"));
 });
 
-app.listen(8088);
+app.listen(port, () => console.log(`Your server running by "Express" in port: "${port}".`));

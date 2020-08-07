@@ -5,7 +5,7 @@
 2. [Parsing Incoming Request](#parsing-incoming-request)
 3. [Limiting Middleware to Post Request](#limiting-middleware-to-post-request)
 4. [Using Express Routing](#using-express-routing)
-5. [Module Summary]($module-summary)
+5. [Module Summary](#module-summary)
 
 ## Adding Middleware
 <br />
@@ -188,8 +188,8 @@ developer should structure the app.
 ExpressJS it's all about `middleware`; understanding flow of `request` through
 all the `middleware` functions is really helpful . You can visit in
 [ExpressJS-Middleware](http://expressjs.com/en/guide/using-middleware.html) by
-how to using it with appropriate rules; if not your code will end up in
-disaster **middleware rabbit hole**.
+how to using it with appropriate rules; if not your code will end up in disaster
+**middleware rabbit hole**.
 
 ExpressJS is popular because it's highly extensible; as you already saw with the
 `body-parser`; you can easily plug some packages into an ExpressJS app, because
@@ -210,26 +210,21 @@ transform a `reqeust`; read something from it, and send different `response`
 depending the `route` you're accessing; depending on the `path`; depending on
 `method` you're sending.
 
-You learn that you can **filter** `request` by `path` and `method` easily with
-`app.use()` by adding a `path` (`app.use("/admin")`); or by use `app.get()`,
-`app.post()`; and if you **filter** by `method`, like you had `app.get()`; that
-`paths` would then be matched exactly otherwise with `app.use()`, the `path` you
-passed would only be matched with the beginning of the `url`, the part after
-`localhost:8080/..`.
+You learn that you can **filter** `request` by `path` and by `method` easily
+with `app.use()` by adding a `path` (`app.use("/admin")`); or by use
+`app.get()`, `app.post()`; and if you **filter** by `method`, like you had
+`app.get()`; that `paths` would then be matched exactly otherwise with
+`app.use()`, the `path` you passed would only be matched with the beginning of
+the `url`, the part after `localhost:8080/..`.
 
 You also can use the ExpressJS `router` package instead of `app.use()`,
 `app.get()` because this allow you to elegantly split your `routes` across
 multiple files since the `router` you `export` there can be added as
-a `middleware` function into app.use() in your root file.
-
-Last but not least, we also server some file; It's important to know that you're
-**not limited** to serving dummy text or anything like that; You can send files
-for examples like `.html`; and if a `request` directly made for a file like
-    a `.css` or `.js`
+a `middleware` function into `app.use()` in your root file.
 
 Last but not least, we also serve some file; It's important to know that you're
 **not limited** to serving dummy text or anything like that; You can send files
-for examples like `.html`; and if a `request` directly made for a file like a
+for examples like `.html`; and if a `request` directly made for a file like
 `.css` or `.js` or `images extensions`; you can enable **static serving** for
 such file.
 
@@ -241,9 +236,6 @@ This all **CORE BASIC KNOWLEDGE** you should have about ExpressJS. This is what
 we will now build up on and this is where we will now dive deeper into; to learn
 how to `render` **dynamic** content, how to **access databases**, **enable
 authentication**, **manage data on the server** and so much more.
-
-
-
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
