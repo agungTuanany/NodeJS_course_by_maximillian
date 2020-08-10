@@ -16,6 +16,8 @@ const shopRoutes = require("./routes/shop.js");
 const app = express();
 const port = 8080;
 
+app.set("view engine", "pug");
+
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
