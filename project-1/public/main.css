@@ -1,0 +1,28 @@
+@import url("./css/shop.css");
+@import url("./css/add-product.css");
+
+:root {
+    --yellow-wattle  : #DBC441;
+    --white-solid    : #FFFFFF;
+    --black-solid    : #000000;
+    --purple-violet  : #6200FF;
+    --green-tropical : #00695c;
+}
+
+* {
+    box-sizing      : border-box;
+}
+
+body {
+    display         : flex;
+    flex-direction  : column;
+    /* align-items     : center; */
+    /* justify-content : center; */
+    margin          : 0;
+    padding         : 0;
+    font-family     : Helvetica, arial, sans-serif;
+}
+
+main {
+    padding         : 1rem;
+}
