@@ -34,9 +34,11 @@ app.use(shopRoutes);
 // 404 handlers
 app.use((request, response, next) => {
 
-    return response
+    response
         .status(404)
-        .sendFile(path.join(rootDir, "views", "page-not-found.html"));
+        .render("page-not-found", {
+        docTitle: "Page Not Found"
+    });
 });
 
 app.listen(port, () => console.log(`Your server running by "Express" in port: "${port}".`));

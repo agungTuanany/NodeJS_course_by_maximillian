@@ -22,7 +22,9 @@ const products = [];
 // /admin/add-product => GET
 router.get("/add-product", (request, response, next) => {
 
-    response.render("add-product", {
+    response
+        .status(200)
+        .render("add-product", {
             docTitle: "Add Product"
         });
 });
