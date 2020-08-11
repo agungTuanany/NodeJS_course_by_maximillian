@@ -22,7 +22,8 @@ router.get("/", (request, response, next) => {
     // Implement PUG as template engines
     response.render("shop", {
         products: adminData.products,
-        docTitle: "Shop Page"
+        docTitle: "Shop Page",
+        path: "/"
     });
 });
 
