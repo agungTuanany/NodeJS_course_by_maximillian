@@ -34,7 +34,7 @@ app.use(shopRoutes);
 // 404 handlers
 app.use((request, response, next) => {
 
-    response
+    return response
         .status(404)
         .render("page-not-found", {
         docTitle: "Page Not Found"

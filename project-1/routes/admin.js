@@ -22,7 +22,7 @@ const products = [];
 // /admin/add-product => GET
 router.get("/add-product", (request, response, next) => {
 
-    response
+    return response
         .status(200)
         .render("add-product", {
             docTitle: "Add Product"
@@ -36,7 +36,7 @@ router.post("/add-product", (request, response, next) => {
         title: request.body.title
     });
 
-    response.status(302).redirect("/");
+    return response.status(302).redirect("/");
 });
 
 module.exports = {
