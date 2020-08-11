@@ -4,9 +4,8 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title Shop Page
+        title #{docTitle}
         link(rel="stylesheet", href="/main.css")
-        link(rel="stylesheet", href="/css/add-product.css")
     body
         header.main-header
             nav.main-header__nav
@@ -16,6 +15,28 @@ html(lang="en")
                     li.main-header__item
                         a(href="/admin/add-product") Add product
 
+        // - XXX FIXME:
+        //   if I enter an empty string @param product.title; the if
+        //       condition still showed the products should not show the
+        //       empty string
+        //   XXX
         main
             h1 product
             p List of all products
+            if products.length > 0
+                .grid
+                    each product in products
+                        article.card.product-item
+                            header.card__header
+                                h1.product__title #{product.title}
+                            .card_image
+                                img(src="https://source.unsplash.com/Oc3fP0FXJbU/800x450")
+                            .card__content
+                                h2.prdouct__price $19.09
+                                p.product__description A lettuc you can eat
+                            .card__actions
+                                button.btn Add to cart
+            else
+                h1 No Products
+
+

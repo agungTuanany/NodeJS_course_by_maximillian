@@ -19,14 +19,11 @@ const router = express.Router();
 
 router.get("/", (request, response, next) => {
 
-    // console.log("In '/' user middleware!");
-    // console.log("shop.js ====>", adminData.products);
-    // return response
-    //     .status(200)
-    //     .sendFile(path.join(rootDir, "views", "shop.html"));
-
     // Implement PUG as template engines
-    response.render("shop")
+    response.render("shop", {
+        products: adminData.products,
+        docTitle: "Shop Page"
+    });
 });
 
 module.exports = router;
