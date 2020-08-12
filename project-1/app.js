@@ -6,7 +6,7 @@ const path = require("path");
 // 3rd party Dependencies
 const express = require("express");
 const bodyParser = require("body-parser");
-const expressHbs = require("express-handlebars");
+// const expressHbs = require("express-handlebars");        // Uncomment this for using handlebars
 
 // Internal Dependencies
 const rootDir = require("./lib/path.js");
@@ -17,11 +17,13 @@ const shopRoutes = require("./routes/shop.js");
 const app = express();
 const port = 8080;
 
-app.engine("handlebars", expressHbs({
-    defaultLayout: "main-layout"
-}));
+// app.engine("handlebars", expressHbs({                    // Uncommnet this for using handlebars
+//     layoutDir: "views/layouts",
+//     defaultLayout: "main-layout",
+//     extname: "handlebars"
+// }));
 
-app.set("view engine", "handlebars");
+app.set("view engine", "ejs");
 
 // Config explicitly
 app.set("views", "views");
