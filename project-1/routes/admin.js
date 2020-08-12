@@ -33,6 +33,11 @@ router.get("/add-product", (request, response, next) => {
 // /admin/add-product => POST
 router.post("/add-product", (request, response, next) => {
 
+    if (request.body.title === "") {
+        //@TODO: Create notice word if string empty
+        return response.render("add-product");
+    }
+
     products.push({
         title: request.body.title
     });

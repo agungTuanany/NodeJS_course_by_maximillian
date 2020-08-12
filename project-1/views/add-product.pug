@@ -2,6 +2,7 @@ extends layouts/main-layout.pug
 
 block content
     main
+        //@TODO: create warning notice if title is empty
         form.product-form(action="/admin/add-product" method="POST")
             .form-control
                 label(for="title") Title
