@@ -19,11 +19,13 @@ const router = express.Router();
 
 router.get("/", (request, response, next) => {
 
+    const products = adminData.products;
     // Implement PUG as template engines
     response.render("shop", {
-        products: adminData.products,
-        docTitle: "Shop Page",
-        path: "/"
+        products,
+        pageTitle: "Shop Page",
+        path: "/",
+        hasProduct:  products.length> 0
     });
 });
 

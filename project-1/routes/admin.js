@@ -25,8 +25,9 @@ router.get("/add-product", (request, response, next) => {
     return response
         .status(200)
         .render("add-product", {
-            docTitle: "Add Product",
-            path: "/admin/add-product"
+            pageTitle: "Add Product",
+            path: "/admin/add-product",
+            hasProduct: products.length > 0
         });
 });
 

@@ -6,6 +6,7 @@ const path = require("path");
 // 3rd party Dependencies
 const express = require("express");
 const bodyParser = require("body-parser");
+const expressHbs = require("express-handlebars");
 
 // Internal Dependencies
 const rootDir = require("./lib/path.js");
@@ -16,7 +17,14 @@ const shopRoutes = require("./routes/shop.js");
 const app = express();
 const port = 8080;
 
-app.set("view engine", "pug");
+app.engine("handlebars", expressHbs({
+    defaultLayout: "main-layout"
+}));
+
+app.set("view engine", "handlebars");
+
+// Config explicitly
+app.set("views", "views");
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -37,7 +45,7 @@ app.use((request, response, next) => {
     return response
         .status(404)
         .render("page-not-found", {
-        docTitle: "Page Not Found"
+        pageTitle: "Page Not Found"
     });
 });
 

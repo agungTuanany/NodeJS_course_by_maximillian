@@ -42,6 +42,10 @@
     margin             : 0 0.25rem;
 }
 
+.btn {
+    margin: auto;
+}
+
 /* .btn { */
 /*   font                 : inherit; */
 /*   border               : 1px solid var(--green-tropical); */
