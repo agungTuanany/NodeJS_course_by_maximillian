@@ -1,4 +1,3 @@
-
 # Chapter-5 Working with Dynamic Content Adding Templating Engines
 
 ## Table of Contents

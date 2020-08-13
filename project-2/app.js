@@ -6,7 +6,6 @@ const path = require("path");
 // 3rd party Dependencies
 const express = require("express");
 const bodyParser = require("body-parser");
-// const expressHbs = require("express-handlebars");        // Uncomment this for using .handlebars
 
 // Internal Dependencies
 const rootDir = require("./lib/path.js");
@@ -17,13 +16,8 @@ const shopRoutes = require("./routes/shop.js");
 const app = express();
 const port = 8080;
 
-// app.engine("handlebars", expressHbs({                    // Uncommnet this for using .handlebars
-//     layoutDir: "views/layouts",
-//     defaultLayout: "main-layout",
-//     extname: "handlebars"
-// }));
 
-app.set("view engine", "ejs");                              // Change this for using .handlebars or .pug
+app.set("view engine", "ejs");
 
 // Config explicitly
 app.set("views", "views");
@@ -52,4 +46,4 @@ app.use((request, response, next) => {
         });
 });
 
-app.listen(port, () => console.log(`You are run "project-1" in server running by "Express" in port: "${port}".`));
+app.listen(port, () => console.log(`You run "project-2" in server running by "Express" in port: "${port}".`));
