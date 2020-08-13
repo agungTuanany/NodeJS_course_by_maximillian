@@ -20,13 +20,15 @@ const router = express.Router();
 router.get("/", (request, response, next) => {
 
     const products = adminData.products;
+    console.log(`shopjs products ${products}`)
     // Implement PUG as template engines
     response.render("shop", {
         products,
         pageTitle: "Shop Page",
         path: "/",
-        hasProduct:  products.length> 0
+        // hasProduct:  products.length  > 0
     });
+
 });
 
 module.exports = router;

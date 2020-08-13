@@ -10,8 +10,10 @@
  * XXX
  */
 
+// Internal Dependencies
+const Product = require("./../models/product.js");
+
 // Global variables
-const products = [];
 
 const getAddProduct = (request, response, next) => {
 
@@ -20,7 +22,7 @@ const getAddProduct = (request, response, next) => {
         .render("add-product", {
         pageTitle: "Add Product",
         path: "/admin/add-product",
-        hasProduct: products.length > 0,
+        // hasProduct: products.length > 0,
         formCSS: true,
         productCSS: true,
         activeAddProduct: true
@@ -29,6 +31,8 @@ const getAddProduct = (request, response, next) => {
 
 const postAddProduct = (request, response, next) => {
 
+    const product = new Product(request.body.title);
+
     if (request.body.title === "") {
         //@TODO: Create notice word if string empty
         return response
@@ -36,24 +40,24 @@ const postAddProduct = (request, response, next) => {
             .render("add-product", {
                 pageTitle: "Add Product",
                 path: "/admin/add-product",
-                hasProduct: products.length > 0
+                // hasProduct: products.length > 0
             });
     };
 
-    products.push({
-        title: request.body.title
-    });
+    product.save();
 
     return response.status(302).redirect("/");
 };
 
 const getProduct = (request, response, next) => {
 
+    const products = Product.fetchAll();
+
     return response.render("shop", {
         products,
         pageTitle: "Shop Page",
         path: "/",
-        hasProduct:  products.length> 0,
+        hasProduct:  products.length > 0,
         activeShop: true,
         productCSS: true
     });
