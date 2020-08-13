@@ -49,9 +49,6 @@ across `middleware` functions or some of the logic might be separated and move
 into another `middleware` function but we'll see all that and we'll get there
 step by for now.
 
-
-
-
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>

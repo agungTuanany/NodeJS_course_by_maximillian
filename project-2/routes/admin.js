@@ -13,61 +13,20 @@ const path = require("path");
 const express = require("express");
 
 // Internal Dependencies
-const rootDir = require("../lib/path.js");
+const productController = require("../controllers/product.js");
 
 // Global variables
 const router = express.Router();
-const products = [];
 
 // /admin/add-product => GET
-router.get("/add-product", (request, response, next) => {
-
-    return response
-        .status(200)
-        .render("add-product", {
-            pageTitle: "Add Product",
-            path: "/admin/add-product",
-            hasProduct: products.length > 0,
-            formCSS: true,
-            productCSS: true,
-            activeAddProduct: true
-        });
-});
+router.get("/add-product", productController.getAddProduct);
 
 // /admin/add-product => POST
-router.post("/add-product", (request, response, next) => {
+router.post("/add-product", productController.postAddProduct);
 
-    if (request.body.title === "") {
-        //@TODO: Create notice word if string empty
-        return response
-            .status(302)
-            .render("add-product", {
-                pageTitle: "Add Product",
-                path: "/admin/add-product",
-                hasProduct: products.length > 0
-            });
-    }
-
-    products.push({
-        title: request.body.title
-    });
-
-    return response.status(302).redirect("/");
-});
-
-module.exports = {
-    routes: router,
-    products: products
-};
+module.exports = router;
 
 /// Or you can imports like this; but I prefer above.
 // exports.routes = router;
 // exports.products = products;
 
-/*
- * XXX  NOTE FIXME:
- * @param product.push() is returning with a new array; caused the data can be seen
- * with unauthorized requested user; That cause the @param requested.body.title
- * is always stream until the server reloaded. This a BAD APPROACH!!
- * XXX
- */

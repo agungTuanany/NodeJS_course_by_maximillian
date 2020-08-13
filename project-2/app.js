@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 
 // Internal Dependencies
 const rootDir = require("./lib/path.js");
-const adminData = require("./routes/admin.js");
+const adminRoutes = require("./routes/admin.js");
 const shopRoutes = require("./routes/shop.js");
 
 // Global variables
@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public/css")));
 
 // Admin routes handlers
-app.use("/admin", adminData.routes);
+app.use("/admin", adminRoutes);
 
 // Shop router handlers
 app.use(shopRoutes);

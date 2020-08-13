@@ -11,22 +11,11 @@ const path = require("path");
 const express = require("express");
 
 // Internal Dependencies
-const rootDir = require("../lib/path.js");
-const adminData = require("./admin.js");
+const productController = require("../controllers/product.js");
 
 // Global variables
 const router = express.Router();
 
-router.get("/", (request, response, next) => {
-
-    const products = adminData.products;
-    // Implement PUG as template engines
-    response.render("shop", {
-        products,
-        pageTitle: "Shop Page",
-        path: "/",
-        hasProduct:  products.length> 0
-    });
-});
+router.get("/", productController.getProduct);
 
 module.exports = router;
