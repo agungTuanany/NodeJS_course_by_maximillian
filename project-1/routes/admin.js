@@ -36,7 +36,13 @@ router.post("/add-product", (request, response, next) => {
 
     if (request.body.title === "") {
         //@TODO: Create notice word if string empty
-        return response.render("add-product");
+        return response
+            .status(302)
+            .render("add-product", {
+                pageTitle: "Add Product",
+                path: "/admin/add-product",
+                hasProduct: products.length > 0
+            });
     }
 
     products.push({

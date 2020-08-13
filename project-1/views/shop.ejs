@@ -1,52 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title><%= pageTitle %></title>
-        <link rel="stylesheet" href="/main.css" />
-    </head>
-    <body>
+<%- include("includes/head.ejs") %>
+<body>
+    <%- include("includes/navigation.ejs") %>
+    <main>
+        <h1>My Product</h1>
+        <p>List of all products...</p>
 
-        <header class="main-header">
-            <nav class="main-header__nav">
-                <ul class="main-header__item-list">
-                    <li class="main-header__item"><a class="active" href="/">Shop</a></li>
-                    <li class="main-header__item"><a href="/admin/add-product">Add Product</a></li>
-                </ul>
-            </nav>
-        </header>
+        <% if (products.length > 0) { %>
+            <div class="grid">
+                <% for (let product of products) { %>
+                    <article class="card product-item">
+                        <header class="card__header">
+                            <h1 class="product__title"><%= product.title %></h1>
+                        </header>
+                        <div class="card__image">
+                            <img src="https://source.unsplash.com/Oc3fP0FXJbU/800x450" alt="{{productTitle}}">
+                        </div>
+                        <div class="card__content">
+                            <h2 class="product__price">$19.09</h2>
+                            <p class="product__description">A lettuce you can eat</p>
+                        </div>
 
-        <main>
-            <h1>My Product</h1>
-            <p>List of all products...</p>
+                        <div class="card__actions">
+                            <button class="btn">Add to Cart</button>
+                        </div>
+                    </article>
+                <% } %>
+            </div>
+        <% } else { %>
+            <h1>No Product Found!</h1>
+        <% } %>
+    </main>
 
-            <% if (products.length > 0) { %>
-                <div class="grid">
-                    <% for (let product of products) { %>
-                        <article class="card product-item">
-                            <header class="card__header">
-                                <h1 class="product__title"><%= product.title %></h1>
-                            </header>
-                            <div class="card__image">
-                                <img src="https://source.unsplash.com/Oc3fP0FXJbU/800x450" alt="{{productTitle}}">
-                            </div>
-                            <div class="card__content">
-                                <h2 class="product__price">$19.09</h2>
-                                <p class="product__description">A lettuce you can eat</p>
-                            </div>
-
-                            <div class="card__actions">
-                                <button class="btn">Add to Cart</button>
-                            </div>
-                        </article>
-                    <% } %>
-                </div>
-            <% } else { %>
-                <h1>No Product Found!</h1>
-            <% } %>
-
-        </main>
-    </body>
-</html>
+    <%- include("includes/end.ejs") %>
