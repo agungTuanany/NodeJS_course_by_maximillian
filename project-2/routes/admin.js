@@ -25,8 +25,3 @@ router.get("/add-product", productController.getAddProduct);
 router.post("/add-product", productController.postAddProduct);
 
 module.exports = router;
-
-/// Or you can imports like this; but I prefer above.
-// exports.routes = router;
-// exports.products = products;
-

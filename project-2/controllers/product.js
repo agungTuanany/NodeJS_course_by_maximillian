@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * Controller for all "product" either admin-product or user-product
  *

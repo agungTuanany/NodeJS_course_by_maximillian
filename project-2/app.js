@@ -11,6 +11,7 @@ const bodyParser = require("body-parser");
 const rootDir = require("./lib/path.js");
 const adminRoutes = require("./routes/admin.js");
 const shopRoutes = require("./routes/shop.js");
+const errorController = require("./controllers/404.js");
 
 // Global variables
 const app = express();
@@ -36,14 +37,6 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
 // 404 handlers
-app.use((request, response, next) => {
-
-    return response
-        .status(404)
-        .render("page-not-found", {
-            pageTitle: "Page Not Found",
-            path: "/"
-        });
-});
+app.use(errorController.get404);
 
 app.listen(port, () => console.log(`You run "project-2" in server running by "Express" in port: "${port}".`));
