@@ -67,5 +67,3 @@ const Product = class Product {
 };
 
 module.exports = Product;
-
-
