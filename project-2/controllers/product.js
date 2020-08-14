@@ -13,20 +13,18 @@
 // Internal Dependencies
 const Product = require("./../models/product.js");
 
-// Global variables
-
 const getAddProduct = (request, response, next) => {
 
     return response
         .status(200)
         .render("add-product", {
-        pageTitle: "Add Product",
-        path: "/admin/add-product",
-        // hasProduct: products.length > 0,
-        formCSS: true,
-        productCSS: true,
-        activeAddProduct: true
-    });
+            pageTitle: "Add Product",
+            path: "/admin/add-product",
+            // hasProduct: products.length > 0,
+            formCSS: true,
+            productCSS: true,
+            activeAddProduct: true
+        });
 };
 
 const postAddProduct = (request, response, next) => {
@@ -61,10 +59,10 @@ const getProduct = (request, response, next) => {
         activeShop: true,
         productCSS: true
     });
-}
+};
 
 module.exports = {
     getAddProduct,
     postAddProduct,
     getProduct
-}
+};
