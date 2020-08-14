@@ -49,15 +49,15 @@ const postAddProduct = (request, response, next) => {
 
 const getProduct = (request, response, next) => {
 
-    const products = Product.fetchAll();
-
-    return response.render("shop", {
-        products,
-        pageTitle: "Shop Page",
-        path: "/",
-        hasProduct:  products.length > 0,
-        activeShop: true,
-        productCSS: true
+    Product.fetchAll(products => {
+        return response.render("shop", {
+            products,
+            pageTitle: "Shop Page",
+            path: "/",
+            hasProduct:  products.length > 0,
+            activeShop: true,
+            productCSS: true
+        });
     });
 };
 

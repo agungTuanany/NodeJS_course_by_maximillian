@@ -53,10 +53,8 @@ const Product = class Product {
         });
     };
 
-    static fetchAll() {
+    static fetchAll(callback) {
 
-        // FIXME: create a callback to accept the 'length' of products, when
-        // this method get call.
         const p = path.join(rootDir, ".data", "products.json");
 
         // FIXME: again you should close this file after read to clean your
@@ -65,10 +63,11 @@ const Product = class Product {
 
             if (err && !data) {
                 console.log(err);
-                return [];
+                callback([]);
+                return;
             };
 
-            return JSON.parse(data);
+            return callback(JSON.parse(data));
         });
     };
 };
