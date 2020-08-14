@@ -14,6 +14,29 @@ const path = require("path");
 // Internal Dependencies
 const rootDir = require("./../lib/path.js");
 
+// Global variables
+const p = path.join(rootDir, ".data", "products.json");
+
+// Helpers function
+const _getProductsFromFile = (callback) => {
+
+    // FIXME: again you should close this file after read to clean your
+    // event-loop, !!!make use to explicit when writing the code.
+    fs.readFile(p, "utf8", (err, data) => {
+
+        // Sanitize check cause I'm not use typescript
+        data = typeof(data) ===  "string" && data.trim().length > 0 ? data : false;
+
+        if (err && !data) {
+            console.log(err);
+            callback([]);
+            return;
+        };
+
+        return callback(JSON.parse(data));
+    });
+};
+
 const Product = class Product {
 
     constructor(title) {
@@ -22,23 +45,7 @@ const Product = class Product {
 
     save() {
 
-        const p = path.join(rootDir, ".data", "products.json");
-
-        fs.readFile(p, "utf8", (err, data) => {
-
-            // @TODO: add sanitize check  for 'data' is accept 'string' only; so not get 'undefined'.
-
-            let products = [];
-
-            // @FIXME: the logic when get an 'error' should resolve; not throw the 'error'.
-            // @TODO: if file doesn't exist you should create automatically and close it.
-            if(err && !data) {
-                console.log(err);
-                // throw err;
-            }
-            else {
-                products = JSON.parse(data);
-            };
+        _getProductsFromFile(products => {
 
             products.push(this);
 
@@ -55,20 +62,7 @@ const Product = class Product {
 
     static fetchAll(callback) {
 
-        const p = path.join(rootDir, ".data", "products.json");
-
-        // FIXME: again you should close this file after read to clean your
-        // event-loop, !!!make use to explicit when writing the code.
-        fs.readFile(p, "utf8", (err, data) => {
-
-            if (err && !data) {
-                console.log(err);
-                callback([]);
-                return;
-            };
-
-            return callback(JSON.parse(data));
-        });
+        _getProductsFromFile(callback);
     };
 };
 
