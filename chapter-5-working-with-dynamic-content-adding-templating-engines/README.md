@@ -62,7 +62,7 @@ depending on the engine you're using with real HTML content; but this HTML
 content it uses there is generated on the fly; on the server by the templating
 engine taking that dynamic content into account.
 
-So fir example you could output a `<ul>` with `<li>` items for the data you have
+So for example you could output a `<ul>` with `<li>` items for the data you have
 in your `Node/Express` app with the help of the templating engine and in the
 end; the result will be dynamically; on the fly generated `.html` file which is
 then sent back to your users; The users never see the template, all that happens
