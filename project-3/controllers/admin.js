@@ -29,9 +29,14 @@ const getAddProduct = (request, response, next) => {
 
 const postAddProduct = (request, response, next) => {
 
-    const product = new Product(request.body.title);
+    const title       = request.body.title;
+    const imageUrl    = request.body.imageUrl;
+    const price       = request.body.price;
+    const description = request.body.description;
 
-    if (request.body.title === "") {
+    const product = new Product(title, imageUrl, price, description);
+
+    if (product === "") {
         //@TODO: Create notice word if string empty
         return response
             .status(302)
