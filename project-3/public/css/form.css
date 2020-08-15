@@ -21,7 +21,7 @@
 
 .form-control input,
 .from-control textarea {
-    border               : 1px solid var(--grey-silver);
+    border               : 1px solid var(--gray-silver);
     border-radius        : 5px;
     padding              : 15px;
     font                 : inherit;

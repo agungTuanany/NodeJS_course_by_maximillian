@@ -14,11 +14,11 @@
                         </header>
                         <div class="card__image">
                             <!-- @TODO: make the call async | caused took longer time -->
-                            <img src="https://source.unsplash.com/Oc3fP0FXJbU/800x450" alt="{{productTitle}}">
+                            <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
                         </div>
                         <div class="card__content">
-                            <h2 class="product__price">$19.09</h2>
-                            <p class="product__description">A lettuce you can eat</p>
+                            <h2 class="product__price">$<%= product.price %></h2>
+                            <p class="product__description"><%= product.description %></p>
                         </div>
 
                         <div class="card__actions">

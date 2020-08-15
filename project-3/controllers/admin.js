@@ -5,9 +5,9 @@
  *
  * XXX  NOTE FIXME:
  * @param product.push() is returning with a new array; caused the data can be seen
- * with unauthorized requested user; That cause the @param requested.body.title
- * is always stream until the server reloaded. This a BAD APPROACH!!
+ * with unauthorized requested user; This a BAD APPROACH!!
  * XXX
+ *
  */
 
 // Internal Dependencies
@@ -20,7 +20,6 @@ const getAddProduct = (request, response, next) => {
         .render("admin/add-product", {
             pageTitle: "Add Product",
             path: "/admin/add-product",
-            // hasProduct: products.length > 0,
             formCSS: true,
             productCSS: true,
             activeAddProduct: true
@@ -29,27 +28,31 @@ const getAddProduct = (request, response, next) => {
 
 const postAddProduct = (request, response, next) => {
 
-    const title       = request.body.title;
-    const imageUrl    = request.body.imageUrl;
-    const price       = request.body.price;
-    const description = request.body.description;
+    const title       = typeof(request.body.title) === "string" && request.body.title.trim().length > 0 ? request.body.title : false;
+    const imageUrl    = typeof(request.body.imageUrl) === "string" && request.body.imageUrl.trim().length > 0 ? request.body.imageUrl : false;
+    const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
+    const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
     const product = new Product(title, imageUrl, price, description);
 
-    if (product === "") {
-        //@TODO: Create notice word if string empty
-        return response
+    if (product.title === false ||
+        product.imageUrl === false ||
+        product.price === false ||
+        product.description === false
+    ) {
+        //@TODO: Create notice word if product is false
+        response
             .status(302)
             .render("admin/add-product", {
                 pageTitle: "Add Product",
                 path: "/admin/add-product",
-                // hasProduct: products.length > 0
             });
+        return
     };
 
     product.save();
 
-    return response.status(302).redirect("/");
+    return response.status(302).redirect("/products");
 };
 
 const getProducts = (request, response, next) => {
@@ -59,13 +62,12 @@ const getProducts = (request, response, next) => {
         return response
             .status(200)
             .render("admin/products", {
-            products,
-            pageTitle: "Admin Products",
-            path: "/admin/products",
-            hasProduct:  products.length > 0,
-            activeShop: true,
-            productCSS: true
-        });
+                products,
+                pageTitle: "Admin Products",
+                path: "/admin/products",
+                activeShop: true,
+                productCSS: true
+            });
     });
 };
 
