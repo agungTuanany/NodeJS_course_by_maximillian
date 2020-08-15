@@ -48,8 +48,18 @@ const getCheckout = (request, response, next) => {
     return response
         .status(200)
         .render("shop/checkout", {
-            pageTitle: "Checkout page",
+            pageTitle: "Checkout Page",
             path: "/checkout",
+        });
+};
+
+const getOrders = (request, response, next) => {
+
+    return response
+        .status(200)
+        .render("shop/orders", {
+            pageTitle: "Orders Page",
+            path: "/orders",
         });
 };
 
@@ -57,5 +67,6 @@ module.exports = {
     getProducts,
     getIndex,
     getCart,
-    getCheckout
+    getCheckout,
+    getOrders
 };
