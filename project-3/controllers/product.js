@@ -64,5 +64,5 @@ const getProduct = (request, response, next) => {
 module.exports = {
     getAddProduct,
     postAddProduct,
-    getProduct
+    getProduct,
 };
