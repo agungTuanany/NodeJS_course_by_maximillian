@@ -22,7 +22,10 @@
                         </div>
 
                         <div class="card__actions">
-                            <button class="btn">Add to Cart</button>
+                            <!-- @TODO: edit with single product; ie: /add-to-cart/product-name=foo -->
+                            <form action="/add-to-cart" method="POST">
+                                <button class="btn">Add to Cart</button>
+                            </form>
                         </div>
                     </article>
                 <% } %>

@@ -47,7 +47,7 @@ const postAddProduct = (request, response, next) => {
                 pageTitle: "Add Product",
                 path: "/admin/add-product",
             });
-        return
+        return;
     };
 
     product.save();
