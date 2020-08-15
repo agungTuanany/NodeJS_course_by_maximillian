@@ -13,18 +13,19 @@ const path = require("path");
 const express = require("express");
 
 // Internal Dependencies
-const productController = require("../controllers/product.js");
+const adminController = require("../controllers/admin.js");
 
 // Global variables
 const router = express.Router();
 
 // "/admin/add-product" => GET
-router.get("/add-product", productController.getAddProduct);
-
-// "/admin/add-product" => POST
-router.post("/add-product", productController.postAddProduct);
+router.get("/add-product", adminController.getAddProduct);
 
 // "/admin/products" => GET
-router.get("/products", productController.getProduct);
+router.get("/products", adminController.getProducts);
+
+// "/admin/add-product" => POST
+router.post("/add-product", adminController.postAddProduct);
+
 
 module.exports = router;

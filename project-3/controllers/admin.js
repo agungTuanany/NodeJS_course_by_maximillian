@@ -47,13 +47,16 @@ const postAddProduct = (request, response, next) => {
     return response.status(302).redirect("/");
 };
 
-const getProduct = (request, response, next) => {
+const getProducts = (request, response, next) => {
 
     Product.fetchAll(products => {
-        return response.render("shop/product-list", {
+
+        return response
+            .status(200)
+            .render("admin/products", {
             products,
-            pageTitle: "Shop Page",
-            path: "/",
+            pageTitle: "Admin Products",
+            path: "/admin/products",
             hasProduct:  products.length > 0,
             activeShop: true,
             productCSS: true
@@ -64,5 +67,5 @@ const getProduct = (request, response, next) => {
 module.exports = {
     getAddProduct,
     postAddProduct,
-    getProduct,
+    getProducts,
 };

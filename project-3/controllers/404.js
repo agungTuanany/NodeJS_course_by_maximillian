@@ -11,7 +11,7 @@ const get404 = (request, response, next) => {
         .status(404)
         .render("page-not-found", {
             pageTitle: "Page Not Found",
-            path: "/"
+            path: "/404"
         });
 };
 
