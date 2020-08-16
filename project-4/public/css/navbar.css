@@ -5,11 +5,13 @@
     height                    : 56px;
     background-color          : var(--green-tropical);
     padding                   : 0 1.5rem;
+    display                   : flex;
+    align-items               : center;
 }
 
 .main-header__nav {
     height                    : 100%;
-    display                   : flex;
+    display                   : none;
     align-items               : center;
 }
 
@@ -35,4 +37,81 @@
 .main-header__item a:active,
 .main-header__item a.active {
     color                     : var(--yellow-wattle);
+}
+
+.mobile-nav {
+  width                       : 20rem;
+  height                      : 100vh;
+  max-width                   : 90%;
+  position                    : fixed;
+  left                        : 0;
+  top                         : 0;
+  background                  : var(--white-solid);
+  z-index                     : 10;
+  padding                     : 2rem 1rem 1rem 2rem;
+  transform                   : translateX(-100%);
+  transition                  : transform 0.3s ease-out;
+}
+
+.mobile-nav.open {
+  transform                   : translateX(0);
+}
+
+.mobile-nav__item-list {
+  list-style                  : none;
+  display                     : flex;
+  flex-direction              : column;
+  margin                      : 0;
+  padding                     : 0;
+}
+
+.mobile-nav__item {
+  margin                      : 1rem;
+  padding                     : 0;
+}
+
+.mobile-nav__item a {
+  text-decoration             : none;
+  color                       : var(--black-solid);
+  font-size                   : 1.2rem;
+  padding                     : 0.5rem 2rem;
+}
+
+.mobile-nav__item a:active,
+.mobile-nav__item a:hover,
+.mobile-nav__item a.active {
+  background                  : var(--green-tropical);
+  color                       : var(--white-solid);
+  border-radius               : 3px;
+}
+
+#side-menu-toggle {
+  border                      : 1px solid var(--white-solid);
+  font                        : inherit;
+  padding                     : 0.5rem;
+  display                     : block;
+  background                  : transparent;
+  color                       : var(--white-solid);
+  cursor                      : pointer;
+}
+
+#side-menu-toggle:focus {
+  outline                     : none;
+}
+
+#side-menu-toggle:active,
+#side-menu-toggle:hover {
+  color                       : var(--yellow-grose);
+  border-color                : var(--yellow-grose);
+}
+
+.backdrop {
+  position                    : fixed;
+  top                         : 0;
+  left                        : 0;
+  width                       : 100%;
+  height                      : 100vh;
+  background                  : rgba(0, 0, 0, 0.5);
+  z-index                     : 5;
+  display                     : none;
 }

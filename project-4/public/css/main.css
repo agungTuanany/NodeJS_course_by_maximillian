@@ -1,14 +1,19 @@
-@import url("./css/shop.css");
-@import url("./css/form.css");
-@import url("./css/product.css");
+@import url("./shop.css");
+@import url("./form.css");
+@import url("./product.css");
 
 :root {
+    /* this color name refer to: */
+    /* http://chir.ag/projects/name-that-color/ */
+
     --black-solid    : #000000;
     --green-tropical : #00695C;
     --gray-silver    : #A1A1A1;
+    --gray-tundaro   : #4D4D4D;
     --purple-violet  : #6200FF;
     --white-solid    : #FFFFFF;
     --yellow-wattle  : #DBC441;
+    --yellow-grose   : #FFEB3B;
 }
 
 * {

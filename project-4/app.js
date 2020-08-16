@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Serve Static file
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "public/css")));
+// app.use(express.static(path.join(__dirname, "public/css")));
 
 // Admin routes handlers
 app.use("/admin", adminRoutes);
@@ -39,4 +39,4 @@ app.use(shopRoutes);
 // 404 handlers
 app.use(errorController.get404);
 
-app.listen(port, () => console.log(`You run "project-2" in server running by "Express" in port: "${port}".`));
+app.listen(port, () => console.log(`You run "project-4" in server running by "Express" in port: "${port}".`));

@@ -1,36 +1,35 @@
-/* @import url("../main.css"); */
 @import url("./navbar.css");
 
 .product-form {
-    width                : 30rem;
-    max-width            : 90%;
-    margin               : auto;
+    width                       : 30rem;
+    max-width                   : 90%;
+    margin                      : auto;
 }
 
 .form-control label,
 .form-control input,
 .form-control textarea {
-    display              : block;
-    width                : 100%;
-    margin               : 8px 0;
+    display                     : block;
+    width                       : 100%;
+    margin                      : 8px 0;
 }
 
 .form-control label {
-    font-size            : 1.5rem;
+    font-size                   : 1.5rem;
 }
 
 .form-control input,
 .from-control textarea {
-    border               : 1px solid var(--gray-silver);
-    border-radius        : 5px;
-    padding              : 15px;
-    font                 : inherit;
-    margin-bottom        : 1rem;
+    border                      : 1px solid var(--gray-silver);
+    border-radius               : 5px;
+    padding                     : 15px;
+    font                        : inherit;
+    margin-bottom               : 1rem;
 }
 
 .form-control input:active,
 .form-control textarea:active,
 .form-control input:focus,
 .form-control textarea:focus {
-    outline-color        : var(--green-tropical);
+    outline-color               : var(--green-tropical);
 }

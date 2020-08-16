@@ -17,6 +17,6 @@ In this "project-4" we also continuing working with `models`; learn about how to
 pass `route parameters`; how to use `query parameters`; both **important**
 things that `EpressJS` `router` supports.
 
-In this "project-4" we'll also use `EpressJS` `router` methods to enhance our
+In this "project-4" we'll also use `ExpressJS` `router` methods to enhance our
 `models`; and with that will add more functionalities; add some **new**
 `models`.
