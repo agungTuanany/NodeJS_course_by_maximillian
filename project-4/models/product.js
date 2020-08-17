@@ -69,6 +69,17 @@ const Product = class Product {
 
         _getProductsFromFile(callback);
     };
+
+    static findById(id, callback) {
+
+        _getProductsFromFile(products => {
+
+            const product = products.find(p => p.id === id);
+
+            // Executed synchronously
+            callback(product);
+        })
+    }
 };
 
 module.exports = Product;

@@ -26,9 +26,12 @@ const getProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
-    console.log(prodId)
+    // Fetch product
+    Product.findById(prodId, product => {
+        console.log(product);
+    })
     response.redirect("/")
-}
+};
 
 const getIndex = (request, response, next) => {
 
