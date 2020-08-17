@@ -23,6 +23,9 @@ router.get("/", shopController.getIndex);
 // "/products" => GET
 router.get("/products", shopController.getProducts);
 
+// "/products/123" => GET
+router.get("/products/:productId", shopController.getProduct);
+
 // "/products" => GET
 router.get("/cart", shopController.getCart);
 

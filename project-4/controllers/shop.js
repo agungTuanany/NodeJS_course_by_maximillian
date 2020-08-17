@@ -22,6 +22,14 @@ const getProducts = (request, response, next) => {
     });
 };
 
+const getProduct = (request, response, next) => {
+
+    const prodId = request.params.productId;
+
+    console.log(prodId)
+    response.redirect("/")
+}
+
 const getIndex = (request, response, next) => {
 
     return response
@@ -65,6 +73,7 @@ const getOrders = (request, response, next) => {
 
 module.exports = {
     getProducts,
+    getProduct,
     getIndex,
     getCart,
     getCheckout,
