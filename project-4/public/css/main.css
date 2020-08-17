@@ -1,6 +1,7 @@
 @import url("./shop.css");
 @import url("./form.css");
 @import url("./product.css");
+@import url("./product-detail.css");
 
 :root {
     /* this color name refer to: */

@@ -28,9 +28,13 @@ const getProduct = (request, response, next) => {
 
     // Fetch product
     Product.findById(prodId, product => {
-        console.log(product);
-    })
-    response.redirect("/")
+
+        response.render("shop/product-detail", {
+            product,
+            pageTitle: product.title,
+            path: "/products"
+        });
+    });
 };
 
 const getIndex = (request, response, next) => {
