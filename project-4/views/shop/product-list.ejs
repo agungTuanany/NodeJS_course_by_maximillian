@@ -23,6 +23,7 @@
 
                         <div class="card__actions">
                             <!-- @TODO: edit with single product; ie: /add-to-cart/:product__title -->
+                            <a href="/products/<%= product.id %>" class="btn">Details</a>
                             <form action="/add-to-cart" method="POST">
                                 <button class="btn">Add to Cart</button>
                             </form>

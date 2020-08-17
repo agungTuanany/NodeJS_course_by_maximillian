@@ -48,6 +48,8 @@ const Product = class Product {
 
     save() {
 
+        //@TODO: 'id' should keep in JSON as 'number'
+        this.id = Math.random().toString()
         _getProductsFromFile(products => {
 
             products.push(this);
