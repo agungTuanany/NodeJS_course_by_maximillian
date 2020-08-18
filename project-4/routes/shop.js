@@ -26,8 +26,11 @@ router.get("/products", shopController.getProducts);
 // "/products/123" => GET
 router.get("/products/:productId", shopController.getProduct);
 
-// "/products" => GET
+// "/cart" => GET
 router.get("/cart", shopController.getCart);
+
+// "/cart" => POST
+router.post("/cart", shopController.postCart);
 
 // "/checkout" => GET
 router.get("/checkout", shopController.getCheckout);

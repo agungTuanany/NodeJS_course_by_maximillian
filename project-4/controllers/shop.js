@@ -58,6 +58,17 @@ const getCart = (requets, response, next) => {
         });
 };
 
+const postCart = (request, response, next) => {
+
+    const prodId = request.body.productId;
+
+    console.log(prodId)
+
+    response
+        .status(301)
+        .redirect("/cart")
+};
+
 const getCheckout = (request, response, next) => {
 
     return response
@@ -83,6 +94,7 @@ module.exports = {
     getProduct,
     getIndex,
     getCart,
+    postCart,
     getCheckout,
     getOrders
 };
