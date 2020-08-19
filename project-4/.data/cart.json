@@ -1,0 +1,9 @@
+{
+    "products": [
+        {
+            "id": "123aabb",
+            "qty": 1
+        }
+    ],
+    "totalPrice": 19.8
+}

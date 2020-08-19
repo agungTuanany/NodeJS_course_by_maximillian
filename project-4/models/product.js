@@ -78,8 +78,8 @@ const Product = class Product {
 
             // Executed synchronously
             callback(product);
-        })
-    }
+        });
+    };
 };
 
 module.exports = Product;

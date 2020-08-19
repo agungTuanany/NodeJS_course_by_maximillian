@@ -7,6 +7,7 @@
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
+const Cart = require("./../models/cart.js");
 
 const getProducts = (request, response, next) => {
 
@@ -62,7 +63,11 @@ const postCart = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    console.log(prodId)
+    // console.log(prodId)
+    Product.findById(prodId, product => {
+
+        Cart.addProduct(prodId, product.price);
+    });
 
     response
         .status(301)

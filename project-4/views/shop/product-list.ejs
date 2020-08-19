@@ -24,10 +24,8 @@
                         <div class="card__actions">
                             <!-- @TODO: edit with single product; ie: /add-to-cart/:product__title -->
                             <a href="/products/<%= product.id %>" class="btn">Details</a>
-                            <form action="/add-to-cart" method="POST">
-                                <button class="btn">Add to Cart</button>
-                                <input type="hidden" name="productId" value="<%= product.id %>">
-                            </form>
+                            <!-- @NOTE: use second argument in ejs, to include function where you pass an object -->
+                            <%- include("../includes/add-to-cart.ejs", {product: product}) %>
                         </div>
                     </article>
                 <% } %>
