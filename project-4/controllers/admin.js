@@ -117,10 +117,16 @@ const getProducts = (request, response, next) => {
     });
 };
 
+const postDeleteProduct = (request, response, next) => {
+
+    const prodId = request.body.productId;
+};
+
 module.exports = {
     getAddProduct,
     postAddProduct,
     getEditProduct,
     postEditProduct,
-    getProducts
+    getProducts,
+    postDeleteProduct
 };

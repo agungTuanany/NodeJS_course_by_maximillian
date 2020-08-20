@@ -78,6 +78,28 @@ const Product = class Product {
         });
     };
 
+    static deleteById(id) {
+
+        _getProductsFromFile(products => {
+
+            // const productIndex = products.findIndex(product => product.id === id);
+            const updatedProducts = products.filter(product => product.id !== id);
+
+            fs.writeFile(p, JSON.stringify(updatedProducts, null, 4), (err, data) => {
+
+                if (err && data) {
+                    console.log(err);
+                }
+                else {
+                    //...
+                    console.log(data);
+                }
+            });
+
+            callback(product);
+        });
+    };
+
     static fetchAll(callback) {
 
         _getProductsFromFile(callback);

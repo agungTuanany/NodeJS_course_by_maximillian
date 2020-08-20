@@ -25,6 +25,7 @@
                             <!-- @TODO: edit with single product; ie: /admin/edit-product/:product_title -->
                             <a href="/admin/edit-product" class="btn">Edit</a>
                             <form action="/admin/delete-product" method="POST">
+                                <input type="hidden" value="<%= product.id %>" name="productId">
                                 <button class="btn" type="submit">Delete</button>
                             </form>
                         </div>
