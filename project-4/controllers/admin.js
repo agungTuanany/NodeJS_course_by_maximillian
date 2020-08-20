@@ -20,6 +20,7 @@ const getAddProduct = (request, response, next) => {
         .render("admin/edit-product", {
             pageTitle: "Add Product",
             path: "/admin/add-product",
+            editing: false
             // formCSS: true,
             // productCSS: true,
             // activeAddProduct: true
@@ -66,14 +67,23 @@ const getEditProduct = (request, response, next) => {
             .redirect("/");
     };
 
-    // If editMode is attached even the value is 'null' or 'undefined'  you get render into
-    // "admin/edit-product/productId"
-    console.log(editMode);
+    const prodId = request.params.productId;
+    Product.findById(prodId, product => {
 
-    response.render("admin/edit-product", {
-        pageTitle: "Edit Products",
-        path: "/admin/edit-product",
-        editing: editMode
+        // @NOTE: It's bad approach in UX, most of the time you want to show an
+        // error instead redirect
+        if (!product) {
+            return response
+                .status(301)
+                .redirect("/")
+        };
+
+        response.render("admin/edit-product", {
+            pageTitle: "Edit Products",
+            path: "/admin/edit-product",
+            editing: editMode,
+            product: product
+        });
     });
 };
 
