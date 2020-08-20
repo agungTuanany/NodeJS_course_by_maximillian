@@ -13,6 +13,7 @@ const path = require("path");
 
 // Internal Dependencies
 const rootDir = require("./../lib/path.js");
+const Cart = require("./cart.js");
 
 // Global variables
 const p = path.join(rootDir, ".data", "products.json");
@@ -82,6 +83,7 @@ const Product = class Product {
 
         _getProductsFromFile(products => {
 
+            const product = products.find(product => product.id === id);
             // const productIndex = products.findIndex(product => product.id === id);
             const updatedProducts = products.filter(product => product.id !== id);
 
@@ -91,12 +93,10 @@ const Product = class Product {
                     console.log(err);
                 }
                 else {
-                    //...
-                    console.log(data);
-                }
+                    Cart.deleteProduct(id, product.price);
+                    // console.log(data);
+                };
             });
-
-            callback(product);
         });
     };
 

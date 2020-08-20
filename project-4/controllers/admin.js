@@ -120,6 +120,11 @@ const getProducts = (request, response, next) => {
 const postDeleteProduct = (request, response, next) => {
 
     const prodId = request.body.productId;
+
+    Product.deleteById(prodId);
+    response
+        .status(301)
+        .redirect("/admin/products");
 };
 
 module.exports = {

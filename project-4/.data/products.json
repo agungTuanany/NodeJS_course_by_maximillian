@@ -12,12 +12,5 @@
         "imageUrl": "https://source.unsplash.com/CLwHYy17rSA/800x450",
         "description": "A lettuce",
         "price": 20
-    },
-    {
-        "title": "lettuce",
-        "imageUrl": "https://source.unsplash.com/CLwHYy17rSA/800x450",
-        "description": "A third product",
-        "price": 19.91,
-        "id": "0.05327033741428977"
     }
 ]

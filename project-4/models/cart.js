@@ -96,11 +96,48 @@ const Cart = class Cart {
                     // @NOTE: Why not parse the 'data' instead 'cart'? Cause the
                     // 'data' parsed into JSON and encapsulated into 'cart' as an
                     // object.
-                    console.log("writed a file cart.json with data:", cart);
-                    console.log(err);
+                    console.log("writed cart.json file with data:", cart);
+                    console.log(err); // result null
                     return;
                 };
             });
+        });
+    };
+
+    static deleteProduct(id, productPrice) {
+
+        // FIXME: if the specific 'id' in cart.json didn't punch the 'add
+        // product button' is not registered; it will fire an error.
+        fs.readFile(p, "utf8", (err, data) => {
+
+            // return err cause the 'id' doesn't exist
+            if(err) {
+                console.log("Error in Cart Model method  'deleteProduct':", err);
+                return;
+            };
+
+            const updatedCart = { ...JSON.parse(data) };
+            const product = updatedCart.products.findIndex(product => product.id === id);
+            const productQty = product.qty;
+
+            updatedCart.products = updatedCart.products.filter(product => product.id !== id);
+
+            // FIXME: the totalPrice return 'null' cause updatedCart.totalPrice
+            // also subtract the price that not belong to specific 'id'
+            updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQty;
+
+            fs.writeFile(p, JSON.stringify(updatedCart, null, 4), (err, data) => {
+
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                else {
+                    console.log("Update cart.json file with data:", updatedCart);
+                    console.log(err); // result null
+                    return;
+                };
+            })
         });
     };
 };
