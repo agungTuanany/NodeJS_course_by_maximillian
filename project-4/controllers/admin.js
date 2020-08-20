@@ -21,9 +21,6 @@ const getAddProduct = (request, response, next) => {
             pageTitle: "Add Product",
             path: "/admin/add-product",
             editing: false
-            // formCSS: true,
-            // productCSS: true,
-            // activeAddProduct: true
         });
 };
 
@@ -34,7 +31,7 @@ const postAddProduct = (request, response, next) => {
     const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
     const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
-    const product = new Product(title, imageUrl, price, description);
+    const product = new Product(null, title, imageUrl, price, description);
 
     if (product.title === false ||
         product.imageUrl === false ||
@@ -87,6 +84,23 @@ const getEditProduct = (request, response, next) => {
     });
 };
 
+const postEditProduct = (request, response, next) => {
+
+    const prodId          = request.body.productId;
+    const updatedTitle    = request.body.title;
+    const updatedPrice    = request.body.price;
+    const updatedImageUrl = request.body.imageUrl;
+    const updatedDesc     = request.body.description;
+
+    // (id, title, imageUrl, price, description)
+    const updatedProduct = new Product(prodId, updatedTitle, updatedImageUrl, updatedPrice, updatedDesc);
+
+    updatedProduct.save();
+
+    response.redirect("/admin/products");
+};
+
+
 const getProducts = (request, response, next) => {
 
     Product.fetchAll(products => {
@@ -107,5 +121,6 @@ module.exports = {
     getAddProduct,
     postAddProduct,
     getEditProduct,
+    postEditProduct,
     getProducts
 };

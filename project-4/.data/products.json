@@ -1,10 +1,10 @@
 [
     {
         "id": "123aabb",
-        "title": "lettuce",
+        "title": "lettuce edited",
         "imageUrl": " https://source.unsplash.com/CLwHYy17rSA/800x450",
-        "description": "A fresh lettuce",
-        "price": 19.8
+        "description": "A fresh lettuce edited ",
+        "price": "19.8"
     },
     {
         "id": "123aacc",

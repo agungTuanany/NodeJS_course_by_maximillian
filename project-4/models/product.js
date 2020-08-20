@@ -20,8 +20,6 @@ const p = path.join(rootDir, ".data", "products.json");
 // Helpers function
 const _getProductsFromFile = (callback) => {
 
-    // FIXME: again you should close this file after read to clean your
-    // event-loop, !!!make use to explicit when writing the code.
     fs.readFile(p, "utf8", (err, data) => {
 
         // Sanitize check cause I'm not use typescript
@@ -39,7 +37,8 @@ const _getProductsFromFile = (callback) => {
 
 const Product = class Product {
 
-    constructor(title, imageUrl, price, description) {
+    constructor(id, title, imageUrl, price, description) {
+        this.id          = id;
         this.title       = title;
         this.imageUrl    = imageUrl;
         this.description = description;
@@ -49,19 +48,33 @@ const Product = class Product {
     save() {
 
         //@TODO: 'id' should keep in JSON as 'number'
-        this.id = Math.random().toString()
         _getProductsFromFile(products => {
 
-            products.push(this);
+            // Create 'id' for product
+            if (!this.id) {
+                this.id = Math.random().toString();
 
-            fs.writeFile(p, JSON.stringify(products, null, 4), (err, data) => {
+                products.push(this);
+                fs.writeFile(p, JSON.stringify(products, null, 4), (err, data) => {
 
-                // @FIXME: after you write a file you should `close` the file. So
-                // not looping around in event-loop in future. Hint: use fs.close.
-                if (err && data) {
-                    console.log(err);
-                };
-            });
+                    if (err && data) {
+                        console.log(err);
+                    };
+                });
+            }
+            // Edit the product
+            else {
+                const existingProductIndex = products.findIndex(product => product.id === this.id);
+                const updatedProducts = [...products];
+
+                updatedProducts[existingProductIndex] = this;
+                fs.writeFile(p, JSON.stringify(updatedProducts, null, 4), (err, data) => {
+
+                    if (err && data) {
+                        console.log(err);
+                    };
+                });
+            };
         });
     };
 
