@@ -17,12 +17,12 @@ const getAddProduct = (request, response, next) => {
 
     return response
         .status(200)
-        .render("admin/add-product", {
+        .render("admin/edit-product", {
             pageTitle: "Add Product",
             path: "/admin/add-product",
-            formCSS: true,
-            productCSS: true,
-            activeAddProduct: true
+            // formCSS: true,
+            // productCSS: true,
+            // activeAddProduct: true
         });
 };
 
@@ -55,6 +55,28 @@ const postAddProduct = (request, response, next) => {
     return response.status(302).redirect("/products");
 };
 
+// http://localhost:8080/admin/edit-product/123aabb?edit=true
+const getEditProduct = (request, response, next) => {
+
+    const editMode = request.query.edit;
+
+    if (!editMode) {
+        return response
+            .status(301)
+            .redirect("/");
+    };
+
+    // If editMode is attached even the value is 'null' or 'undefined'  you get render into
+    // "admin/edit-product/productId"
+    console.log(editMode);
+
+    response.render("admin/edit-product", {
+        pageTitle: "Edit Products",
+        path: "/admin/edit-product",
+        editing: editMode
+    });
+};
+
 const getProducts = (request, response, next) => {
 
     Product.fetchAll(products => {
@@ -74,5 +96,6 @@ const getProducts = (request, response, next) => {
 module.exports = {
     getAddProduct,
     postAddProduct,
-    getProducts,
+    getEditProduct,
+    getProducts
 };
