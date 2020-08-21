@@ -118,14 +118,16 @@ const Cart = class Cart {
 
             const updatedCart = { ...JSON.parse(data) };
             const product = updatedCart.products.find(product => product.id === id);
+
+            // If the 'id' is not listed on cart.json; exit event-loop immediately
+            if (!product) {
+                return;
+            };
+
             const productQty = product.qty;
 
             updatedCart.products = updatedCart.products.filter(product => product.id !== id);
-
-            // @FIXME: the totalPrice return 'null' cause updatedCart.totalPrice
-            // also subtract the price that not belong to specific 'id'
             updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQty;
-
 
             fs.writeFile(p, JSON.stringify(updatedCart, null, 4), (err, data) => {
 
@@ -141,11 +143,12 @@ const Cart = class Cart {
             })
         });
     };
+
     static getCart(callback) {
 
         fs.readFile(p, "utf8", (err, data) => {
 
-            const cart =JSON.parse(data);
+            const cart = JSON.parse(data);
 
             if (err) {
                 callback(null);
