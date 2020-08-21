@@ -49,7 +49,6 @@ const postAddProduct = (request, response, next) => {
     };
 
     product.save();
-
     return response.status(302).redirect("/products");
 };
 
@@ -65,6 +64,7 @@ const getEditProduct = (request, response, next) => {
     };
 
     const prodId = request.params.productId;
+
     Product.findById(prodId, product => {
 
         // @NOTE: It's bad approach in UX, most of the time you want to show an
@@ -75,7 +75,7 @@ const getEditProduct = (request, response, next) => {
                 .redirect("/")
         };
 
-        response.render("admin/edit-product", {
+        return response.render("admin/edit-product", {
             pageTitle: "Edit Products",
             path: "/admin/edit-product",
             editing: editMode,
@@ -91,13 +91,11 @@ const postEditProduct = (request, response, next) => {
     const updatedPrice    = request.body.price;
     const updatedImageUrl = request.body.imageUrl;
     const updatedDesc     = request.body.description;
-
     // (id, title, imageUrl, price, description)
     const updatedProduct = new Product(prodId, updatedTitle, updatedImageUrl, updatedPrice, updatedDesc);
 
     updatedProduct.save();
-
-    response.redirect("/admin/products");
+    return response.redirect("/admin/products");
 };
 
 
@@ -122,7 +120,7 @@ const postDeleteProduct = (request, response, next) => {
     const prodId = request.body.productId;
 
     Product.deleteById(prodId);
-    response
+    return response
         .status(301)
         .redirect("/admin/products");
 };

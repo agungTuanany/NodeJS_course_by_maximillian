@@ -60,7 +60,7 @@ const Cart = class Cart {
 
             /* @NOTE: This the logic I should repeatedly read. As I don't grasp;
              * You should READ THE CODE BELOW CAREFULLY!.
-            */
+             */
 
             // Analyze the cart => Find existing product
             const existingProductIndex = cart.products .findIndex(product => product.id === id);
@@ -89,7 +89,7 @@ const Cart = class Cart {
             fs.writeFile(p, JSON.stringify(cart, null, 4), (err) => {
 
                 if (err) {
-                    console.log(err);
+                    console.log("addProduct Error:", err);
                     return;
                 }
                 else {
@@ -97,7 +97,7 @@ const Cart = class Cart {
                     // 'data' parsed into JSON and encapsulated into 'cart' as an
                     // object.
                     console.log("writed cart.json file with data:", cart);
-                    console.log(err); // result null
+                    console.log("addProduct Error:", err); // result null
                     return;
                 };
             });
@@ -117,7 +117,7 @@ const Cart = class Cart {
             };
 
             const updatedCart = { ...JSON.parse(data) };
-            const product = updatedCart.products.findIndex(product => product.id === id);
+            const product = updatedCart.products.find(product => product.id === id);
             const productQty = product.qty;
 
             updatedCart.products = updatedCart.products.filter(product => product.id !== id);
@@ -126,15 +126,16 @@ const Cart = class Cart {
             // also subtract the price that not belong to specific 'id'
             updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQty;
 
+
             fs.writeFile(p, JSON.stringify(updatedCart, null, 4), (err, data) => {
 
                 if (err) {
-                    console.log(err);
+                    console.log("deleteProduct Error:", err);
                     return;
                 }
                 else {
                     console.log("Update cart.json file with data:", updatedCart);
-                    console.log(err); // result null
+                    console.log("deleteProduct Error:", err); // result null
                     return;
                 };
             })
@@ -153,7 +154,6 @@ const Cart = class Cart {
                 callback(cart);
             };
         });
-
     };
 };
 

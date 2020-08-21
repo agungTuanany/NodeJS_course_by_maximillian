@@ -1,9 +1,4 @@
 {
-    "products": [
-        {
-            "id": "123aabb",
-            "qty": 2
-        }
-    ],
-    "totalPrice": "19.8"
+    "products": [],
+    "totalPrice": 0
 }

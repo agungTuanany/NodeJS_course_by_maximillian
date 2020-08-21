@@ -30,7 +30,7 @@ const getProduct = (request, response, next) => {
     // Fetch product
     Product.findById(prodId, product => {
 
-        response.render("shop/product-detail", {
+        return response.render("shop/product-detail", {
             product,
             pageTitle: product.title,
             path: "/products"
@@ -49,7 +49,7 @@ const getIndex = (request, response, next) => {
 
 };
 
-const getCart = (requets, response, next) => {
+const getCart = (request, response, next) => {
 
     // @TODO: re code from callback hell! Is not good code approach
     Cart.getCart(cart => {
@@ -92,9 +92,26 @@ const postCart = (request, response, next) => {
         Cart.addProduct(prodId, product.price);
     });
 
-    response
+    return response
         .status(301)
         .redirect("/cart")
+};
+
+const postCartDeleteProduct = (request, response, next) => {
+
+    const prodId = request.body.productId;
+
+    Product.findById(prodId, product => {
+
+        // Fri 21 Aug 2020 10:24:58 PM WIB
+        // @TODO: make if block statement; if deletion is succeeded go to
+        // redirect if not warn the user. Because we access a file in there,
+        // theoretically we should use callback here.
+        Cart.deleteProduct(prodId, product.price);
+        return response
+            .status(301)
+            .redirect("/cart");
+    });
 };
 
 const getCheckout = (request, response, next) => {
@@ -123,6 +140,7 @@ module.exports = {
     getIndex,
     getCart,
     postCart,
+    postCartDeleteProduct,
     getCheckout,
     getOrders
 };

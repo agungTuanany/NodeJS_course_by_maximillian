@@ -12,5 +12,12 @@
         "imageUrl": "https://source.unsplash.com/CLwHYy17rSA/800x450",
         "description": "A lettuce",
         "price": 20
+    },
+    {
+        "id": "0.5052685095214684",
+        "title": "Wholemeal Bread",
+        "imageUrl": "https://source.unsplash.com/qLcSBmaebR8/800x450",
+        "description": "Wholemeal bread",
+        "price": 5
     }
 ]
