@@ -106,7 +106,7 @@ const Cart = class Cart {
 
     static deleteProduct(id, productPrice) {
 
-        // FIXME: if the specific 'id' in cart.json didn't punch the 'add
+        // @FIXME: if the specific 'id' in cart.json didn't punch the 'add
         // product button' is not registered; it will fire an error.
         fs.readFile(p, "utf8", (err, data) => {
 
@@ -122,7 +122,7 @@ const Cart = class Cart {
 
             updatedCart.products = updatedCart.products.filter(product => product.id !== id);
 
-            // FIXME: the totalPrice return 'null' cause updatedCart.totalPrice
+            // @FIXME: the totalPrice return 'null' cause updatedCart.totalPrice
             // also subtract the price that not belong to specific 'id'
             updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQty;
 
@@ -139,6 +139,21 @@ const Cart = class Cart {
                 };
             })
         });
+    };
+    static getCart(callback) {
+
+        fs.readFile(p, "utf8", (err, data) => {
+
+            const cart =JSON.parse(data);
+
+            if (err) {
+                callback(null);
+            }
+            else {
+                callback(cart);
+            };
+        });
+
     };
 };
 

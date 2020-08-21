@@ -109,7 +109,7 @@ const Product = class Product {
 
         _getProductsFromFile(products => {
 
-            const product = products.find(p => p.id === id);
+            const product = products.find(prod => prod.id === id);
 
             // Executed synchronously
             callback(product);

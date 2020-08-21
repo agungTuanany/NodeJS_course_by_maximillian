@@ -2,8 +2,8 @@
     "products": [
         {
             "id": "123aabb",
-            "qty": 1
+            "qty": 2
         }
     ],
-    "totalPrice": null
+    "totalPrice": "19.8"
 }

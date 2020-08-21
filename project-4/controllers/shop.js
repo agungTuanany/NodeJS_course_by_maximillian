@@ -51,12 +51,35 @@ const getIndex = (request, response, next) => {
 
 const getCart = (requets, response, next) => {
 
-    return response
-        .status(200)
-        .render("shop/cart", {
-            pageTitle: "Your Cart",
-            path: "/cart"
+    // @TODO: re code from callback hell! Is not good code approach
+    Cart.getCart(cart => {
+
+        Product.fetchAll(products => {
+
+            const cartProducts =[];
+
+            for (const product of products) {
+                const cartProductData = cart.products.find(prod => prod.id === product.id);
+
+                // @TODO: catch the error if '!product'
+                // @TODO: handle productPrice
+                if (cartProductData) {
+                    cartProducts.push({
+                        productData: product,
+                        qty: cartProductData.qty
+                    });
+                };
+            };
+
+            return response
+                .status(200)
+                .render("shop/cart", {
+                    pageTitle: "Your Cart",
+                    path: "/cart",
+                    products: cartProducts
+                });
         });
+    });
 };
 
 const postCart = (request, response, next) => {
