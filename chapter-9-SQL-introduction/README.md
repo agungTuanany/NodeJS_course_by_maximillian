@@ -1,0 +1,127 @@
+# SQL introduction
+
+## Table of Contents
+1. [Module Introduction](#module-introduction)
+2. [Choosing Database](#choosing-database)
+
+
+## Module Introduction
+
+It's now finally time that we start storing our data in a more correct and
+realistic way because thus far, we either used the `memory` when we just stored
+the data in a `variable` in our NodeJS program and it was then even shared
+across requests or we stored it in a `file` that's also not optimal because
+accessing file from files is **pretty slow**. Especially as we start storing
+more and more data in them. Therefore not really something we would do in a real
+application.
+
+Instead there, you typically would use a database which is specific program that
+allows you or that is built for storing data and for efficiently retrieving data
+too.
+
+![chapter-9-1.gif](./images/gif/chapter-9-1.gif "Module Introduction")
+
+Therefore in this module, we'll have a look at the different of two important
+different kinds of database, `SQL` and `NoSQL ` databases and compare them,
+**highlight** the differences and actually see examples for both.
+
+In this chapter we'll start with `SQL`. `NoSQL` example will also follow in
+a separate module but let me first of all show you how you would use a `SQL`
+based database together with NodeJS application.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+
+## Choosing Database
+
+So `SQL` or `NoSQL`, that is the question and to answer the that question, we
+first of all have to understand the difference or what `SQL` and `NoSQL`
+database are, how they differ, how differ regarding how we store the data and so
+on.
+
+![chapter-9-2.gif](./images/gif/chapter-9-2.gif "Choosing database")
+
+Our goal always to store data and make it easily available or accessible so that
+we have an easy of accessing our data and not just easy from a code prospective
+but of course efficient, it should be fast.
+
+It's simply quicker than accessing a file especially as the data in there grows,
+it also helps us with things like we don't have to read the entire file to just
+find one piece of information.
+
+Now as I mentioned, we can opt (select) for a `SQL`-based databases; `MySQL`
+would be an example database engine that you can use or a `NoSQL` database and
+there `MongoDB` is more prominent (leading) and well known alternatives.
+
+### What is SQL how does it work then ?
+<br/>
+
+![chapter-9-3.gif](./images/gif/chapter-9-3.gif "What is SQL how doest it work")
+
+`SQL` database thinks in so-called `tables`; So we might have a `Users`,
+a `Products` and let's say an `Orders` table and in each table, you have so
+called `fields` or `columns`.
+
+For example, a `User` could b defined by having an `Id`, an `email`, a `name`
+and a `Products` having an `Id` and `title`, `price` , and `description`.
+
+Now we fill in data for these fields, so-called `records`. So basically the
+`rows` in our `tables`. For example we got a couple users with their data and we
+get a couple of products too.
+
+`SQL` based database also have on important thing, they allow you to `relate`
+different `tables`, for example, an `Orders` could simply described as
+`connection` of a `User` and a `Products`, because a user might order a couple of
+different products and a product might be ordered by a couple of different Users
+
+So basically we have relations in `SQL` based databases, here we can see one
+example relation.
+
+### Core SQL Database Characteristics
+<br/>
+
+![chapter-9-4.gif](./images/gif/chapter-9-4.gif "Core SQL database characteristics")
+
+This is noe of the core things about `SQL` in general, the core `SQL` database
+characteristics are that we have a strong `Data Schema` so that for each
+`table`, we clearly define how the data in there should look like, which
+`type of data` does each field store; is it a `number`?, is it a `booelan`?.
+
+So that we have this  strongly or `strict` defined schema; and `all data in the
+table has to fit the schema`. This definition of how the data has to look like
+is one **core** thing in a `SQL` database.
+
+We also have `relations` between our data, that is another core characteristic
+of `SQL` based database.
+
+We relate our different tables with basically three important kind of `relations`:
+
+- one to one
+- one to may
+- many to many
+
+This simply means that we can have two tables where each records fits one other
+record; a record might fit multiple other records or multiple record in table
+**A** can fit multiple records in table **B**; and you will see this in practice
+and in the code in this module.
+
+### SQL Queries
+
+![chapter-9-5.gif](./images/gif/chapter-9-5.gif "Core SQL database Characteristics")
+
+SQL stand for `Structure Query Language`, `queries` are simply `command` we use
+to interact with database. And in `SQL`, a `query` look above. Of course there
+are different commands.
+
+Above command wold be that selects all users, so all `entries`, all `records` in the
+`users` table where the age is greater than `28`.
+
+We've hot a couple of keywords there which are making up that `SQL` language, so
+the structured query language simply has these keywords, and then we insert some
+`parameters` or some data we connect with these keywords.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
