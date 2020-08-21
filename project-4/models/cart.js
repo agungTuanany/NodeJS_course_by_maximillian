@@ -45,16 +45,17 @@ const Cart = class Cart {
             //     return;
             // }
 
-            if (!err && data) {
-                cart = JSON.parse(data);
-                // This console.log will fired up after 'cart.json' exist;
-                console.log("cart.js ===> fs.readFile:", cart);
-            }
-            else {
+            if (err && data) {
                 console.log("ERROR: you don't have 'cart.json' flie");
 
                 // Uncomment this for production
                 // return;
+            }
+            else {
+                cart = JSON.parse(data);
+
+                // This console.log will fired up after 'cart.json' exist;
+                console.log("cart.js ===> fs.readFile:", cart);
             };
 
 
@@ -63,7 +64,7 @@ const Cart = class Cart {
              */
 
             // Analyze the cart => Find existing product
-            const existingProductIndex = cart.products .findIndex(product => product.id === id);
+            const existingProductIndex = cart.products.findIndex(product => product.id === id);
             const existingProduct = cart.products[existingProductIndex];
             // @FIXME: You should explicit!; not return any variable as 'null'
             let updatedProduct;
