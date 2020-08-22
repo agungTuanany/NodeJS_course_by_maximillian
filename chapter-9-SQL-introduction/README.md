@@ -3,6 +3,7 @@
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
 2. [Choosing Database](#choosing-database)
+3. [NoSQL Introduction](#nosql-introduction)
 
 
 ## Module Introduction
@@ -121,6 +122,95 @@ Above command wold be that selects all users, so all `entries`, all `records` in
 We've hot a couple of keywords there which are making up that `SQL` language, so
 the structured query language simply has these keywords, and then we insert some
 `parameters` or some data we connect with these keywords.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+
+## NoSQL Introduction
+
+The name `NoSQL` simply means that it doesn't follow the approach `SQL` follows;
+It also uses a different query language but instead of having `schemas` and
+`relations`. `NoSQL` has other focuses or other strengths.
+
+![chapter-9-6.gif](./images/gif/chapter-9-6.gif "NoSQL relations")
+<br/>
+
+So in `NoSQL` we can still have a database and we can give this database a **name**
+`Shop`. We then have **tables** `Users` and `Orders` and maybe also `Products`.
+
+In `NoSQL` tables are *called* **collection** but you can think of them as
+a tables. As the table equivalent but we can call them `collections` in the
+`NoSQL` world.
+
+Now in `collection`, we don't find **records** but so-called `documents`which
+look like this:
+
+```sql
+{name: 'Max', age: 26}
+{name: 'Manu'}
+```
+Since we're working with JavaScript, kind of see `documents` looks a bit like
+JavaScript `object`. `documents` are very close to how we describe data in
+JavaScript you could say. Now that are the `documents` in our `collections` and
+what you can already see here in the `Users` `collections` example is that
+`NoSQL` **doesn't have a strict schema**.
+
+We got two `documents` in the same `collection` but the second
+`document`**Manu** does not have an `age` and that is perfectly fine in `NoSQL`.
+
+You can Store multiple `documents` with different structures in the same
+`collection`. Now often you of course still try to have kind of a similar
+structure but it's also **not uncommon** for some applications that you don't
+always have exactly same fields available for the data you are storing in the
+database and that is OK in `NoSQL`; you can definitely store documents which are
+generally equal but where some fields might differ.
+
+### What is NoSQL
+<br/>
+
+![chapter-9-7.gif](./images/gif/chapter-9-7.gif "What is NoSQL")
+<br/>
+
+One other things is that in `NoSQL` world, we got **no real relations**, instead
+we go for **duplicate data**. That simply means if we have an `Orders`
+`collections` here, we have a **nested** document, the `User` which also is
+stored as a separate document with more details maybe in the `Users`
+`collection` and we don't connect that through some `ID` or behind the scenes
+setup relations, instead we simply duplicate data, to be precise the data we
+need in the `Orders` `collection` here.
+
+If all these places need the latest update or the lattes data change but that
+can be OK because this on the other hand gives us the huge advantage that if we
+ever retrieve data, we don't have to join multiple tables together which can
+lead very long and difficult code and which can also impact performance; instead
+we can simply read the data from the `Orders` `collection`  and we probably got
+all the data we need to display on the order page without having to reach out to
+other `collections`.
+
+Therefore this can be done in super fast way and that is one of the huge
+advantage of `NoSQL` it can be very fast and efficient.
+
+
+### NoSQL Characteristics
+<br/>
+
+![chapter-9-8.gif](./images/gif/chapter-9-8.gif "What is NoSQL")
+<br/>
+
+`NoSQL` characteristic in general are that we have **no strong** data schema,
+**no structure** required, and that we have generally **no data relations**.
+
+We can relate `documents` (records) in some way and this possible and we will
+see how to work with connnected data in `NoSQL` module of but generally we have
+no or only a few connections and instead try to copy data and have a collection
+with documents that work on their own, this is the difference
+
+We also got a difference between `SQL` and `NoSQL`; So as our application grows
+and we need to store more, add more data and access that data or work with it
+more frequently, we might need to scale our database servers, and we can
+differentiate between horizontal and vertical scaling.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
