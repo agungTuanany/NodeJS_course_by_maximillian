@@ -12,16 +12,18 @@ const rootDir = require("./lib/path.js");
 const adminRoutes = require("./routes/admin.js");
 const shopRoutes = require("./routes/shop.js");
 const errorController = require("./controllers/404.js");
+const db = require("./lib/database.js");
 
 // Global variables
 const app = express();
 const port = 8080;
 
-
 app.set("view engine", "ejs");
 
 // Config explicitly
 app.set("views", "views");
+
+db.execute("SELECT * FROM products");
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
