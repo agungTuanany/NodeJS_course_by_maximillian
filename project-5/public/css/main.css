@@ -1,0 +1,53 @@
+@import url("./shop.css");
+@import url("./form.css");
+@import url("./product.css");
+@import url("./product-detail.css");
+
+:root {
+    /* this color name refer to: */
+    /* http://chir.ag/projects/name-that-color/ */
+
+    --black-solid    : #000000;
+    --green-tropical : #00695C;
+    --gray-silver    : #A1A1A1;
+    --gray-tundaro   : #4D4D4D;
+    --purple-violet  : #6200FF;
+    --white-solid    : #FFFFFF;
+    --yellow-wattle  : #DBC441;
+    --yellow-grose   : #FFEB3B;
+}
+
+* {
+    box-sizing      : border-box;
+}
+
+body {
+    display         : flex;
+    flex-direction  : column;
+    /* align-items     : center; */
+    /* justify-content : center; */
+    margin          : 0;
+    padding         : 0;
+    font-family     : Helvetica, arial, sans-serif;
+}
+
+main {
+    padding         : 1rem;
+}
+
+.btn {
+    font              : inherit;
+    border            : 1px solid var(--green-tropical);
+    background        : var(--white-solid);
+    color             : var(--green-tropical);
+    padding           : 10px;
+    border-radius     : 5px;
+    /* width             : 100%; */
+    cursor            : pointer;
+}
+
+.btn:active,
+.btn:hover {
+    color             : var(--yellow-wattle);
+    background-color  : var(--green-tropical);
+}
