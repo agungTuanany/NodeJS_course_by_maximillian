@@ -4,6 +4,7 @@
 1. [Module Introduction](#module-introduction)
 2. [Choosing Database](#choosing-database)
 3. [NoSQL Introduction](#nosql-introduction)
+4. [Comparing SQL and NoSQL](#comparing-sql-and-nosql)
 
 
 ## Module Introduction
@@ -211,6 +212,97 @@ We also got a difference between `SQL` and `NoSQL`; So as our application grows
 and we need to store more, add more data and access that data or work with it
 more frequently, we might need to scale our database servers, and we can
 differentiate between horizontal and vertical scaling.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Comparing SQL and NoSQL
+<br/>
+
+![chapter-9-9.gif](./images/gif/chapter-9-9.gif "comparing SQL and NoSQL")
+<br/>
+
+We often need to scale database to keep up with our growing application with
+more and more users. Horizontal and vertical scaling are the two approach we can
+use to scale database.
+
+In **horizontal** scaling, we simply add more servers; and the advantage here of
+course is that we can do this infinitely; We can always buy new servers, be
+that on a cloud provider in our own data center and connect them to our database
+and split our data across all these servers, of course this means that we also
+need some process that runs `quiries` on all of them and merges them together.
+This is generally something which is not that easy to do but is of course
+a good way of scaling.
+
+In **vertical** scaling is simply means that we make our existing server
+stronger by adding more CPU or memory, or with something like that, especially
+with cloud providers; this is typically very easy, you simply choose another
+option from the dropdown, you pay more and you're done. The problem here is that
+you have some limit, you can't fit infinitely much CPU power into a single
+machine.
+
+So these diagram below is the steps ways we can scale.
+
+![chapter-9-10.gif](./images/gif/chapter-9-10.gif "comparing SQL and NoSQL")
+<br/>
+
+### SQL scale
+
+Regarding that in general. Now in general in `SQL` we use `schemas`, we also
+have `relations`. These are two core characteristic and data is typically
+`distributed` across many many `tables` which are then connected through
+`relations`.
+
+Now regarding the scaling, it's important that **horizontal** scaling often is
+very difficult or even impossible due to the way `SQL` works. You can of course
+add more servers but running them all on one shared data cloud is pretty
+difficult. You can simply make your server stronger but adding more servers can
+be very hard or impossible, so definitely not trivial.
+
+This problem possibly if we have multiple or thousand of `read` and `write`
+quires **per second**. Then maybe our `SQL` database especially if we do very
+complex `joins` between related `tables` can reach limit or can not be the best
+choice.
+
+### NoSQL scale
+
+`NoSQL` is **schemaless** and has only a few `relations` if at all, the data is
+typically `not distributed` across multiple `collection` (tables) but instead we
+work  with `merged` or `nested` documents in an existing `document` (records).
+
+Though we of course also have a couple of `collections` for the different
+features of our application typically. With `NoSQL`, horizontal scaling is
+easier, still something where your have to know what you do but there are cloud
+providers which do that for us; So we don't have to know the **ins** and
+**outs** of that and in general, due to the way it works with less connections
+and so on, this is possible;
+
+Therefore we also get great performance for mass read and write request and
+`NoSQL` can very performant in an application with high throughput.
+
+This makes `SQL` look very bad but the full truth is that its always depends on
+the kind of data you are storing. If you are storing where the relations are
+really important and where you want to have a split up across `tables` and where
+you want to have strong `schemas`, `SQL` an be perfect.
+
+Also not every part of your data is accessed multiple times per second. You can
+have parts of your application where you managed general data; let's say user
+data which does not change that often and therefore `SQL` might be very good
+there.
+
+Other parts of the application, let's say `Orders` or `Shopping` carts that do
+change frequently could be stored with `NoSQL` and there, the relations might
+also not be that important because you can always put all the information that
+belongs to a shopping cart to an order in one single document; and even if you
+do for example store some user data there, you might not need to touch that
+document (records) just because the user change his photo because you probably
+didn't store that along with the order anyways.
+
+In this course, we will build both, and it's not so much about this course
+application but you should know how to use `SQL` with NodeJS because maybe you
+need to add in your application or you're working on a project where you don't
+decide which database to use but you simply have to us it.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
