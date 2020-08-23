@@ -40,13 +40,17 @@ const getProduct = (request, response, next) => {
 
 const getIndex = (request, response, next) => {
 
-    return response
-        .status(200)
-        .render("shop/index", {
-            pageTitle: "Index Page",
-            path: "/"
-        });
-
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            return response
+                .status(200)
+                .render("shop/index", {
+                    pageTitle: "Shop",
+                    path: "/",
+                    prods: rows
+                });
+        })
+        .catch(err => console.log(err));
 };
 
 const getCart = (request, response, next) => {
