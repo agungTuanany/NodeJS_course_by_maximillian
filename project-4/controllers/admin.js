@@ -41,15 +41,18 @@ const postAddProduct = (request, response, next) => {
         //@TODO: Create notice word if product is false
         response
             .status(302)
-            .render("admin/add-product", {
+            .render("admin/edit-product", {
                 pageTitle: "Add Product",
                 path: "/admin/add-product",
+                editing: false
             });
         return;
     };
 
     product.save();
-    return response.status(302).redirect("/products");
+    return response
+        .status(302)
+        .redirect("/products");
 };
 
 // http://localhost:8080/admin/edit-product/123aabb?edit=true
@@ -65,6 +68,7 @@ const getEditProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
+    console.log(`prodId DEBUG ======> ${prodId} `)
     Product.findById(prodId, product => {
 
         // @NOTE: It's bad approach in UX, most of the time you want to show an

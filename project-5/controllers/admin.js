@@ -41,15 +41,18 @@ const postAddProduct = (request, response, next) => {
         //@TODO: Create notice word if product is false
         response
             .status(302)
-            .render("admin/add-product", {
+            .render("admin/edit-product", {
                 pageTitle: "Add Product",
                 path: "/admin/add-product",
+                editing: false
             });
         return;
     };
 
     product.save();
-    return response.status(302).redirect("/products");
+    return response
+        .status(302)
+        .redirect("/products");
 };
 
 // http://localhost:8080/admin/edit-product/123aabb?edit=true
