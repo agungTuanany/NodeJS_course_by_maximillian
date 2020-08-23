@@ -11,16 +11,17 @@ const Cart = require("./../models/cart.js");
 
 const getProducts = (request, response, next) => {
 
-    Product.fetchAll(products => {
-
-        return response
-            .status(200)
-            .render("shop/product-list", {
-                products,
-                pageTitle: "All Products",
-                path: "/products"
-            });
-    });
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            return response
+                .status(200)
+                .render("shop/product-list", {
+                    pageTitle: "All Products",
+                    path: "/products",
+                    products: rows
+                });
+        })
+        .catch(err => console.log(err));
 };
 
 const getProduct = (request, response, next) => {
