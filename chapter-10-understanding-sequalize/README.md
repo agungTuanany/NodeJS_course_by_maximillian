@@ -2,6 +2,7 @@
 
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
+2. [What is Sequelize](#what-is-sequelize)
 
 <br/>
 
@@ -48,11 +49,72 @@ database typically also work with `relations` and we got lot of `relations` in
 our current project.
 
 You will learn what exactly `sequelize` this third package is; and how  you can
-use it and we'll then implement our `proudct` and our `cart` and so on in this
+use it and we'll then implement our `product` and our `cart` and so on in this
 chapter with `sequelize`.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## What is Sequelize
+<br/>
+
+![chapter-10-1.gif](./images/gif/chapter-10-1.gif "What is sequelize")
+
+To be precise `sequelize` is `Object Relational Mapping Library`, which simply
+means it does **all the heavy lifting**, all the `SQL` code behind the scenes
+for us and `maps` it into JavaScript `objects` with convenience methods which we
+can call to execute that behind the scenes `SQL` code so that we never have to
+write `SQL` code on our own.
+
+We got our `object` let's say a `User` with `name`, `age`, `email`, and
+`password` but of course this can be anything, could be a `product`, whatever
+you need and this is `mapped` to a database `table` by `sequelize`; so it
+automatically creates that `table` for use even, ti automatically sets up
+`relations` and `tables` even for us; And when we create a `new` `user` for
+example, we simply call a method on that `User` JavaScript `object` and
+`sequelize` executes the `SQL` query or the `SQL` command that is required.
+
+So instead or writing this on our own, we simply create a JavaScript `object`
+and work with that and here would be one example using `sequelize` to create
+a `new User` which would behind the scenes execute the `SQL` code we don't have
+to write.
+
+```javascript
+const user = User.create({
+    name: "Max",
+    age: 28,
+    password: "1234abcd",
+    email: "max@academind.com"
+});
+```
+
+### Sequelize core concept
+<br/>
+
+![chapter-10-2.gif](./images/gif/chapter-10-2.gif "Sequelize core concept")
+
+`sequelize` offers us the `models` to work with our database; as I showed you on
+the last slide and it allows us to define such `models`.
+
+So basically define which data makes up a `model` and therefore which data will
+be saved in the database.
+
+We can then instantiate these `models`, so these classes so to say, we can
+execute the `constructor` functions or use utility ([lib](./../project-5/lib/))
+methods to create; let's say a new `User` object based on that `model`.
 
 
+So we have a connection here and we can then run `queries` on that. That could
+be that we save a new `User` but it could also be that we find all user
+(`User.findAll()`) as an example and here again, this always relates back to our
+`model` which we define with `sequelize`; and we can also for example
+`associate` our `User` model to a `Product`model.
+
+In the end we don't want to learn that in theory, we want to see that in
+practice. So let's add `sequelize` to our [project](./../project-6); and let's
+slowly integrate it to manage our `Product` in our `Cart`and so on through
+`sequelize`.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
