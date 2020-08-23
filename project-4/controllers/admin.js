@@ -68,7 +68,6 @@ const getEditProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
-    console.log(`prodId DEBUG ======> ${prodId} `)
     Product.findById(prodId, product => {
 
         // @NOTE: It's bad approach in UX, most of the time you want to show an

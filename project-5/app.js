@@ -23,7 +23,7 @@ app.set("view engine", "ejs");
 // Config explicitly
 app.set("views", "views");
 
-db.execute("SELECT * FROM products");
+db.execute("SELECT * FROM product");
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,4 +41,4 @@ app.use(shopRoutes);
 // 404 handlers
 app.use(errorController.get404);
 
-app.listen(port, () => console.log(`You run "project-4" in server running by "Express" in port: "${port}".`));
+app.listen(port, () => console.log(`You run "project-5" in server running by "Express" in port: "${port}".`));
