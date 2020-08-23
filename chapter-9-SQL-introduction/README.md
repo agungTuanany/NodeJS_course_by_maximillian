@@ -5,6 +5,7 @@
 2. [Choosing Database](#choosing-database)
 3. [NoSQL Introduction](#nosql-introduction)
 4. [Comparing SQL and NoSQL](#comparing-sql-and-nosql)
+5. [Retrieving Data from SQL Database](#retrieving-data-from-sql-database)
 
 
 ## Module Introduction
@@ -86,7 +87,7 @@ example relation.
 
 ![chapter-9-4.gif](./images/gif/chapter-9-4.gif "Core SQL database characteristics")
 
-This is noe of the core things about `SQL` in general, the core `SQL` database
+This is one of the core things about `SQL` in general, the core `SQL` database
 characteristics are that we have a strong `Data Schema` so that for each
 `table`, we clearly define how the data in there should look like, which
 `type of data` does each field store; is it a `number`?, is it a `booelan`?.
@@ -303,6 +304,101 @@ In this course, we will build both, and it's not so much about this course
 application but you should know how to use `SQL` with NodeJS because maybe you
 need to add in your application or you're working on a project where you don't
 decide which database to use but you simply have to us it.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Retrieving Data from SQL Database
+
+I choose to use `MariaDB` as my `SQL` engine. Cause `MariaDB` is open source
+base as arch favor development, and not affiliate with others.
+
+Back in the code [app.js](./../project-5/app.js)
+
+```javascript
+//...
+
+// @TODO: handle promise
+db.execute("SELECT * FROM product")
+
+    .then(result => {
+        console.log(result[0]);
+    })
+    .catch(err => console.log(err));
+//...
+```
+
+We're executing a `query` here with `execute` on our pool, on the products table
+we just created; And added the `then` and `cath` block. These two function we
+can chain onto the result of the `execute()` call.
+
+### What is Promise
+
+Promise is a basic JavaScript `object` not specific to NodeJS, it's also
+available in JavaScript in the browser which **allows** us to work with `async
+code`. Instead of using callback which we could also use with the `MariaDB`
+package, `promise` allow us to write more structured code;
+
+Instead of having a **nested anonymous** functions as a second argument,
+
+```javascript
+db.execute("SELECT * FROM product", (callback) => {})
+```
+
+We simply use `then()` block which will then get the `anonymous` function to
+execute.
+
+### Why call the result with 'result[0]'
+
+The data retrieved from database in structured as `nested array`
+
+```javascript
+[
+    [
+      BinaryRow {
+        id: 1,
+        title: 'lettuce',
+        price: 20.05,
+        imageUrl: 'https://source.unsplash.com/CLwHYy17rSA/800x450',
+        description: 'fresh lettuce'
+      },
+      BinaryRow {
+        id: 2,
+        title: 'wholemeal bread',
+        price: 5.25,
+        imageUrl: 'https://source.unsplash.com/qLcSBmaebR8/800x450',
+        description: 'fresch wholemeal bread'
+      }
+    ],
+    [
+        ColumnDefinition {
+          _buf: <Buffer 01 00 00 01 05 35 00 00 02 03 64 65 66 0d 6e 6f 64 65 5f 63 6f 6d 70 6c 65 74 65 07 70 72 6f 64 75 63 74 07 70 72 6f 64 75 63 74 02 69 64 02 69 64 0c ... 493 more bytes>,
+          _clientEncoding: 'utf8',
+          _catalogLength: 3,
+          _catalogStart: 10,
+          _schemaLength: 13,
+          _schemaStart: 14,
+          _tableLength: 7,
+          _tableStart: 28,
+          _orgTableLength: 7,
+          _orgTableStart: 36,
+          _orgNameLength: 2,
+          _orgNameStart: 47,
+          characterSet: 63,
+          encoding: 'binary',
+          name: 'id',
+          columnLength: 11,
+          columnType: 3,
+          flags: 16899,
+          decimals: 0
+        },
+    ]
+]
+```
+By calling with `result[0]` we just retrieved an `array` not the `nested array`;
+
+
 
 **[⬆ back to top](#table-of-contents)**
 <br/>

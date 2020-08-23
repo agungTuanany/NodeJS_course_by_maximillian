@@ -23,7 +23,13 @@ app.set("view engine", "ejs");
 // Config explicitly
 app.set("views", "views");
 
-db.execute("SELECT * FROM product");
+// @TODO: handle promise
+db.execute("SELECT * FROM product")
+
+    .then(result => {
+        console.log(result[0]);
+    })
+    .catch(err => console.log(err));
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
