@@ -49,10 +49,14 @@ const postAddProduct = (request, response, next) => {
         return;
     };
 
-    product.save();
-    return response
-        .status(302)
-        .redirect("/products");
+    product
+        .save()
+        .then(() => {
+            return response
+                .status(302)
+                .redirect("/products");
+        })
+        .catch(err => console.log(err));
 };
 
 // http://localhost:8080/admin/edit-product/123aabb?edit=true

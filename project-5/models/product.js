@@ -27,6 +27,10 @@ const Product = class Product {
     };
 
     save() {
+        return db.execute(
+            "INSERT INTO product (title, price, imageUrl, description) VALUES (?, ?, ?, ?)",
+            [this.title, this.price, this.imageUrl, this.description]
+        )
     };
 
     static deleteById(id) {
