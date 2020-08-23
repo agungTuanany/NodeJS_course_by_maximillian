@@ -398,6 +398,35 @@ The data retrieved from database in structured as `nested array`
 ```
 By calling with `result[0]` we just retrieved an `array` not the `nested array`;
 
+### Why failed retrieved single product
+
+[shop.js](./../project-5/controllers/shop.js)
+
+```javascript
+//...
+
+const getProduct = (request, response, next) => {
+
+    const prodId = request.params.productId;
+
+    Product.findById(prodId)
+        .then(([product]) => {
+            console.log(product)
+            response.render('shop/product-detail', {
+                pageTitle: product.title,
+                path: '/products',
+                product: product[0]             // Product get fetched from database
+            });
+        })
+        .catch(err => console.log(err));
+};
+//..
+```
+
+The product get fetched from databasestill is an array; but the `view` from
+`shop/product-detail` expects one single object, not an array with one object.
+The solution is simply **pass the first element** in  that array; and we know
+that there will only be one element in that array.
 
 
 **[⬆ back to top](#table-of-contents)**

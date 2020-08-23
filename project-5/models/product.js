@@ -15,7 +15,6 @@ const Cart = require("./cart.js");
 
 // Global variables
 
-
 const Product = class Product {
 
     constructor(id, title, imageUrl, price, description) {
@@ -27,10 +26,11 @@ const Product = class Product {
     };
 
     save() {
+
         return db.execute(
             "INSERT INTO product (title, price, imageUrl, description) VALUES (?, ?, ?, ?)",
             [this.title, this.price, this.imageUrl, this.description]
-        )
+        );
     };
 
     static deleteById(id) {
@@ -38,10 +38,12 @@ const Product = class Product {
 
     static fetchAll() {
 
-        return db.execute("SELECT * FROM product")
+        return db.execute("SELECT * FROM product");
     };
 
-    static findById(id, callback) {
+    static findById(id) {
+
+        return db.execute("SELECT * FROM product WHERE product.id = ?", [id]);
     };
 };
 

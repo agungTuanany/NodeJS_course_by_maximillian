@@ -28,15 +28,16 @@ const getProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
-    // Fetch product
-    Product.findById(prodId, product => {
-
-        return response.render("shop/product-detail", {
-            product,
-            pageTitle: product.title,
-            path: "/products"
-        });
-    });
+    Product.findById(prodId)
+        .then(([product]) => {
+            console.log(product)
+            response.render('shop/product-detail', {
+                pageTitle: product.title,
+                path: '/products',
+                product: product[0]
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 const getIndex = (request, response, next) => {
