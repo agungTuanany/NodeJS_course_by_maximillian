@@ -10,41 +10,34 @@
 // Core Dependencies
 
 // Internal Dependencies
-const db = require("../lib/database.js");
-const Cart = require("./cart.js");
+const { DataTypes } = require("sequelize");
+const sequelize = require("./../lib/database.js");
 
 // Global variables
 
-const Product = class Product {
-
-    constructor(id, title, imageUrl, price, description) {
-        this.id          = id;
-        this.title       = title;
-        this.imageUrl    = imageUrl;
-        this.description = description;
-        this.price       = price;
-    };
-
-    save() {
-
-        return db.execute(
-            "INSERT INTO product (title, price, imageUrl, description) VALUES (?, ?, ?, ?)",
-            [this.title, this.price, this.imageUrl, this.description]
-        );
-    };
-
-    static deleteById(id) {
-    };
-
-    static fetchAll() {
-
-        return db.execute("SELECT * FROM product");
-    };
-
-    static findById(id) {
-
-        return db.execute("SELECT * FROM product WHERE product.id = ?", [id]);
-    };
-};
+const Product = sequelize.define("products", {
+    id: {
+        type: DataTypes.INTEGER,
+        autoincrement: true,
+        allowNull: false,
+        primaryKey: true,
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    price: {
+        type: DataTypes.DOUBLE,
+        allowNull: false
+    },
+    imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+})
 
 module.exports = Product;
