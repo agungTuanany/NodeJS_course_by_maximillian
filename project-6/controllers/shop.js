@@ -28,6 +28,22 @@ const getProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
+    // @NOTE: Another approach for getEditProduct
+    // Product.findAll({
+    //     where: {
+    //         id: prodId
+    //     }
+    // })
+    //     .then(products => {
+    //         console.log(products)
+    //         response.render('shop/product-detail', {
+    //             pageTitle: products[0].title,
+    //             path: '/products',
+    //             product: products[0]
+    //         });
+    //     })
+    //     .catch(err => console.log(err));
+
     Product.findByPk(prodId)
         .then(product => {
             // console.log(product)
