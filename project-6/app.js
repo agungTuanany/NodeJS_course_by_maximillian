@@ -12,7 +12,7 @@ const rootDir = require("./lib/path.js");
 const adminRoutes = require("./routes/admin.js");
 const shopRoutes = require("./routes/shop.js");
 const errorController = require("./controllers/404.js");
-const db = require("./lib/database.js");
+const sequelize = require("./lib/database.js");
 
 // Global variables
 const app = express();
@@ -22,12 +22,6 @@ app.set("view engine", "ejs");
 
 // Config explicitly
 app.set("views", "views");
-
-db.authenticate()
-    .then(() => {
-        console.log("Connection has been established successfully");
-    })
-    .catch(err => console.log(err));
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,4 +39,15 @@ app.use(shopRoutes);
 // 404 handlers
 app.use(errorController.get404);
 
-app.listen(port, () => console.log(`You run "project-6" in server running by "Express" in port: "${port}".`));
+sequelize
+    .sync({
+        // Dropping a table if exist
+        force: true,
+        // Check the current table state
+        alter: true,
+    })
+    .then(result => {
+        // console.log(result)
+        app.listen(port, () => console.log(`You run "project-6" in server running by "Express" in port: "${port}".`));
+    })
+    .catch(err => console.lg(err));
