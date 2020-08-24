@@ -31,32 +31,42 @@ const postAddProduct = (request, response, next) => {
     const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
     const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
-    const product = new Product(null, title, imageUrl, price, description);
-
-    if (product.title === false ||
-        product.imageUrl === false ||
-        product.price === false ||
-        product.description === false
-    ) {
-        //@TODO: Create notice word if product is false
-        response
-            .status(302)
-            .render("admin/edit-product", {
-                pageTitle: "Add Product",
-                path: "/admin/add-product",
-                editing: false
-            });
-        return;
-    };
-
-    product
-        .save()
-        .then(() => {
-            return response
-                .status(302)
-                .redirect("/products");
+    Product.create({
+        title       : title,
+        price       : price,
+        imageUrl    : imageUrl,
+        description : description
+    })
+        .then(result => {
+            console.log(result);
         })
         .catch(err => console.log(err));
+    //const product = new Product(null, title, imageUrl, price, description);
+
+    //if (product.title === false ||
+    //    product.imageUrl === false ||
+    //    product.price === false ||
+    //    product.description === false
+    //) {
+    //    //@TODO: Create notice word if product is false
+    //    response
+    //        .status(302)
+    //        .render("admin/edit-product", {
+    //            pageTitle: "Add Product",
+    //            path: "/admin/add-product",
+    //            editing: false
+    //        });
+    //    return;
+    //};
+
+    //product
+    //    .save()
+    //    .then(() => {
+    //        return response
+    //            .status(302)
+    //            .redirect("/products");
+    //    })
+    //    .catch(err => console.log(err));
 };
 
 // http://localhost:8080/admin/edit-product/123aabb?edit=true

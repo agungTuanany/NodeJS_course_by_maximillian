@@ -18,7 +18,7 @@ const sequelize = require("./../lib/database.js");
 const Product = sequelize.define("products", {
     id: {
         type: DataTypes.INTEGER,
-        autoincrement: true,
+        autoIncrement: true,
         allowNull: false,
         primaryKey: true,
     },
