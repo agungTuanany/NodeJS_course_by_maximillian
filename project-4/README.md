@@ -1,9 +1,10 @@
 ## What is this Project-4 ?
 
-This is the project from "chapter-8-dynamic-routes-advances-model". As deep in
-with 'max' course; 'max' doesn't explain any theory; however he show me the
-programming technique when you get in **logic error**; as you get if you watch
-'max' videos.
+This is the project from
+"[chapter-8-dynamic-routes-advances-model](./../chapter-8-dynamic-routes-advances-model)".
+As deep in with 'max' course; 'max' doesn't explain any theory; however he show
+me the programming technique when you get in **logic error**; as you get if you
+watch 'max' videos.
 
 In this "project-4" 'max' explain how **pass some dynamic data** through
 `routes`. **Encode** some information in `url` (path) so we can pass
