@@ -41,10 +41,10 @@ app.use(errorController.get404);
 
 sequelize
     .sync({
-        // Dropping a table if exist
-        force: true,
-        // Check the current table state
-        alter: true,
+        // Dropping a table if exist | this options only for Stagging
+        // force: true,
+        // Check the current table state | this options only for Stagging
+        // alter: true,
     })
     .then(result => {
         // console.log(result)

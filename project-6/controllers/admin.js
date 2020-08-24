@@ -38,6 +38,7 @@ const postAddProduct = (request, response, next) => {
         description : description
     })
         .then(result => {
+            // @FIXME products is desappeared from database if the server is restarted
             console.log(result);
         })
         .catch(err => console.log(err));

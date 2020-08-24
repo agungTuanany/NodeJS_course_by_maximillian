@@ -11,14 +11,14 @@ const Cart = require("./../models/cart.js");
 
 const getProducts = (request, response, next) => {
 
-    Product.fetchAll()
-        .then(([rows, fieldData]) => {
+    Product.findAll()
+        .then(products => {
             return response
                 .status(200)
-                .render("shop/product-list", {
-                    pageTitle: "All Products",
-                    path: "/products",
-                    products: rows
+                .render("shop/index", {
+                    pageTitle: "Shop",
+                    path: "/",
+                    prods: products
                 });
         })
         .catch(err => console.log(err));
@@ -42,14 +42,14 @@ const getProduct = (request, response, next) => {
 
 const getIndex = (request, response, next) => {
 
-    Product.fetchAll()
-        .then(([rows, fieldData]) => {
+    Product.findAll()
+        .then(products => {
             return response
                 .status(200)
                 .render("shop/index", {
                     pageTitle: "Shop",
                     path: "/",
-                    prods: rows
+                    prods: products
                 });
         })
         .catch(err => console.log(err));
