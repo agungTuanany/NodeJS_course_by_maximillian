@@ -23,6 +23,12 @@ app.set("view engine", "ejs");
 // Config explicitly
 app.set("views", "views");
 
+db.authenticate()
+    .then(() => {
+        console.log("Connection has been established successfully");
+    })
+    .catch(err => console.log(err));
+
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
