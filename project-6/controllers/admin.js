@@ -38,8 +38,7 @@ const postAddProduct = (request, response, next) => {
         description : description
     })
         .then(result => {
-            // @FIXME products is desappeared from database if the server is restarted
-            console.log(result);
+            // console.log(result);
         })
         .catch(err => console.log(err));
     //const product = new Product(null, title, imageUrl, price, description);
@@ -119,18 +118,17 @@ const postEditProduct = (request, response, next) => {
 
 const getProducts = (request, response, next) => {
 
-    Product.fetchAll(products => {
-
-        return response
-            .status(200)
-            .render("admin/products", {
-                products,
+    Product.findAll()
+        .then(product => {
+            // console.log(products)
+            response.render('admin/products', {
                 pageTitle: "Admin Products",
-                path: "/admin/products",
-                activeShop: true,
-                productCSS: true
+                path: 'admin//products',
+                products: product
             });
-    });
+        })
+        .catch(err => console.log(err));
+
 };
 
 const postDeleteProduct = (request, response, next) => {

@@ -28,7 +28,7 @@ const getProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
-    // @NOTE: Another approach for getEditProduct
+    // @NOTE: Another approach for getProduct
     // Product.findAll({
     //     where: {
     //         id: prodId
