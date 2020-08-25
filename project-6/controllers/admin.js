@@ -35,7 +35,8 @@ const postAddProduct = (request, response, next) => {
         title       : title,
         price       : price,
         imageUrl    : imageUrl,
-        description : description
+        description : description,
+        userId      : request.user.id
     })
         .then(result => {
 
@@ -106,7 +107,7 @@ const postEditProduct = (request, response, next) => {
         // Handle any success saved product
         .then(result => {
 
-            console.log("Successes update product");
+            console.log("Succeeded update product");
             return response
                 .status(301)
                 .redirect("/admin/products");
@@ -142,7 +143,7 @@ const postDeleteProduct = (request, response, next) => {
         })
         .then(result => {
 
-            console.log("Successes delete product");
+            console.log("Succeeded delete product");
             return response
                 .status(301)
                 .redirect("/admin/products");
