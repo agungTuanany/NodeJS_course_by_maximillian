@@ -1,6 +1,6 @@
-## What is this Project-6 ?
+## What is Project-6 ?
 
 Project-6 base on
 "[chapter-10-understanding-sequelize](./../chapter-10-understanding-sequelize)".
-Using a third party library `sequelize` for create automatically `SQL` query
+Using a third party library `sequelize` for create `SQL` query automatically.
 

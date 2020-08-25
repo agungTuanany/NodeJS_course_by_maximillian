@@ -14,7 +14,7 @@ It's now finally time that we start storing our data in a more correct and
 realistic way because thus far, we either used the `memory` when we just stored
 the data in a `variable` in our NodeJS program and it was then even shared
 across requests or we stored it in a `file` that's also not optimal because
-accessing file from files is **pretty slow**. Especially as we start storing
+accessing *data from files* is **pretty slow**. Especially as we start storing
 more and more data in them. Therefore not really something we would do in a real
 application.
 
@@ -39,48 +39,47 @@ based database together with NodeJS application.
 
 ## Choosing Database
 
-So `SQL` or `NoSQL`, that is the question and to answer the that question, we
+So `SQL` or `NoSQL` ?, that is the question and to answer the that question, we
 first of all have to understand the difference or what `SQL` and `NoSQL`
-database are, how they differ, how differ regarding how we store the data and so
+database are, how they differ, how differ regarding, how we store the data and so
 on.
 
 ![chapter-9-2.gif](./images/gif/chapter-9-2.gif "Choosing database")
 
 Our goal always to store data and make it easily available or accessible so that
-we have an easy of accessing our data and not just easy from a code prospective
-but of course efficient, it should be fast.
+we have an easy of accessing our data, not just easy from a code prospective
+but of course efficiently, it should be fast.
 
 It's simply quicker than accessing a file especially as the data in there grows,
 it also helps us with things like we don't have to read the entire file to just
 find one piece of information.
 
-Now as I mentioned, we can opt (select) for a `SQL`-based databases; `MySQL`
-would be an example database engine that you can use or a `NoSQL` database and
-there `MongoDB` is more prominent (leading) and well known alternatives.
+Now as I mentioned, we can opt (select) for a `SQL`-based databases; `MySQL`, or
+`mariaDB` would be an example database engine that you can use. For `NoSQL`
+database there `MongoDB`. `MongoDB` is more prominent (leading) and well known
+alternatives.
 
 ### What is SQL how does it work then ?
 <br/>
 
 ![chapter-9-3.gif](./images/gif/chapter-9-3.gif "What is SQL how doest it work")
 
-`SQL` database thinks in so-called `tables`; So we might have a `Users`,
-a `Products` and let's say an `Orders` table and in each table, you have so
-called `fields` or `columns`.
+`SQL` database thinks in so-called **tables**. We might have a `Users`,
+`Products` and `Orders` tables. In each tables you have so called **fields** or
+**columns**.
 
-For example, a `User` could b defined by having an `Id`, an `email`, a `name`
-and a `Products` having an `Id` and `title`, `price` , and `description`.
+For example, a `User` table could be defined by having an `Id`, `email`, `name`.
+`Products` table having an `Id`, `title`, `price` , `description`.
 
-Now we fill in data for these fields, so-called `records`. So basically the
-`rows` in our `tables`. For example we got a couple users with their data and we
-get a couple of products too.
+Now we fill in data for these fields, so-called **records**. So basically the
+`rows` in our `tables` is record; For example we got a couple users with their
+data and we get a couple of products data too.
 
-`SQL` based database also have on important thing, they allow you to `relate`
-different `tables`, for example, an `Orders` could simply described as
-`connection` of a `User` and a `Products`, because a user might order a couple of
-different products and a product might be ordered by a couple of different Users
-
-So basically we have relations in `SQL` based databases, here we can see one
-example relation.
+`SQL` based database also have on important thing, they allow you to **relate**
+different `tables`, for example, an `Orders`tables could simply described as
+**connection** of a `User` tables and a `Products` tables, because a `User`
+might order a couple of different `Products`; and a `Products` might be ordered
+by a couple of different `User`
 
 ### Core SQL Database Characteristics
 <br/>
@@ -88,19 +87,18 @@ example relation.
 ![chapter-9-4.gif](./images/gif/chapter-9-4.gif "Core SQL database characteristics")
 
 This is one of the core things about `SQL` in general, the core `SQL` database
-characteristics are that we have a strong `Data Schema` so that for each
-`table`, we clearly define how the data in there should look like, which
-`type of data` does each field store; is it a `number`?, is it a `booelan`?.
+characteristics are that we have a strong **Data Schema** so that for each
+`table`, we clearly define how the data in there should look like, which **type
+of data** does each field store; is it a `number`?, is it a `booelan`?.
 
-So that we have this  strongly or `strict` defined schema; and `all data in the
-table has to fit the schema`. This definition of how the data has to look like
+So that we have this  strongly or `strict` defined schema; and **all data in the
+table has to fit the schema**. This definition of how the data has to look like
 is one **core** thing in a `SQL` database.
 
-We also have `relations` between our data, that is another core characteristic
+We also have **relations** between our data, that is another core characteristic
 of `SQL` based database.
 
 We relate our different tables with basically three important kind of `relations`:
-
 - one to one
 - one to may
 - many to many
@@ -119,11 +117,11 @@ to interact with database. And in `SQL`, a `query` look above. Of course there
 are different commands.
 
 Above command wold be that selects all users, so all `entries`, all `records` in the
-`users` table where the age is greater than `28`.
+`Users` table where the age is greater than `28`.
 
 We've hot a couple of keywords there which are making up that `SQL` language, so
-the structured query language simply has these keywords, and then we insert some
-`parameters` or some data we connect with these keywords.
+the _structured query language_ simply has these keywords, and then we insert some
+**parameters** or some data we connect with these keywords.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
@@ -139,14 +137,15 @@ It also uses a different query language but instead of having `schemas` and
 ![chapter-9-6.gif](./images/gif/chapter-9-6.gif "NoSQL relations")
 <br/>
 
-So in `NoSQL` we can still have a database and we can give this database a **name**
-`Shop`. We then have **tables** `Users` and `Orders` and maybe also `Products`.
+So in `NoSQL` we can still have a database and we can give this database
+a _name_ `Shop`. We then have _tables_ `Users`, `Orders` and maybe also
+`Products`.
 
-In `NoSQL` tables are *called* **collection** but you can think of them as
-a tables. As the table equivalent but we can call them `collections` in the
+In `NoSQL` tables are _called_ **collection** but you can think of them as
+a tables. As the table equivalent but we can call them _collections_ in the
 `NoSQL` world.
 
-Now in `collection`, we don't find **records** but so-called `documents`which
+Now in **collection**, we don't find *records* but so-called **documents** which
 look like this:
 
 ```sql
@@ -155,19 +154,23 @@ look like this:
 ```
 Since we're working with JavaScript, kind of see `documents` looks a bit like
 JavaScript `object`. `documents` are very close to how we describe data in
-JavaScript you could say. Now that are the `documents` in our `collections` and
-what you can already see here in the `Users` `collections` example is that
-`NoSQL` **doesn't have a strict schema**.
+JavaScript you could say. Now that are the `documents` in our `collections`; and
+what you can already see here in the `Users` `collections` (tables) example is
+that `NoSQL` **doesn't have a strict schema**.
 
-We got two `documents` in the same `collection` but the second
-`document`**Manu** does not have an `age` and that is perfectly fine in `NoSQL`.
+We got two `documents` in the same `collection` but the second `document`
+_Manu_ does not have an `age` and that is perfectly fine in `NoSQL`.
 
-You can Store multiple `documents` with different structures in the same
-`collection`. Now often you of course still try to have kind of a similar
-structure but it's also **not uncommon** for some applications that you don't
-always have exactly same fields available for the data you are storing in the
-database and that is OK in `NoSQL`; you can definitely store documents which are
-generally equal but where some fields might differ.
+You can Store multiple **documents** (records) with different structures in the same
+**collection** (tables).
+
+Now often you certainly still try to have kind of a similar structure. It's
+also **not uncommon** for some applications that you don't always have exactly
+same fields available for the data you are storing in the database, and that is
+OK in `NoSQL`.
+
+You can definitely store `documents` which are generally equal but where some
+fields might differ.
 
 ### What is NoSQL
 <br/>
@@ -248,10 +251,22 @@ So these diagram below is the steps ways we can scale.
 ![chapter-9-10.gif](./images/gif/chapter-9-10.gif "comparing SQL and NoSQL")
 <br/>
 
+In the case of `SQL`:
+- Horizontal scaling is very difficult, but vertical scaling is easy
+- Limitations of read/write queries per seconds
+- use this when you have multiple data, and you want data aggregation to be very
+    easy
+
+In the case of `NoSQL`:
+
+- Both horizontal and vertical scaling are easy
+- Great performance for mass read/write operations
+- Use this when you have to deal with big data
+
 ### SQL scale
 
-Regarding that in general. Now in general in `SQL` we use `schemas`, we also
-have `relations`. These are two core characteristic and data is typically
+Regarding that in general. Now in general in `SQL` we use **schemas**, we also
+have **relations**. These are two core characteristic and data is typically
 `distributed` across many many `tables` which are then connected through
 `relations`.
 
@@ -349,9 +364,19 @@ db.execute("SELECT * FROM product", (callback) => {})
 We simply use `then()` block which will then get the `anonymous` function to
 execute.
 
+```javascript
+db.execute("SELECT * FROM product")
+    .then(result =>{
+        console.log(result[0]);
+        // do some stuff
+    })
+    .catch(err => console.log(err));
+```
+
+
 ### Why call the result with 'result[0]'
 
-The data retrieved from database in structured as `nested array`
+Cause the data retrieved from database in structured as `nested array`
 
 ```javascript
 [
@@ -396,9 +421,11 @@ The data retrieved from database in structured as `nested array`
     ]
 ]
 ```
-By calling with `result[0]` we just retrieved an `array` not the `nested array`;
+
+By calling with `result[0]` we just retrieved an `array` not the `nested array`.
 
 ### Why failed retrieved single product
+<br />
 
 [shop.js](./../project-5/controllers/shop.js)
 
@@ -423,11 +450,11 @@ const getProduct = (request, response, next) => {
 //..
 ```
 
-The product get fetched from databasestill is an array; but the `view` from
-`shop/product-detail` expects one single object, not an array with one object.
-The solution is simply **pass the first element** in  that array; and we know
-that there will only be one element in that array.
-
+The product get fetched from database still is an array; but the `view` from
+[product-detail.ejs](./../project-5/views/shop/product-list.ejs) expects one
+single object, not an array with one object. The solution is simply **pass the
+first element** in  that array; and we know that there will only be one element
+in that array.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>

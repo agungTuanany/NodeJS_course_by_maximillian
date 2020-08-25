@@ -1,10 +1,11 @@
 {
-  "name": "chapter-4_working_with_express",
-  "version": "1.0.0",
+  "name": "project-5-chapter-9-SQL-introduction",
+  "version": "0.1.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,8 @@
     "ejs": "^3.1.3",
     "express": "^4.17.1",
     "mysql2": "^2.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

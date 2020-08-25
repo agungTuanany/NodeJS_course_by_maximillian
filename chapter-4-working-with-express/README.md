@@ -12,7 +12,7 @@
 
 ![chapter-4-1.png](./images/chapter-4-1.png "All about Middleware")
 
-ExpressJS is all about `middleware` as diagram above. Instead of just having one
+`ExpressJS` is all about **middleware** as diagram above. Instead of just having one
 `request` handler, you will have a possibility of hooking (connect) in multiple
 functions which the `request` will go through until you send a `response`.
 
