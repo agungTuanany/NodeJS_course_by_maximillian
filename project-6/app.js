@@ -32,6 +32,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 // app.use(express.static(path.join(__dirname, "public/css")));
 
+app.use((request, response, next) => {
+    User.findByPk(1)
+        .then(user => {
+            request.user = user;
+            next();
+        })
+        .catch(err => console.log(err))
+})
+
 // Admin routes handlers
 app.use("/admin", adminRoutes);
 
@@ -52,12 +61,31 @@ User.hasMany(Product);
 sequelize
     .sync({
         // Dropping a table if exist | this options only for Stagging
-        force: true,
+        // force: true,
         // Check the current table state | this options only for Stagging
         // alter: true,
     })
     .then(result => {
-        console.log(result)
+
+        // console.log(result)
+        return User.findByPk(1);
+        console.log("---------------",User.findByPk(1));
+    })
+    .then(user => {
+
+        if (!user) {
+            return User.create({
+                first_name: "boot",
+                last_name: "dummy",
+                email: "boot@dummy.com"
+            });
+
+        }
+        return user;
+        // return Promise.resolve(user);
+    })
+    .then(user => {
+        // console.log("user:", user);
         app.listen(port, () => console.log(`You run "project-6" in server running by "Express" in port: "${port}".`));
     })
-    .catch(err => console.lg(err));
+    .catch(err => console.log(err));
