@@ -31,7 +31,10 @@ const postAddProduct = (request, response, next) => {
     const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
     const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
-    Product.create({
+    // @NOTE: 'createProduct()' is a method created automatically by Sequelize
+    // cause User have a relations  with Products tables
+    // https://sequelize.org/master/class/lib/associations/has-many.js~HasMany.html
+    request.user.createProduct({
         title       : title,
         price       : price,
         imageUrl    : imageUrl,
