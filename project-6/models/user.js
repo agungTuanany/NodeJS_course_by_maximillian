@@ -7,7 +7,7 @@
  * for products.
  */
 
-const ( DataTypes ) = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("./../lib/database.js");
 
 

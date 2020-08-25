@@ -3,6 +3,7 @@
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
 2. [What is Sequelize](#what-is-sequelize)
+3. [Association](#association)
 
 <br/>
 
@@ -115,6 +116,34 @@ In the end we don't want to learn that in theory, we want to see that in
 practice. So let's add `sequelize` to our [project](./../project-6); and let's
 slowly integrate it to manage our `Product` in our `Cart`and so on through
 `sequelize`.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Association
+<br/>
+
+![chapter-10-3.gif](./images/gif/chapter-10-3.gif "SQL association")
+<br />
+
+What do you mean by association ? You could say `relation`. In this above
+diagram we have 4 table: `Product`, `User`, `Cart`, `Order`. Now if we want to
+connect all tales and define how tables work together, then a `Product` probably
+belong to `many` `Cart`, because our `User` will have carts therefore we have
+multiple users, `multiple` carts; and therefore a `Product` can belong to `many`
+carts because different users can add the same `Product` to their `Cart`
+
+Each `User` has only one `Cart`. A `Product` can also be part of `multiple`
+`Order` and a `User` can have `multiple` orders, because typically user order
+more than one product.
+
+A `User` can also own `multiple` `Product`, in a sense of this `User`
+**created** this `Product`, in the sense of `User` offer this product, `User`
+sell some products on the shop.
+
+Above a rough outline of how we can communicate or relate different models,
+these is what we can also reflect in [sequelize](https://sequelize.org).
 
 **[⬆ back to top](#table-of-contents)**
 <br/>

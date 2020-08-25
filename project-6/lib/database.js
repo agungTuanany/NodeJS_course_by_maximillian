@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize("node_complete", "daun", "daun", {
     dialect: "mariadb",
     host: "localhost",
-    timezone: "+07:00",
+    timezone: "Etc/GMT-7",
     logging: false
 });
 
