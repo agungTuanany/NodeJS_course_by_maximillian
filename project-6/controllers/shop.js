@@ -47,7 +47,9 @@ const getProduct = (request, response, next) => {
     Product.findByPk(prodId)
         .then(product => {
             // console.log(product)
-            response.render('shop/product-detail', {
+            return response
+                .status(200)
+                .render('shop/product-detail', {
                 pageTitle: product.title,
                 path: '/products',
                 product: product
@@ -108,7 +110,6 @@ const postCart = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    // console.log(prodId)
     Product.findById(prodId, product => {
 
         Cart.addProduct(prodId, product.price);

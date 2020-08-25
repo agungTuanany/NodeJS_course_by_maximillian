@@ -82,23 +82,27 @@ const getEditProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
-    Product.findById(prodId, product => {
+    Product.findByPk(prodId)
+        .then(product => {
 
-        // @NOTE: It's bad approach in UX, most of the time you want to show an
-        // error instead redirect
-        if (!product) {
+            // @NOTE: It's bad approach in UX, most of the time you want to show an
+            // error instead redirect
+            if(!product) {
+                return response
+                    .status(301)
+                    .redirect("/")
+            };
+
             return response
-                .status(301)
-                .redirect("/")
-        };
-
-        return response.render("admin/edit-product", {
-            pageTitle: "Edit Products",
-            path: "/admin/edit-product",
-            editing: editMode,
-            product: product
-        });
-    });
+                .status(200)
+                .render('admin/edit-product', {
+                pageTitle: "Edit Product",
+                path: '/admin/edit-product',
+                editing:editMode,
+                product: product
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 const postEditProduct = (request, response, next) => {
@@ -109,10 +113,27 @@ const postEditProduct = (request, response, next) => {
     const updatedImageUrl = request.body.imageUrl;
     const updatedDesc     = request.body.description;
     // (id, title, imageUrl, price, description)
-    const updatedProduct = new Product(prodId, updatedTitle, updatedImageUrl, updatedPrice, updatedDesc);
 
-    updatedProduct.save();
-    return response.redirect("/admin/products");
+    Product.findByPk(prodId)
+
+        .then(product => {
+            product.title       = updatedTitle;
+            product.imageUrl    = updatedImageUrl;
+            product.price       = updatedPrice;
+            product.description = updatedDesc
+
+            //  If the products doesn't exist will create a new one. This should not be happens
+            return product.save()
+        })
+        // Handle any success saved product
+        .then(result => {
+
+            console.log("Admin PostEditproduct method:", result);
+            return response
+                .status(301)
+                .redirect("/admin/products");
+        })
+        .catch(err => console.log(err))
 };
 
 
