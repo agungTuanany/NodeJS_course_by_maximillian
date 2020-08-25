@@ -38,35 +38,12 @@ const postAddProduct = (request, response, next) => {
         description : description
     })
         .then(result => {
-            // console.log(result);
+
+            return response
+                .status(301)
+                .redirect("/admin/products");
         })
         .catch(err => console.log(err));
-    //const product = new Product(null, title, imageUrl, price, description);
-
-    //if (product.title === false ||
-    //    product.imageUrl === false ||
-    //    product.price === false ||
-    //    product.description === false
-    //) {
-    //    //@TODO: Create notice word if product is false
-    //    response
-    //        .status(302)
-    //        .render("admin/edit-product", {
-    //            pageTitle: "Add Product",
-    //            path: "/admin/add-product",
-    //            editing: false
-    //        });
-    //    return;
-    //};
-
-    //product
-    //    .save()
-    //    .then(() => {
-    //        return response
-    //            .status(302)
-    //            .redirect("/products");
-    //    })
-    //    .catch(err => console.log(err));
 };
 
 // http://localhost:8080/admin/edit-product/123aabb?edit=true
@@ -117,6 +94,7 @@ const postEditProduct = (request, response, next) => {
     Product.findByPk(prodId)
 
         .then(product => {
+
             product.title       = updatedTitle;
             product.imageUrl    = updatedImageUrl;
             product.price       = updatedPrice;
@@ -128,7 +106,7 @@ const postEditProduct = (request, response, next) => {
         // Handle any success saved product
         .then(result => {
 
-            console.log("Admin PostEditproduct method:", result);
+            console.log("Successes update product");
             return response
                 .status(301)
                 .redirect("/admin/products");
@@ -141,8 +119,8 @@ const getProducts = (request, response, next) => {
 
     Product.findAll()
         .then(product => {
-            // console.log(products)
-            response.render('admin/products', {
+
+            return response.render('admin/products', {
                 pageTitle: "Admin Products",
                 path: 'admin//products',
                 products: product
@@ -156,10 +134,20 @@ const postDeleteProduct = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    Product.deleteById(prodId);
-    return response
-        .status(301)
-        .redirect("/admin/products");
+    Product.findByPk(prodId)
+
+        .then(product => {
+
+            return product.destroy()
+        })
+        .then(result => {
+
+            console.log("Successes delete product");
+            return response
+                .status(301)
+                .redirect("/admin/products");
+        })
+        .catch(err => console.log(err));
 };
 
 module.exports = {

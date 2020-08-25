@@ -13,6 +13,7 @@ const getProducts = (request, response, next) => {
 
     Product.findAll()
         .then(products => {
+
             return response
                 .status(200)
                 .render("shop/index", {
@@ -35,6 +36,7 @@ const getProduct = (request, response, next) => {
     //     }
     // })
     //     .then(products => {
+    //
     //         console.log(products)
     //         response.render('shop/product-detail', {
     //             pageTitle: products[0].title,
@@ -46,7 +48,7 @@ const getProduct = (request, response, next) => {
 
     Product.findByPk(prodId)
         .then(product => {
-            // console.log(product)
+
             return response
                 .status(200)
                 .render('shop/product-detail', {
@@ -62,6 +64,7 @@ const getIndex = (request, response, next) => {
 
     Product.findAll()
         .then(products => {
+
             return response
                 .status(200)
                 .render("shop/index", {
