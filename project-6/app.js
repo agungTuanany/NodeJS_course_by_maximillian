@@ -52,7 +52,8 @@ app.use(shopRoutes);
 // 404 handlers
 app.use(errorController.get404);
 
-// Define database relations
+// https://sequelize.org/master/class/lib/associations/base.js~Association.html
+// Define database relations | associations
 Product.belongsTo(User, {
     constraint: true,
     onDelete: "CASCADE"
@@ -69,9 +70,9 @@ Product.belongsToMany(Cart, {
 
 sequelize
     .sync({
-        // Dropping a table if exist | this options only for Stagging
-        force: true,
-        // Check the current table state | this options only for Stagging
+        // Dropping a table if exist | this options only for Staging
+        // force: true,
+        // Check the current table state | this options only for Staging
         // alter: true,
     })
     .then(result => {
@@ -95,6 +96,9 @@ sequelize
     })
     .then(user => {
         // console.log("user:", user);
+        user.createCart();
+    })
+    .then(cart => {
         app.listen(port, () => console.log(`You run "project-6" in server running by "Express" in port: "${port}".`));
     })
     .catch(err => console.log(err));

@@ -78,35 +78,54 @@ const getIndex = (request, response, next) => {
 
 const getCart = (request, response, next) => {
 
-    // @TODO: re code from callback hell! Is not good code approach
-    Cart.getCart(cart => {
+    console.log(request.user.cart)
 
-        Product.fetchAll(products => {
-
-            const cartProducts =[];
-
-            for (const product of products) {
-                const cartProductData = cart.products.find(prod => prod.id === product.id);
-
-                // @TODO: catch the error if '!product'
-                // @TODO: handle productPrice
-                if (cartProductData) {
-                    cartProducts.push({
-                        productData: product,
-                        qty: cartProductData.qty
+    request.user.getCart()
+        .then(cart => {
+            // console.log(cart);
+            return cart.getProducts()
+                .then(products => {
+                    console.log(products);
+                    response.render("shop/cart", {
+                        pageTitle: "Your Cart",
+                        path: "/cart",
+                        products: products
                     });
-                };
-            };
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
 
-            return response
-                .status(200)
-                .render("shop/cart", {
-                    pageTitle: "Your Cart",
-                    path: "/cart",
-                    products: cartProducts
-                });
-        });
-    });
+
+    // @TODO: re code from callback hell! Is not good code approach
+    // Cart.getCart(cart => {
+
+    //     Product.fetchAll(products => {
+
+    //         const cartProducts =[];
+
+    //         for (const product of products) {
+    //             const cartProductData = cart.products.find(prod => prod.id === product.id);
+
+    //             // @TODO: catch the error if '!product'
+    //             // @TODO: handle productPrice
+    //             if (cartProductData) {
+    //                 cartProducts.push({
+    //                     productData: product,
+    //                     qty: cartProductData.qty
+    //                 });
+    //             };
+    //         };
+
+    //         return response
+    //             .status(200)
+    //             .render("shop/cart", {
+    //                 pageTitle: "Your Cart",
+    //                 path: "/cart",
+    //                 products: cartProducts
+    //             });
+    //     });
+    // });
 };
 
 const postCart = (request, response, next) => {
