@@ -63,8 +63,15 @@ const getEditProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
-    Product.findByPk(prodId)
-        .then(product => {
+    request.user.getProducts({
+        where: {
+            id: prodId
+        }
+    })
+    // Product.findByPk(prodId)
+        .then(products => {
+
+            const product = products[0];
 
             // @NOTE: It's bad approach in UX, most of the time you want to show an
             // error instead redirect
@@ -96,7 +103,6 @@ const postEditProduct = (request, response, next) => {
     // (id, title, imageUrl, price, description)
 
     Product.findByPk(prodId)
-
         .then(product => {
 
             product.title       = updatedTitle;
@@ -121,7 +127,8 @@ const postEditProduct = (request, response, next) => {
 
 const getProducts = (request, response, next) => {
 
-    Product.findAll()
+    request.user.getProducts()
+    // Product.findAll()
         .then(product => {
 
             return response.render('admin/products', {
