@@ -15,6 +15,8 @@ const errorController = require("./controllers/404.js");
 const sequelize = require("./lib/database.js");
 const Product = require("./models/product.js");
 const User = require("./models/user.js");
+const Cart = require("./models/cart.js");
+const CartItem = require("./models/cart-item.js");
 
 // Global variables
 const app = express();
@@ -55,13 +57,20 @@ Product.belongsTo(User, {
     constraint: true,
     onDelete: "CASCADE"
 });
-
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, {
+    through: CartItem
+});
+Product.belongsToMany(Cart, {
+    through: CartItem
+});
 
 sequelize
     .sync({
         // Dropping a table if exist | this options only for Stagging
-        // force: true,
+        force: true,
         // Check the current table state | this options only for Stagging
         // alter: true,
     })
