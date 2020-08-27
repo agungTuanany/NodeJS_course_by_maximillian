@@ -52,10 +52,10 @@ const getProduct = (request, response, next) => {
             return response
                 .status(200)
                 .render('shop/product-detail', {
-                pageTitle: product.title,
-                path: '/products',
-                product: product
-            });
+                    pageTitle: product.title,
+                    path: '/products',
+                    product: product
+                });
         })
         .catch(err => console.log(err));
 };
@@ -131,15 +131,61 @@ const getCart = (request, response, next) => {
 const postCart = (request, response, next) => {
 
     const prodId = request.body.productId;
+    let fetchedCart;
 
-    Product.findById(prodId, product => {
+    request.user.getCart()
+        .then(cart => {
 
-        Cart.addProduct(prodId, product.price);
-    });
+            fetchedCart = cart;
+            return cart.getProducts({
+                where: {
+                    id: prodId
+                }
+            });
+        })
+        .then(products => {
 
-    return response
-        .status(301)
-        .redirect("/cart")
+            let product;
+            if (products.length > 0) {
+                product = product[0];
+            };
+
+            let newQuantity = 1;
+
+            if (product) {
+                // ...
+                console.log(fetchedCart)
+            };
+
+            return Product.findByPk(prodId)
+                .then(product => {
+
+                    //A sequelize magic method | associations:belongs-to-many
+                    return fetchedCart.addProduct(product, {
+                        through: {
+                            quantity: newQuantity
+                        }
+
+                    })
+                })
+                .catch(err => console.log(err));
+        })
+        .then(() => {
+            return response
+                .status(301)
+                .redirect("/cart");
+
+        })
+        .catch(err => console.log(err));
+
+    // Product.findById(prodId, product => {
+
+    //     Cart.addProduct(prodId, product.price);
+    // });
+
+    // return response
+    //     .status(301)
+    //     .redirect("/cart")
 };
 
 const postCartDeleteProduct = (request, response, next) => {
