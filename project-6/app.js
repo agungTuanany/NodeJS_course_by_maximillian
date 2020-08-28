@@ -17,6 +17,8 @@ const Product = require("./models/product.js");
 const User = require("./models/user.js");
 const Cart = require("./models/cart.js");
 const CartItem = require("./models/cart-item.js");
+const Order = require("./models/order.js");
+const OrderItem = require("./models/order-item.js");
 
 // Global variables
 const app = express();
@@ -61,12 +63,11 @@ Product.belongsTo(User, {
 User.hasMany(Product);
 User.hasOne(Cart);
 Cart.belongsTo(User);
-Cart.belongsToMany(Product, {
-    through: CartItem
-});
-Product.belongsToMany(Cart, {
-    through: CartItem
-});
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
 
 sequelize
     .sync({

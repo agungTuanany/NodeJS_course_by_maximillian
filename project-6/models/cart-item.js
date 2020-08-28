@@ -3,7 +3,7 @@
 /*
  * A model for single cart-item from 'cart'.
  *
- * Is a central place to organized, structured, manipulate your single entity
+ * This is a central place to organized, structured, manipulate your single entity
  * for cart-item.
  */
 

@@ -3,7 +3,7 @@
 /*
  * A model for single entity from 'products'.
  *
- * Is a central place to organized, structured, manipulate your single entity
+ * This is a central place to organized, structured, manipulate your single entity
  * for products.
  */
 

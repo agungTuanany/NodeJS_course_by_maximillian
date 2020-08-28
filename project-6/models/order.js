@@ -1,10 +1,10 @@
 "use strict";
 
 /*
- * A model for single entity from 'cart'.
+ * A model for single entity from 'order'.
  *
  * This is a central place to organized, structured, manipulate your single entity
- * for cart.
+ * for order.
  */
 
 // Core Dependencies
@@ -15,13 +15,14 @@ const { DataTypes } = require("sequelize");
 // Internal Dependencies
 const sequelize = require("./../lib/database.js");
 
-const Cart = sequelize.define("cart", {
+const Order = sequelize.define("order", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
-    },
+    }
+    // @TODO: add more information like an address, etc...
 })
 
-module.exports = Cart;
+module.exports = Order;
