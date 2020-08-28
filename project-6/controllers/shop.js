@@ -3,6 +3,8 @@
 /*
  * Controller for "customer" views.
  *
+ * Sat Aug 29 05:07:10 AM WIB 2020
+ * @TODO: change all promise with async-await
  */
 
 // Internal Dependencies
@@ -78,7 +80,7 @@ const getIndex = (request, response, next) => {
 
 const getCart = (request, response, next) => {
 
-    console.log(request.user.cart)
+    console.log("request.user ===>", request.user)
 
     request.user.getCart()
         .then(cart => {
@@ -147,17 +149,27 @@ const postCartDeleteProduct = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    Product.findById(prodId, product => {
+    request.user.getCart()
+        .then(cart => {
 
-        // Fri 21 Aug 2020 10:24:58 PM WIB
-        // @TODO: make if block statement; if deletion is succeeded go to
-        // redirect if not warn the user. Because we access a file in there,
-        // theoretically we should use callback here.
-        Cart.deleteProduct(prodId, product.price);
-        return response
-            .status(301)
-            .redirect("/cart");
-    });
+            return cart.getProducts({
+                where: {
+                    id: prodId
+                }
+            });
+        })
+        .then(products => {
+
+            const product = products[0]
+            return product.cartItem.destroy()
+        })
+        .then(result => {
+
+            return response
+                .status(301)
+                .redirect("/cart");
+        })
+        .catch(err => console.log(err));
 };
 
 const getCheckout = (request, response, next) => {
