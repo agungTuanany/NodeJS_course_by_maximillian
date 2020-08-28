@@ -96,7 +96,7 @@ sequelize
     })
     .then(user => {
         // console.log("user:", user);
-        user.createCart();
+        return user.createCart();
     })
     .then(cart => {
         app.listen(port, () => console.log(`You run "project-6" in server running by "Express" in port: "${port}".`));

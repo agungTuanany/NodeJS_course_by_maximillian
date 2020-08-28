@@ -85,7 +85,7 @@ const getCart = (request, response, next) => {
             // console.log(cart);
             return cart.getProducts()
                 .then(products => {
-                    console.log("getCart ===>",products);
+                    // console.log("getCart ===>",products);
                     response.render("shop/cart", {
                         pageTitle: "Your Cart",
                         path: "/cart",
@@ -95,43 +95,13 @@ const getCart = (request, response, next) => {
                 .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
-
-
-    // @TODO: re code from callback hell! Is not good code approach
-    // Cart.getCart(cart => {
-
-    //     Product.fetchAll(products => {
-
-    //         const cartProducts =[];
-
-    //         for (const product of products) {
-    //             const cartProductData = cart.products.find(prod => prod.id === product.id);
-
-    //             // @TODO: catch the error if '!product'
-    //             // @TODO: handle productPrice
-    //             if (cartProductData) {
-    //                 cartProducts.push({
-    //                     productData: product,
-    //                     qty: cartProductData.qty
-    //                 });
-    //             };
-    //         };
-
-    //         return response
-    //             .status(200)
-    //             .render("shop/cart", {
-    //                 pageTitle: "Your Cart",
-    //                 path: "/cart",
-    //                 products: cartProducts
-    //             });
-    //     });
-    // });
 };
 
 const postCart = (request, response, next) => {
 
     const prodId = request.body.productId;
     let fetchedCart;
+    let newQuantity = 1;
 
     request.user.getCart()
         .then(cart => {
@@ -150,30 +120,19 @@ const postCart = (request, response, next) => {
                 product = products[0];
             };
 
-            let newQuantity = 1;
-
             if (product) {
                 const oldQuantity = product.cartItem.quantity;
                 newQuantity = oldQuantity + 1;
-                return fetchedCart.addProduct(product, {
-                    through: {
-                        quantity: newQuantity
-                    }
-                })
+                return product;
             };
-
             return Product.findByPk(prodId)
-                .then(product => {
-
-                    //A sequelize magic method | associations:belongs-to-many
-                    return fetchedCart.addProduct(product, {
-                        through: {
-                            quantity: newQuantity
-                        }
-
-                    })
-                })
-                .catch(err => console.log(err));
+        })
+        .then(product => {
+            return fetchedCart.addProduct(product, {
+                through: {
+                    quantity: newQuantity
+                }
+            })
         })
         .then(() => {
             return response
@@ -182,15 +141,6 @@ const postCart = (request, response, next) => {
 
         })
         .catch(err => console.log(err));
-
-    // Product.findById(prodId, product => {
-
-    //     Cart.addProduct(prodId, product.price);
-    // });
-
-    // return response
-    //     .status(301)
-    //     .redirect("/cart")
 };
 
 const postCartDeleteProduct = (request, response, next) => {
