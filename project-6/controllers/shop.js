@@ -85,7 +85,7 @@ const getCart = (request, response, next) => {
             // console.log(cart);
             return cart.getProducts()
                 .then(products => {
-                    console.log(products);
+                    console.log("getCart ===>",products);
                     response.render("shop/cart", {
                         pageTitle: "Your Cart",
                         path: "/cart",
@@ -147,14 +147,19 @@ const postCart = (request, response, next) => {
 
             let product;
             if (products.length > 0) {
-                product = product[0];
+                product = products[0];
             };
 
             let newQuantity = 1;
 
             if (product) {
-                // ...
-                console.log(fetchedCart)
+                const oldQuantity = product.cartItem.quantity;
+                newQuantity = oldQuantity + 1;
+                return fetchedCart.addProduct(product, {
+                    through: {
+                        quantity: newQuantity
+                    }
+                })
             };
 
             return Product.findByPk(prodId)

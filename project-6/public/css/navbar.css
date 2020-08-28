@@ -115,3 +115,13 @@
   z-index                     : 5;
   display                     : none;
 }
+
+@media (min-width: 768px) {
+    .main-header__nav {
+        display               : flex;
+    }
+
+    #side-menu-toggle {
+        display               : none;
+    }
+}
