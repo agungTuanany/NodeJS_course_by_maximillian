@@ -9,7 +9,7 @@
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
-const Cart = require("./../models/cart.js");
+const Order = require("./../models/order.js");
 
 const getProducts = (request, response, next) => {
 
@@ -80,7 +80,7 @@ const getIndex = (request, response, next) => {
 
 const getCart = (request, response, next) => {
 
-    console.log("request.user ===>", request.user)
+    // console.log("request.user ===>", request.user)
 
     request.user.getCart()
         .then(cart => {
@@ -182,6 +182,33 @@ const getCheckout = (request, response, next) => {
         });
 };
 
+const postOrder = (request, response, next) => {
+
+    request.user.getCart()
+        .then(cart => {
+            return cart.getProducts()
+        })
+        .then(products => {
+            // @NOTE: createOrder() method present cause we called user.createCart() in app.js
+            return request.user.createOrder()
+            // @TODO: get rid from nested .then(); bad approach!!
+                .then(order => {
+                    order.addProducts(products.map(product => {
+                        product.orderItem = { quantity: product.cartItem.quantity }
+                        return product;
+                    }))
+                })
+                .catch(err => console.log(err));
+            // console.log("postOrder products ==>", products);
+        })
+        .then(result => {
+            response
+                .status(301)
+                .redirect("/orders");
+        })
+        .catch(err => console.log(err));
+};
+
 const getOrders = (request, response, next) => {
 
     return response
@@ -200,5 +227,6 @@ module.exports = {
     postCart,
     postCartDeleteProduct,
     getCheckout,
+    postOrder,
     getOrders
 };
