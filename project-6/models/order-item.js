@@ -4,7 +4,7 @@
  * A model for single entity from 'order-item'.
  *
  * This is a central place to organized, structured, manipulate your single entity
- * for order.
+ * for order-item.
  */
 
 // Core Dependencies
@@ -15,7 +15,7 @@ const { DataTypes } = require("sequelize");
 // Internal Dependencies
 const sequelize = require("./../lib/database.js");
 
-const OrderItem = sequelize.define("orderItems", {
+const OrderItem = sequelize.define("orderItem", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

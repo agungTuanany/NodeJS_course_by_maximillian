@@ -2,9 +2,24 @@
 <body>
     <%- include("../includes/navigation.ejs") %>
     <main>
-        <h1>Orders Page</h1>
-        <p>List of all orders products</p>
-
+        <% if (orders.length <= 0) { %>
+            <h1>Orders Page</h1>
+            <p>List of all orders products</p>
+            <h1>No order items in Orders Page</h1>
+        <% } else { %>
+            <ul>
+                <% orders.forEach(order => { %>
+                    <li>
+                        <h1># <%= order.id %></h1>
+                        <ul>
+                            <% order.products.forEach(product => { %>
+                                <li><%= product.title %> (<%= product.orderItem.quantity %>)</li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                <% }); %>
+            </ul>
+        <%  } %>
     </main>
 
     <%- include("../includes/end.ejs") %>

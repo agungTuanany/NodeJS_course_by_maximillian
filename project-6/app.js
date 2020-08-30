@@ -80,7 +80,6 @@ sequelize
 
         // console.log(result)
         return User.findByPk(1);
-        console.log("---------------",User.findByPk(1));
     })
     .then(user => {
 

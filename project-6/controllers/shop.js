@@ -5,6 +5,13 @@
  *
  * Sat Aug 29 05:07:10 AM WIB 2020
  * @TODO: change all promise with async-await
+ *
+ * @NOTE: why use @param: "include:["products"]" ? Because in app.js we associate
+ * "Order. @param: belongsToMany(Product, { through: OrderItem });".  Sequelize pluralize
+ * "product" as a model then we use concept eager loading; and basically
+ * instruct Sequelize if Sequelize fetch all the "orders" please also fetch all
+ * related "products" already and give the "orders" data back, and one array of
+ * "orders" that also includes the "products" per "order"
  */
 
 // Internal Dependencies
@@ -172,6 +179,7 @@ const postCartDeleteProduct = (request, response, next) => {
         .catch(err => console.log(err));
 };
 
+// @TODO work in this controllers with Sequelize
 const getCheckout = (request, response, next) => {
 
     return response
@@ -184,39 +192,60 @@ const getCheckout = (request, response, next) => {
 
 const postOrder = (request, response, next) => {
 
+    let fetchedCart;
     request.user.getCart()
         .then(cart => {
+
+            fetchedCart = cart;
             return cart.getProducts()
         })
         .then(products => {
+
             // @NOTE: createOrder() method present cause we called user.createCart() in app.js
             return request.user.createOrder()
             // @TODO: get rid from nested .then(); bad approach!!
                 .then(order => {
+
                     order.addProducts(products.map(product => {
+
                         product.orderItem = { quantity: product.cartItem.quantity }
+                        // console.log("==========>", product.orderItem)
                         return product;
                     }))
                 })
                 .catch(err => console.log(err));
-            // console.log("postOrder products ==>", products);
         })
         .then(result => {
-            response
+
+            console.log("===========> fetchedCart", fetchedCart);
+            return fetchedCart.setProducts(null);
+        })
+        .then(result => {
+
+            return response
                 .status(301)
                 .redirect("/orders");
+
         })
         .catch(err => console.log(err));
 };
 
 const getOrders = (request, response, next) => {
 
-    return response
-        .status(200)
-        .render("shop/orders", {
-            pageTitle: "Orders Page",
-            path: "/orders",
-        });
+     // @NOTE: using concept "eager loading" in Sequelize.
+    request.user.getOrders({include: ["products"]})
+        .then(orders => {
+
+            console.log(orders)
+            return response
+                .status(200)
+                .render("shop/orders", {
+                    pageTitle: "Orders Page",
+                    path: "/orders",
+                    orders: orders
+                });
+        })
+        .catch(err => console.log(err));
 };
 
 module.exports = {
