@@ -9,6 +9,8 @@
  * Sat Aug 29 05:07:10 AM WIB 2020
  * @TODO: change all promise with async-await
  *
+ * @param: this.id is optional arguments.
+ * @param :#$et is reserved name in MongoDB
  */
 
 // Core Dependencies
@@ -22,26 +24,46 @@ const  { getDb }  = require("./../lib/database.js");
 // Global variables
 
 class Product {
-    constructor(title, price, imageUrl, description) {
+    constructor(title, price, imageUrl, description, id) {
 
         this.title = title;
         this.price = price;
         this.imageUrl = imageUrl;
         this.description = description;
+        this._id = id;
     };
 
     save() {
-
         const db = getDb();
-        return db.collection("products")
-            .insertOne(this)
+        let dbOperation;
+
+        if (this._id) {
+            // update the product
+            dbOperation = db.collection("products")
+                .updateOne({
+                    _id: new mongodb.ObjectId(this._id)
+                }, {
+                    $set: {
+                        title: this.title,
+                        price: this.price,
+                        imageUrl: this.imageUrl,
+                        description: this.description
+                    }
+                })
+        }
+        else {
+            dbOperation = db.collection("products").insertOne(this);
+        };
+
+        return dbOperation
             .then(result => {
                 console.log(result)
             })
             .catch(err => console.log(err));
-    }
+    };
 
     static fetchAll() {
+
         const db = getDb();
         return db.collection("products")
             .find()
@@ -55,6 +77,7 @@ class Product {
 
     // Find single product
     static findById(prodId) {
+
         const db = getDb()
         return db.collection("products")
             .find({
