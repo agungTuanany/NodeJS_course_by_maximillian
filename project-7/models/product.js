@@ -10,34 +10,44 @@
 // Core Dependencies
 
 // Internal Dependencies
-const { DataTypes } = require("sequelize");
-const sequelize = require("./../lib/database.js");
 
 // Global variables
 
-const Product = sequelize.define("products", {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    price: {
-        type: DataTypes.DOUBLE,
-        allowNull: false
-    },
-    imageUrl: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-});
+const  { getDb }  = require("./../lib/database.js");
+
+class Product {
+    constructor(title, price, imageUrl, description) {
+
+        this.title = titile;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    };
+}
+
+// const Product = sequelize.define("products", {
+//     id: {
+//         type: DataTypes.INTEGER,
+//         autoIncrement: true,
+//         allowNull: false,
+//         primaryKey: true,
+//     },
+//     title: {
+//         type: DataTypes.STRING,
+//         allowNull: false
+//     },
+//     price: {
+//         type: DataTypes.DOUBLE,
+//         allowNull: false
+//     },
+//     imageUrl: {
+//         type: DataTypes.STRING,
+//         allowNull: false
+//     },
+//     description: {
+//         type: DataTypes.STRING,
+//         allowNull: false
+//     }
+// });
 
 module.exports = Product;

@@ -4,11 +4,11 @@
 const path = require("path");
 
 // 3rd party Dependencies
-const express = require("express");
+const express    = require("express");
 const bodyParser = require("body-parser");
 
 // Internal Dependencies
-const rootDir = require("./lib/path.js");
+const rootDir      = require("./lib/path.js");
 const mongoConnect = require("./lib/database.js");
 
 // Global variables
@@ -19,8 +19,8 @@ const port = 8080;
 app.set("view engine", "ejs");
 app.set("views", "views"); // Config explicitly
 
-// const adminRoutes = require("./routes/admin.js");
-// const shopRoutes = require("./routes/shop.js");
+const adminRoutes     = require("./routes/admin.js");
+const shopRoutes      = require("./routes/shop.js");
 const errorController = require("./controllers/404.js");
 
 // Parser middleware
@@ -37,17 +37,14 @@ app.use((request, response, next) => {
 })
 
 // Admin routes handlers
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 
 // Shop router handlers
-// app.use(shopRoutes);
+app.use(shopRoutes);
 app.use(errorController.get404);
 
 // Mongo Connection
-mongoConnect(client => {
-
-    console.log(client);
+mongoConnect(()=> {
     app.listen(port, () => console.log(`You run "project-7" in server running by "Express" in port: "${port}".`));
-
 });
 
