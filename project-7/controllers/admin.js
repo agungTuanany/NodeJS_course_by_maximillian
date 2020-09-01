@@ -5,8 +5,14 @@
  *
  */
 
+// 3rd party Dependencies
+const mongodb = require("mongodb");
+
 // Internal Dependencies
 const Product = require("./../models/product.js");
+
+// Global variables
+const ObjectId = mongodb.ObjectId;
 
 const getProducts = (request, response, next) => {
 
@@ -97,20 +103,12 @@ const postEditProduct = (request, response, next) => {
     const updatedPrice    = request.body.price;
     const updatedImageUrl = request.body.imageUrl;
     const updatedDesc     = request.body.description;
-    // (id, title, imageUrl, price, description)
 
-    Product.findByPk(prodId)
-        .then(product => {
 
-            product.title       = updatedTitle;
-            product.imageUrl    = updatedImageUrl;
-            product.price       = updatedPrice;
-            product.description = updatedDesc
+    //(title, price, imageUrl, description, id)
+    const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, new ObjectId(prodId));
 
-            //  If the products doesn't exist will create a new one. This should not be happens
-            return product.save()
-        })
-        // Handle any success saved product
+    product.save()
         .then(result => {
 
             console.log("Succeeded update product");

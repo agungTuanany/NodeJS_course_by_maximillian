@@ -43,12 +43,14 @@ class Product {
                 .updateOne({
                     _id: new mongodb.ObjectId(this._id)
                 }, {
-                    $set: {
-                        title: this.title,
-                        price: this.price,
-                        imageUrl: this.imageUrl,
-                        description: this.description
-                    }
+                    $set: this
+                    // or with robust way
+                    // $set: {
+                    //     title: this.title,
+                    //     price: this.price,
+                    //     imageUrl: this.imageUrl,
+                    //     description: this.description
+                    // }
                 })
         }
         else {
@@ -57,7 +59,7 @@ class Product {
 
         return dbOperation
             .then(result => {
-                console.log(result)
+                console.log("============================> model product.js",result)
             })
             .catch(err => console.log(err));
     };
