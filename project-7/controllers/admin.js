@@ -27,20 +27,14 @@ const getAddProduct = (request, response, next) => {
 const postAddProduct = (request, response, next) => {
 
     const title       = typeof(request.body.title) === "string" && request.body.title.trim().length > 0 ? request.body.title : false;
-    const imageUrl    = typeof(request.body.imageUrl) === "string" && request.body.imageUrl.trim().length > 0 ? request.body.imageUrl : false;
     const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
+    const imageUrl    = typeof(request.body.imageUrl) === "string" && request.body.imageUrl.trim().length > 0 ? request.body.imageUrl : false;
     const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
-    // @NOTE: 'createProduct()' is a method created automatically by Sequelize
-    // cause User have a relations  with Products tables
-    // https://sequelize.org/master/class/lib/associations/has-many.js~HasMany.html
-    request.user.createProduct({
-        title       : title,
-        price       : price,
-        imageUrl    : imageUrl,
-        description : description,
-        userId      : request.user.id
-    })
+    //(title, price, imageUrl, description) {
+    const product = new Product(title, price, imageUrl, description)
+
+    product.save()
         .then(result => {
 
             return response
