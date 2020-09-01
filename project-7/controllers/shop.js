@@ -6,12 +6,6 @@
  * Sat Aug 29 05:07:10 AM WIB 2020
  * @TODO: change all promise with async-await
  *
- * @NOTE: why use @param: "include:["products"]" ? Because in app.js we associate
- * "Order. @param: belongsToMany(Product, { through: OrderItem });".  Sequelize pluralize
- * "product" as a model then we use concept eager loading; and basically
- * instruct Sequelize if Sequelize fetch all the "orders" please also fetch all
- * related "products" already and give the "orders" data back, and one array of
- * "orders" that also includes the "products" per "order"
  */
 
 // Internal Dependencies
@@ -38,24 +32,7 @@ const getProduct = (request, response, next) => {
 
     const prodId = request.params.productId;
 
-    // @NOTE: Another approach for getProduct
-    // Product.findAll({
-    //     where: {
-    //         id: prodId
-    //     }
-    // })
-    //     .then(products => {
-    //
-    //         console.log(products)
-    //         response.render('shop/product-detail', {
-    //             pageTitle: products[0].title,
-    //             path: '/products',
-    //             product: products[0]
-    //         });
-    //     })
-    //     .catch(err => console.log(err));
-
-    Product.findByPk(prodId)
+    Product.findById(prodId)
         .then(product => {
 
             return response
@@ -259,3 +236,13 @@ module.exports = {
     postOrder,
     getOrders
 };
+
+/*
+ * @NOTE: why use @param: "include:["products"]" ? Because in app.js we associate
+ * "Order. @param: belongsToMany(Product, { through: OrderItem });".  Sequelize pluralize
+ * "product" as a model then we use concept eager loading; and basically
+ * instruct Sequelize if Sequelize fetch all the "orders" please also fetch all
+ * related "products" already and give the "orders" data back, and one array of
+ * "orders" that also includes the "products" per "order"
+ *
+ */

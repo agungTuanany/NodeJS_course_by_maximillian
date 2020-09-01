@@ -10,11 +10,13 @@
 
 // Core Dependencies
 
+// 3rd party library
+const mongodb = require("mongodb");
+
 // Internal Dependencies
+const  { getDb }  = require("./../lib/database.js");
 
 // Global variables
-
-const  { getDb }  = require("./../lib/database.js");
 
 class Product {
     constructor(title, price, imageUrl, description) {
@@ -38,12 +40,27 @@ class Product {
 
     static fetchAll() {
         const db = getDb();
-        return db.collection('products')
+        return db.collection("products")
             .find()
             .toArray()
             .then(products => {
-                console.log(products);
+                // console.log(products);
                 return products;
+            })
+            .catch(err => console.log(err));
+    };
+
+    // Find single product
+    static findById(prodId) {
+        const db = getDb()
+        return db.collection("products")
+            .find({
+                _id: new mongodb.ObjectId(prodId)
+            })
+            .next()
+            .then(product => {
+                console.log(product);
+                return product;
             })
             .catch(err => console.log(err));
     };

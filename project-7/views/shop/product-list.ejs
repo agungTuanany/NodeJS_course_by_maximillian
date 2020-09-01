@@ -23,7 +23,7 @@
 
                         <div class="card__actions">
                             <!-- @TODO: edit with single product; ie: /add-to-cart/:product__title -->
-                            <a href="/products/<%= product.id %>" class="btn">Details</a>
+                            <a href="/products/<%= product._id %>" class="btn">Details</a>
                             <!-- @NOTE: use second argument in ejs, to include function where you pass an object -->
                             <%- include("../includes/add-to-cart.ejs", {product: product}) %>
                         </div>
