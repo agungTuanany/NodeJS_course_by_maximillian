@@ -35,8 +35,7 @@ app.use((request, response, next) => {
             next();
         })
         .catch(err => console.log(err))
-    next()
-})
+});
 
 // Routes handlers
 app.use("/admin", adminRoutes);

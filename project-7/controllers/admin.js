@@ -45,8 +45,8 @@ const postAddProduct = (request, response, next) => {
     const imageUrl    = typeof(request.body.imageUrl) === "string" && request.body.imageUrl.trim().length > 0 ? request.body.imageUrl : false;
     const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
-    //(title, price, imageUrl, description) {
-    const product = new Product(title, price, imageUrl, description)
+    //(title, price, imageUrl, description, id, userId)
+    const product = new Product(title, price, imageUrl, description, null, request.user._id);
 
     product.save()
         .then(result => {

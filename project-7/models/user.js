@@ -45,8 +45,7 @@ class User {
 
     static findById(userId) {
 
-        // .findOne({ _id: new ObjectId(userId) })
-
+        const db = getDb();
         return db.collection("users")
             .findOne({ _id: new ObjectId(userId) })
             .then(user => {
