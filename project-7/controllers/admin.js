@@ -6,13 +6,11 @@
  */
 
 // 3rd party Dependencies
-const mongodb = require("mongodb");
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
 
 // Global variables
-const ObjectId = mongodb.ObjectId;
 
 const getProducts = (request, response, next) => {
 
@@ -106,7 +104,7 @@ const postEditProduct = (request, response, next) => {
 
 
     //(title, price, imageUrl, description, id)
-    const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, new ObjectId(prodId));
+    const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, prodId);
 
     product.save()
         .then(result => {
