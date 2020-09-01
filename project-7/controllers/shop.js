@@ -15,12 +15,12 @@
  */
 
 // Internal Dependencies
-// const Product = require("./../models/product.js");
+const Product = require("./../models/product.js");
 // const Order = require("./../models/order.js");
 
 const getProducts = (request, response, next) => {
 
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
 
             return response
@@ -71,7 +71,7 @@ const getProduct = (request, response, next) => {
 
 const getIndex = (request, response, next) => {
 
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
 
             return response

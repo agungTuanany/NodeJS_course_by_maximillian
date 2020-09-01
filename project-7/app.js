@@ -37,10 +37,8 @@ app.use((request, response, next) => {
     next()
 })
 
-// Admin routes handlers
+// Routes handlers
 app.use("/admin", adminRoutes);
-
-// Shop router handlers
 app.use(shopRoutes);
 app.use(errorController.get404);
 
