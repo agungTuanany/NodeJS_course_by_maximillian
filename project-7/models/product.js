@@ -10,7 +10,9 @@
  * @TODO: change all promise with async-await
  *
  * @param: this.id is optional arguments.
- * @param :$set is reserved name in MongoDB
+ * @param: next() is reserved method on MongoDB
+ * @param: new mongodb.ObjectId() is converting userId into a string
+ * @param: $set is reserved name in MongoDB
  */
 
 // Core Dependencies
@@ -22,6 +24,7 @@ const mongodb = require("mongodb");
 const  { getDb }  = require("./../lib/database.js");
 
 // Global variables
+const ObjectId = mongodb.ObjectId;
 
 class Product {
     constructor(title, price, imageUrl, description, id) {
@@ -30,7 +33,7 @@ class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.description = description;
-        this._id = id ? new mongodb.ObjectId(id) : null;
+        this._id = id ? new ObjectId(id) : null;
     };
 
     save() {
@@ -60,7 +63,7 @@ class Product {
 
         return dbOperation
             .then(result => {
-                console.log("============================> model product.js",result)
+                console.log("====> model product.js| succeeded create new product", result)
             })
             .catch(err => console.log(err));
     };
@@ -84,7 +87,7 @@ class Product {
         const db = getDb()
         return db.collection("products")
             .find({
-                _id: new mongodb.ObjectId(prodId)
+                _id: new ObjectId(prodId)
             })
             .next()
             .then(product => {
@@ -98,7 +101,7 @@ class Product {
 
         const db = getDb();
         return db.collection("products")
-            .deleteOne({ _id: new mongodb.ObjectId(prodId) })
+            .deleteOne({ _id: new ObjectId(prodId) })
             .then(result => {
                 console.log("Deleted");
             })

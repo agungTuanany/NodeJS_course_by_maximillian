@@ -8,8 +8,9 @@ const express    = require("express");
 const bodyParser = require("body-parser");
 
 // Internal Dependencies
-const rootDir      = require("./lib/path.js");
+const rootDir          = require("./lib/path.js");
 const { mongoConnect } = require("./lib/database.js");
+const User             = require("./models/user.js");
 
 // Global variables
 const app = express();
@@ -28,12 +29,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((request, response, next) => {
-    // User.findByPk(1)
-    //     .then(user => {
-    //         request.user = user;
-    //         next();
-    //     })
-    //     .catch(err => console.log(err))
+    User.findById("5f4ed6baffb67c79467cb4db")
+        .then(user => {
+            request.user = user;
+            next();
+        })
+        .catch(err => console.log(err))
     next()
 })
 
