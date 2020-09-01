@@ -6,6 +6,9 @@
  * This is a central place to organized, structured, manipulate your single entity
  * for products.
  *
+ * Sat Aug 29 05:07:10 AM WIB 2020
+ * @TODO: change all promise with async-await
+ *
  */
 
 // Core Dependencies
@@ -68,12 +71,3 @@ class Product {
 
 
 module.exports = Product;
-
-/*
- * @param: .find(), is not immediately return a promise, instead it return
- * so-called "cursor". Cursor is an object provided by MongoDB which allow to go
- * through documents elements step by step because theoretically and
- * a collection find() could of course return of millions of documents, and you
- * don't want to transfer them over to wire all at once.
- *
- */

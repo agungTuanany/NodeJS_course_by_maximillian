@@ -119,21 +119,20 @@ const postAddProduct = (request, response, next) => {
 // };
 
 
-// const getProducts = (request, response, next) => {
+const getProducts = (request, response, next) => {
 
-//     request.user.getProducts()
-//     // Product.findAll()
-//         .then(product => {
+    Product.fetchAll()
+        .then(product => {
 
-//             return response.render('admin/products', {
-//                 pageTitle: "Admin Products",
-//                 path: 'admin//products',
-//                 products: product
-//             });
-//         })
-//         .catch(err => console.log(err));
+            return response.render('admin/products', {
+                pageTitle: "Admin Products",
+                path: 'admin//products',
+                products: product
+            });
+        })
+        .catch(err => console.log(err));
 
-// };
+};
 
 // const postDeleteProduct = (request, response, next) => {
 
@@ -160,6 +159,6 @@ module.exports = {
     postAddProduct,
     // getEditProduct,
     // postEditProduct,
-    // getProducts,
+    getProducts,
     // postDeleteProduct
 };
