@@ -10,7 +10,7 @@
  * @TODO: change all promise with async-await
  *
  * @param: this.id is optional arguments.
- * @param :#$et is reserved name in MongoDB
+ * @param :$set is reserved name in MongoDB
  */
 
 // Core Dependencies
@@ -41,18 +41,18 @@ class Product {
             // update the product
             dbOperation = db.collection("products")
                 .updateOne({ _id: this._id }, { $set: this })
-                // .updateOne({
-                //     _id: this._id
-                // }, {
-                //     $set: this
-                //     // or with robust way
-                //     // $set: {
-                //     //     title: this.title,
-                //     //     price: this.price,
-                //     //     imageUrl: this.imageUrl,
-                //     //     description: this.description
-                //     // }
-                // })
+            // .updateOne({
+            //     _id: this._id
+            // }, {
+            //     $set: this
+            //     // or with robust way
+            //     // $set: {
+            //     //     title: this.title,
+            //     //     price: this.price,
+            //     //     imageUrl: this.imageUrl,
+            //     //     description: this.description
+            //     // }
+            // })
         }
         else {
             dbOperation = db.collection("products").insertOne(this);
@@ -92,6 +92,19 @@ class Product {
                 return product;
             })
             .catch(err => console.log(err));
+    };
+
+    static deleteById(prodId) {
+
+        const db = getDb();
+        return db.collection("products")
+            .deleteOne({ _id: new mongodb.ObjectId(prodId) })
+            .then(result => {
+                console.log("Deleted");
+            })
+            .catch(err => {
+                console.log(err);
+            });
     };
 };
 

@@ -117,25 +117,20 @@ const postEditProduct = (request, response, next) => {
         .catch(err => console.log(err))
 };
 
-// const postDeleteProduct = (request, response, next) => {
+const postDeleteProduct = (request, response, next) => {
 
-//     const prodId = request.body.productId;
+    const prodId = request.body.productId;
 
-//     Product.findByPk(prodId)
+    Product.deleteById(prodId)
+        .then(result => {
 
-//         .then(product => {
-
-//             return product.destroy()
-//         })
-//         .then(result => {
-
-//             console.log("Succeeded delete product");
-//             return response
-//                 .status(301)
-//                 .redirect("/admin/products");
-//         })
-//         .catch(err => console.log(err));
-// };
+            console.log("Succeeded delete product");
+            return response
+                .status(301)
+                .redirect("/admin/products");
+        })
+        .catch(err => console.log(err));
+};
 
 module.exports = {
     getProducts,
@@ -143,5 +138,5 @@ module.exports = {
     postAddProduct,
     getEditProduct,
     postEditProduct,
-    // postDeleteProduct
+    postDeleteProduct
 };
