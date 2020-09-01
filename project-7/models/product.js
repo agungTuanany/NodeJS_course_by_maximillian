@@ -23,31 +23,22 @@ class Product {
         this.imageUrl = imageUrl;
         this.description = description;
     };
+
+    save() {
+
+        const db = getDb();
+        db.collection("products")
+        // .insertOne({
+        //     name: "lettuce",
+        //     price: "20.04",
+        // });
+            .insertOne(this)
+            .then(result => {
+                console.log(result)
+            })
+            .catch(err => console.log(err));
+    }
 }
 
-// const Product = sequelize.define("products", {
-//     id: {
-//         type: DataTypes.INTEGER,
-//         autoIncrement: true,
-//         allowNull: false,
-//         primaryKey: true,
-//     },
-//     title: {
-//         type: DataTypes.STRING,
-//         allowNull: false
-//     },
-//     price: {
-//         type: DataTypes.DOUBLE,
-//         allowNull: false
-//     },
-//     imageUrl: {
-//         type: DataTypes.STRING,
-//         allowNull: false
-//     },
-//     description: {
-//         type: DataTypes.STRING,
-//         allowNull: false
-//     }
-// });
 
 module.exports = Product;

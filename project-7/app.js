@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 
 // Internal Dependencies
 const rootDir      = require("./lib/path.js");
-const mongoConnect = require("./lib/database.js");
+const { mongoConnect } = require("./lib/database.js");
 
 // Global variables
 const app = express();
@@ -34,6 +34,7 @@ app.use((request, response, next) => {
     //         next();
     //     })
     //     .catch(err => console.log(err))
+    next()
 })
 
 // Admin routes handlers

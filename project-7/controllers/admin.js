@@ -50,122 +50,122 @@ const postAddProduct = (request, response, next) => {
         .catch(err => console.log(err));
 };
 
-// http://localhost:8080/admin/edit-product/123aabb?edit=true
-const getEditProduct = (request, response, next) => {
+// // http://localhost:8080/admin/edit-product/123aabb?edit=true
+// const getEditProduct = (request, response, next) => {
 
-    const editMode = request.query.edit;
+//     const editMode = request.query.edit;
 
-    if (!editMode) {
-        return response
-            .status(301)
-            .redirect("/");
-    };
+//     if (!editMode) {
+//         return response
+//             .status(301)
+//             .redirect("/");
+//     };
 
-    const prodId = request.params.productId;
+//     const prodId = request.params.productId;
 
-    request.user.getProducts({
-        where: {
-            id: prodId
-        }
-    })
-    // Product.findByPk(prodId)
-        .then(products => {
+//     request.user.getProducts({
+//         where: {
+//             id: prodId
+//         }
+//     })
+//     // Product.findByPk(prodId)
+//         .then(products => {
 
-            const product = products[0];
+//             const product = products[0];
 
-            // @NOTE: It's bad approach in UX, most of the time you want to show an
-            // error instead redirect
-            if(!product) {
-                return response
-                    .status(301)
-                    .redirect("/")
-            };
+//             // @NOTE: It's bad approach in UX, most of the time you want to show an
+//             // error instead redirect
+//             if(!product) {
+//                 return response
+//                     .status(301)
+//                     .redirect("/")
+//             };
 
-            return response
-                .status(200)
-                .render('admin/edit-product', {
-                pageTitle: "Edit Product",
-                path: '/admin/edit-product',
-                editing:editMode,
-                product: product
-            });
-        })
-        .catch(err => console.log(err));
-};
+//             return response
+//                 .status(200)
+//                 .render('admin/edit-product', {
+//                 pageTitle: "Edit Product",
+//                 path: '/admin/edit-product',
+//                 editing:editMode,
+//                 product: product
+//             });
+//         })
+//         .catch(err => console.log(err));
+// };
 
-const postEditProduct = (request, response, next) => {
+// const postEditProduct = (request, response, next) => {
 
-    const prodId          = request.body.productId;
-    const updatedTitle    = request.body.title;
-    const updatedPrice    = request.body.price;
-    const updatedImageUrl = request.body.imageUrl;
-    const updatedDesc     = request.body.description;
-    // (id, title, imageUrl, price, description)
+//     const prodId          = request.body.productId;
+//     const updatedTitle    = request.body.title;
+//     const updatedPrice    = request.body.price;
+//     const updatedImageUrl = request.body.imageUrl;
+//     const updatedDesc     = request.body.description;
+//     // (id, title, imageUrl, price, description)
 
-    Product.findByPk(prodId)
-        .then(product => {
+//     Product.findByPk(prodId)
+//         .then(product => {
 
-            product.title       = updatedTitle;
-            product.imageUrl    = updatedImageUrl;
-            product.price       = updatedPrice;
-            product.description = updatedDesc
+//             product.title       = updatedTitle;
+//             product.imageUrl    = updatedImageUrl;
+//             product.price       = updatedPrice;
+//             product.description = updatedDesc
 
-            //  If the products doesn't exist will create a new one. This should not be happens
-            return product.save()
-        })
-        // Handle any success saved product
-        .then(result => {
+//             //  If the products doesn't exist will create a new one. This should not be happens
+//             return product.save()
+//         })
+//         // Handle any success saved product
+//         .then(result => {
 
-            console.log("Succeeded update product");
-            return response
-                .status(301)
-                .redirect("/admin/products");
-        })
-        .catch(err => console.log(err))
-};
+//             console.log("Succeeded update product");
+//             return response
+//                 .status(301)
+//                 .redirect("/admin/products");
+//         })
+//         .catch(err => console.log(err))
+// };
 
 
-const getProducts = (request, response, next) => {
+// const getProducts = (request, response, next) => {
 
-    request.user.getProducts()
-    // Product.findAll()
-        .then(product => {
+//     request.user.getProducts()
+//     // Product.findAll()
+//         .then(product => {
 
-            return response.render('admin/products', {
-                pageTitle: "Admin Products",
-                path: 'admin//products',
-                products: product
-            });
-        })
-        .catch(err => console.log(err));
+//             return response.render('admin/products', {
+//                 pageTitle: "Admin Products",
+//                 path: 'admin//products',
+//                 products: product
+//             });
+//         })
+//         .catch(err => console.log(err));
 
-};
+// };
 
-const postDeleteProduct = (request, response, next) => {
+// const postDeleteProduct = (request, response, next) => {
 
-    const prodId = request.body.productId;
+//     const prodId = request.body.productId;
 
-    Product.findByPk(prodId)
+//     Product.findByPk(prodId)
 
-        .then(product => {
+//         .then(product => {
 
-            return product.destroy()
-        })
-        .then(result => {
+//             return product.destroy()
+//         })
+//         .then(result => {
 
-            console.log("Succeeded delete product");
-            return response
-                .status(301)
-                .redirect("/admin/products");
-        })
-        .catch(err => console.log(err));
-};
+//             console.log("Succeeded delete product");
+//             return response
+//                 .status(301)
+//                 .redirect("/admin/products");
+//         })
+//         .catch(err => console.log(err));
+// };
 
 module.exports = {
     getAddProduct,
     postAddProduct,
-    getEditProduct,
-    postEditProduct,
-    getProducts,
-    postDeleteProduct
+    // getEditProduct,
+    // postEditProduct,
+    // getProducts,
+    // postDeleteProduct
 };

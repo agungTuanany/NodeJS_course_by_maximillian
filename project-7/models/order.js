@@ -9,20 +9,20 @@
 
 // Core Dependencies
 
-// 3rd party Dependencies
-const { DataTypes } = require("sequelize");
-//
-// Internal Dependencies
-const sequelize = require("./../lib/database.js");
+// // 3rd party Dependencies
+// const { DataTypes } = require("sequelize");
 
-const Order = sequelize.define("order", {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    }
-    // @TODO: add more information like an address, etc...
-})
+// // Internal Dependencies
+// const sequelize = require("./../lib/database.js");
 
-module.exports = Order;
+// const Order = sequelize.define("order", {
+//     id: {
+//         type: DataTypes.INTEGER,
+//         autoIncrement: true,
+//         allowNull: false,
+//         primaryKey: true,
+//     }
+//     // @TODO: add more information like an address, etc...
+// })
+
+// module.exports = Order;

@@ -15,8 +15,8 @@
  */
 
 // Internal Dependencies
-const Product = require("./../models/product.js");
-const Order = require("./../models/order.js");
+// const Product = require("./../models/product.js");
+// const Order = require("./../models/order.js");
 
 const getProducts = (request, response, next) => {
 
