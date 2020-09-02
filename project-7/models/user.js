@@ -9,8 +9,9 @@
  * @param: next() is reserved method on MongoDB
  * @param: new mongodb.ObjectId() is converting userId into a string
 
- * @NOTE: You could use @param: findOne() ensuring you just find one element; with
- * @param: findOne() you not need use @param: next() method.
+ * @NOTE: You could use @param: findOne(), ensure you just search only one element;
+ * with @param: findOne() you do not need use @param: next() method cause
+ * @param: findOne() not giving a cursor but immediately return that one element.
  */
 
 // Core Dependencies
@@ -48,21 +49,32 @@ class User {
 
     addToCart(product) {
 
-        // const cartProduct = this.cart.items.findIndex(cartProductArray => {
+        const cartProductIndex = this.cart.items.findIndex(cartProductArray => {
 
-        //     return cartProductArray._id === product._id;
-        // });
+            // @NOTE: @param: toString() is to ensure that every updatd Cart is
+            // only work in string, as in MongoDB is not exactly 'type of string'
+            return cartProductArray.productId.toString() === product._id.toString();
+        });
+
+        let newQuantity = 1;
+        const updatedCartItems = [...this.cart.items];
+
+        if (cartProductIndex >= 0) {
+            newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+            updatedCartItems[cartProductIndex].quantity = newQuantity;
+        }
+        else {
+            updatedCartItems.push({
+                productId: new ObjectId(product._id),
+                quantity: newQuantity
+            });
+        };
 
         const updatedCart = {
-            items: [
-                {
-                    productId: new ObjectId(product._id),
-                    quantity: 1         // Create new element on the fly
-                }
-            ]
+            items: updatedCartItems
         };
-        const db = getDb();
 
+        const db = getDb();
         return db.collection("users")
             .updateOne(
                 { _id: new ObjectId(this._id) },
