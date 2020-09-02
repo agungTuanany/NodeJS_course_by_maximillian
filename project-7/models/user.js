@@ -43,7 +43,7 @@ class User {
             .insertOne(this)
             .then(result => {
 
-                console.log("=====> model user.js| succeeded create new user ",result)
+                console.log("===> model user.js| succeeded create new user ",result);
             })
             .catch(err => console.log(err));
     };
@@ -71,11 +71,9 @@ class User {
             });
         };
 
-        const updatedCart = {
-            items: updatedCartItems
-        };
-
+        const updatedCart = { items: updatedCartItems };
         const db = getDb();
+
         return db.collection("users")
             .updateOne(
                 { _id: new ObjectId(this._id) },
@@ -83,21 +81,20 @@ class User {
             )
             .then(result => {
 
-                console.log("==========> addToCart:", result);
+                // console.log("===> addToCart:", result);
                 return result;
             })
             .catch(err => console.log(err));
     };
 
     getCart() {
+
         const db = getDb();
         const productIds = this.cart.items.map(i => i.productId);
 
         return db.collection("products")
             .find({
-                _id: {
-                    $in: productIds
-                }
+                _id: { $in: productIds }
             })
             .toArray()
             .then(products => {
@@ -112,14 +109,32 @@ class User {
             .catch(err => console.log(err));
     };
 
+    deleteItemFromCart(productId) {
+
+        const updatedCartItems = this.cart.items.filter(item => item.productId.toString() !== productId.toString());
+        const db = getDb()
+
+        return db.collection("users")
+            .updateOne(
+                { _id: new ObjectId(this._id) },
+                { $set: { cart: { items: updatedCartItems } } }
+            )
+            .then(result => {
+                // console.log("===> deleteItemFromCart:", result);
+                return productId
+            })
+            .catch(err => console.log(err));
+    }
+
     static findById(userId) {
 
         const db = getDb();
+
         return db.collection("users")
             .findOne({ _id: new ObjectId(userId) })
             .then(user => {
 
-                // console.log("=====> model user.js| succeeded find user ", user);
+                // console.log("===> model user.js| succeeded find user ", user);
                 return user;
             })
             .catch(err => console.log(err));
