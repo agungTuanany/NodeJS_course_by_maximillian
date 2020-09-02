@@ -89,6 +89,9 @@ const postCart = (request, response, next) => {
         .then(result => {                           // This chain is from db.collection("users").updateOne()
 
             console.log("===> postCart:", result);
+            return response
+                .status(301)
+                .redirect("/cart");
         })
         .catch(err => console.log(err));
 
