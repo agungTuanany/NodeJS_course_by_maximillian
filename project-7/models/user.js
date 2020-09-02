@@ -6,8 +6,9 @@
  * Is a central place to organized, structured, manipulate your single entity
  * for products.
  *
- * @param: next() is reserved method on MongoDB
+ * @param: next() is reserved method in MongoDB
  * @param: new mongodb.ObjectId() is converting userId into a string
+ * @param: $in: reserved method in MongoDB
 
  * @NOTE: You could use @param: findOne(), ensure you just search only one element;
  * with @param: findOne() you do not need use @param: next() method cause
@@ -88,6 +89,29 @@ class User {
             .catch(err => console.log(err));
     };
 
+    getCart() {
+        const db = getDb();
+        const productIds = this.cart.items.map(i => i.productId);
+
+        return db.collection("products")
+            .find({
+                _id: {
+                    $in: productIds
+                }
+            })
+            .toArray()
+            .then(products => {
+
+                return products.map(product => {
+                    return {
+                        ...product,
+                        quantity: this.cart.items.find(i => i.productId.toString() === product._id.toString()).quantity
+                    };
+                });
+            })
+            .catch(err => console.log(err));
+    };
+
     static findById(userId) {
 
         const db = getDb();
@@ -95,7 +119,7 @@ class User {
             .findOne({ _id: new ObjectId(userId) })
             .then(user => {
 
-                console.log("=====> model user.js| succeeded find user ", user);
+                // console.log("=====> model user.js| succeeded find user ", user);
                 return user;
             })
             .catch(err => console.log(err));

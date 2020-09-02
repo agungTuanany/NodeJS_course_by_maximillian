@@ -64,21 +64,15 @@ const getIndex = (request, response, next) => {
 
 const getCart = (request, response, next) => {
 
-    // console.log("request.user ===>", request.user)
-
     request.user.getCart()
-        .then(cart => {
-            // console.log(cart);
-            return cart.getProducts()
-                .then(products => {
-                    // console.log("getCart ===>",products);
-                    response.render("shop/cart", {
-                        pageTitle: "Your Cart",
-                        path: "/cart",
-                        products: products
-                    });
-                })
-                .catch(err => console.log(err));
+        .then(products => {
+
+            // console.log("===> getCart shop models:", products);
+            return response.render("shop/cart", {
+                pageTitle: "Your Cart",
+                path: "/cart",
+                products: products
+            });
         })
         .catch(err => console.log(err));
 };
