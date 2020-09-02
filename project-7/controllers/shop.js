@@ -86,47 +86,59 @@ const getCart = (request, response, next) => {
 const postCart = (request, response, next) => {
 
     const prodId = request.body.productId;
-    let fetchedCart;
-    let newQuantity = 1;
 
-    request.user.getCart()
-        .then(cart => {
-
-            fetchedCart = cart;
-            return cart.getProducts({
-                where: {
-                    id: prodId
-                }
-            });
-        })
-        .then(products => {
-
-            let product;
-            if (products.length > 0) {
-                product = products[0];
-            };
-
-            if (product) {
-                const oldQuantity = product.cartItem.quantity;
-                newQuantity = oldQuantity + 1;
-                return product;
-            };
-            return Product.findByPk(prodId)
-        })
+    Product.findById(prodId)
         .then(product => {
-            return fetchedCart.addProduct(product, {
-                through: {
-                    quantity: newQuantity
-                }
-            })
-        })
-        .then(() => {
-            return response
-                .status(301)
-                .redirect("/cart");
 
+            return request.user.addToCart(product);
+        })
+        .then(result => {                           // This chain is from db.collection("users").updateOne()
+
+            console.log("===> postCart:", result);
         })
         .catch(err => console.log(err));
+
+    // let fetchedCart;
+    // let newQuantity = 1;
+
+    // request.user.getCart()
+    //     .then(cart => {
+
+    //         fetchedCart = cart;
+    //         return cart.getProducts({
+    //             where: {
+    //                 id: prodId
+    //             }
+    //         });
+    //     })
+    //     .then(products => {
+
+    //         let product;
+    //         if (products.length > 0) {
+    //             product = products[0];
+    //         };
+
+    //         if (product) {
+    //             const oldQuantity = product.cartItem.quantity;
+    //             newQuantity = oldQuantity + 1;
+    //             return product;
+    //         };
+    //         return Product.findByPk(prodId)
+    //     })
+    //     .then(product => {
+    //         return fetchedCart.addProduct(product, {
+    //             through: {
+    //                 quantity: newQuantity
+    //             }
+    //         })
+    //     })
+    //     .then(() => {
+    //         return response
+    //             .status(301)
+    //             .redirect("/cart");
+
+    //     })
+    //     .catch(err => console.log(err));
 };
 
 const postCartDeleteProduct = (request, response, next) => {

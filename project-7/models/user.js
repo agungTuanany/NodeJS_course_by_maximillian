@@ -53,12 +53,14 @@ class User {
         //     return cartProductArray._id === product._id;
         // });
 
-        // Create new element on the fly
-        // product.quantity = 1;
-
-        // Check if 'cart' have property named 'quantity' in MongoDB documents.
-        // If not just add on the fly new field named 'quantity'.
-        const updatedCart = { items: [{ ...product, quantity: 1 }] };
+        const updatedCart = {
+            items: [
+                {
+                    productId: new ObjectId(product._id),
+                    quantity: 1         // Create new element on the fly
+                }
+            ]
+        };
         const db = getDb();
 
         return db.collection("users")
@@ -68,7 +70,8 @@ class User {
             )
             .then(result => {
 
-                console.log(result);
+                console.log("==========> addToCart:", result);
+                return result;
             })
             .catch(err => console.log(err));
     };
