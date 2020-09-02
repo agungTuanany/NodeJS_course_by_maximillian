@@ -125,33 +125,7 @@ const getCheckout = (request, response, next) => {
 const postOrder = (request, response, next) => {
 
     let fetchedCart;
-    request.user.getCart()
-        .then(cart => {
-
-            fetchedCart = cart;
-            return cart.getProducts()
-        })
-        .then(products => {
-
-            // @NOTE: createOrder() method present cause we called user.createCart() in app.js
-            return request.user.createOrder()
-            // @TODO: get rid from nested .then(); bad approach!!
-                .then(order => {
-
-                    order.addProducts(products.map(product => {
-
-                        product.orderItem = { quantity: product.cartItem.quantity };
-                        // console.log("====>", product.orderItem)
-                        return product;
-                    }))
-                })
-                .catch(err => console.log(err));
-        })
-        .then(result => {
-
-            console.log("====> fetchedCart", fetchedCart);
-            return fetchedCart.setProducts(null);
-        })
+    request.user.addOrder()
         .then(result => {
 
             return response

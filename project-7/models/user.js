@@ -126,6 +126,24 @@ class User {
             .catch(err => console.log(err));
     }
 
+    addOrder() {
+
+        const db= getDb();
+
+        return db.collection("orders")
+            .insertOne(this.cart)
+            .then(result => {
+
+                this.cart = { items: [] };
+                return db.collection("users")   // Also empty the cart in "users" collection
+                    .updateOne(
+                        { _id: new ObjectId(this._id) },
+                        { $set: { cart: { items: [] } } }
+                    )
+            })
+            // .catch(err => console.log(err));
+    };
+
     static findById(userId) {
 
         const db = getDb();
