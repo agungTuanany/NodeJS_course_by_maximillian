@@ -139,11 +139,10 @@ const postOrder = (request, response, next) => {
 
 const getOrders = (request, response, next) => {
 
-     // @NOTE: using concept "eager loading" in Sequelize.
-    request.user.getOrders({include: ["products"]})
+    request.user.getOrders()
         .then(orders => {
 
-            console.log("====> getOrders", orders);
+            // console.log("====> getOrders", orders);
             return response
                 .status(200)
                 .render("shop/orders", {
@@ -166,13 +165,3 @@ module.exports = {
     postOrder,
     getOrders
 };
-
-/*
- * @NOTE: why use @param: "include:["products"]" ? Because in app.js we associate
- * "Order. @param: belongsToMany(Product, { through: OrderItem });".  Sequelize pluralize
- * "product" as a model then we use concept eager loading; and basically
- * instruct Sequelize if Sequelize fetch all the "orders" please also fetch all
- * related "products" already and give the "orders" data back, and one array of
- * "orders" that also includes the "products" per "order"
- *
- */
