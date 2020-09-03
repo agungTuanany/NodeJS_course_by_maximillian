@@ -46,7 +46,7 @@ app.use(errorController.get404);
 
 // Mongoose
 // @TODO: move this credential into .env
-mongoose.connect("mongodb+srv://daun:WW2thoti3v9mphPW@udemy-nodejs-maximillia.tz0sa.mongodb.net/udemy-nodejs-maximillian?retryWrites=true&w=majority",
+mongoose.connect("mongodb+srv://daun:WW2thoti3v9mphPW@udemy-nodejs-maximillia.tz0sa.mongodb.net/mongooseShop?retryWrites=true&w=majority",
     {
         useUnifiedTopology: true,
         useNewUrlParser: true

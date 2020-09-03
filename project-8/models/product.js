@@ -9,108 +9,126 @@
  * Sat Aug 29 05:07:10 AM WIB 2020
  * @TODO: change all promise with async-await
  *
- * @param: this.id is optional arguments.
- * @param: next() is reserved method on MongoDB
- * @param: new mongodb.ObjectId() is converting userId into a string
- * @param: $set is reserved name in MongoDB
  */
 
 // Core Dependencies
+const mongoose = require("mongoose");
 
-// 3rd party library
-const mongodb = require("mongodb");
+const Schema = mongoose.Schema;
 
-// Internal Dependencies
-const  { getDb }  = require("./../lib/database.js");
+const productScehma = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    imageUrl: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    }
+});
 
-// Global variables
-const ObjectId = mongodb.ObjectId;
+// // 3rd party library
+// const mongodb = require("mongodb");
 
-class Product {
-    constructor(title, price, imageUrl, description, id, userId) {
+// // Internal Dependencies
+// const  { getDb }  = require("./../lib/database.js");
 
-        this.title       = title;
-        this.price       = price;
-        this.imageUrl    = imageUrl;
-        this.description = description;
-        this._id         = id ? new ObjectId(id) : null;
-        this.userId      = userId;
-    };
+// // Global variables
+// const ObjectId = mongodb.ObjectId;
 
-    save() {
-        const db = getDb();
-        let dbOperation;
+// class Product {
+//     constructor(title, price, imageUrl, description, id, userId) {
 
-        if (this._id) {
-            // update the product
-            dbOperation = db.collection("products")
-                .updateOne({ _id: this._id }, { $set: this })
-            // .updateOne({
-            //     _id: this._id
-            // }, {
-            //     $set: this
-            //     // or with robust way
-            //     // $set: {
-            //     //     title: this.title,
-            //     //     price: this.price,
-            //     //     imageUrl: this.imageUrl,
-            //     //     description: this.description
-            //     // }
-            // })
-        }
-        else {
-            dbOperation = db.collection("products").insertOne(this);
-        };
+//         this.title       = title;
+//         this.price       = price;
+//         this.imageUrl    = imageUrl;
+//         this.description = description;
+//         this._id         = id ? new ObjectId(id) : null;
+//         this.userId      = userId;
+//     };
 
-        return dbOperation
-            .then(result => {
-                console.log("====> model product.js| succeeded create new product", result)
-            })
-            .catch(err => console.log(err));
-    };
+//     save() {
+//         const db = getDb();
+//         let dbOperation;
 
-    static fetchAll() {
+//         if (this._id) {
+//             // update the product
+//             dbOperation = db.collection("products")
+//                 .updateOne({ _id: this._id }, { $set: this })
+//             // .updateOne({
+//             //     _id: this._id
+//             // }, {
+//             //     $set: this
+//             //     // or with robust way
+//             //     // $set: {
+//             //     //     title: this.title,
+//             //     //     price: this.price,
+//             //     //     imageUrl: this.imageUrl,
+//             //     //     description: this.description
+//             //     // }
+//             // })
+//         }
+//         else {
+//             dbOperation = db.collection("products").insertOne(this);
+//         };
 
-        const db = getDb();
-        return db.collection("products")
-            .find()
-            .toArray()
-            .then(products => {
-                // console.log(products);
-                return products;
-            })
-            .catch(err => console.log(err));
-    };
+//         return dbOperation
+//             .then(result => {
+//                 console.log("====> model product.js| succeeded create new product", result)
+//             })
+//             .catch(err => console.log(err));
+//     };
 
-    // Find single product
-    static findById(prodId) {
+//     static fetchAll() {
 
-        const db = getDb()
-        return db.collection("products")
-            .find({
-                _id: new ObjectId(prodId)
-            })
-            .next()
-            .then(product => {
-                // console.log("===> findById:", product);
-                return product;
-            })
-            .catch(err => console.log(err));
-    };
+//         const db = getDb();
+//         return db.collection("products")
+//             .find()
+//             .toArray()
+//             .then(products => {
+//                 // console.log(products);
+//                 return products;
+//             })
+//             .catch(err => console.log(err));
+//     };
 
-    static deleteById(prodId) {
+//     // Find single product
+//     static findById(prodId) {
 
-        const db = getDb();
-        return db.collection("products")
-            .deleteOne({ _id: new ObjectId(prodId) })
-            .then(result => {
-                console.log("Deleted");
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
-};
+//         const db = getDb()
+//         return db.collection("products")
+//             .find({
+//                 _id: new ObjectId(prodId)
+//             })
+//             .next()
+//             .then(product => {
+//                 // console.log("===> findById:", product);
+//                 return product;
+//             })
+//             .catch(err => console.log(err));
+//     };
+
+//     static deleteById(prodId) {
+
+//         const db = getDb();
+//         return db.collection("products")
+//             .deleteOne({ _id: new ObjectId(prodId) })
+//             .then(result => {
+//                 console.log("Deleted");
+//             })
+//             .catch(err => {
+//                 console.log(err);
+//             });
+//     };
+// };
 
 
-module.exports = Product;
+// module.exports = Product;

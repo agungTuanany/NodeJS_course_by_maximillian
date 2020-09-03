@@ -3,6 +3,7 @@
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
 2. [What is Mongoose](#what-is-mongoose)
+3. [Schema in Mongoose](#schema-in-mongoose)
 
 <br/>
 
@@ -101,3 +102,50 @@ object [wiki](http://en.wikipedia.org/wiki/Object-relational_mapping)
 <br/>
 <br/>
 
+## Schema in Mongoose
+
+ MongoDB is schemaless, so why we now start to create a schemas? Well the idea
+ is simply, whilst we have the flexibility or not being restricted to a specific
+ schema, we often will have a certain structure in the data we work with and
+ therefore `mongoose` wants to give you the advantage of focusing on just your
+ data.
+
+For that it needs to know how your data looks like and therefore we define such
+a schema for the structure our data will have. But important, we can still
+deviate (differ) by assigning a `title` with type `string` and more strict with
+`required` as like an object.
+
+```javascript
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+
+const productScehma = new Schema({
+    title: {
+        type: String,
+        required: true          // Use restricted schema
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    imageUrl: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    }
+});
+```
+
+So having a schema makes sense even though we have the flexibility to deviate.
+It depends on your application whether you need all that flexibility or whether
+you want to have some structure and you want to have some tool. It just
+deliberate decision to give some flexibility but gain other advantage
+
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
