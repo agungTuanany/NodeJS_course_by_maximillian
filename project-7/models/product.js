@@ -92,7 +92,7 @@ class Product {
             })
             .next()
             .then(product => {
-                console.log(product);
+                // console.log("===> findById:", product);
                 return product;
             })
             .catch(err => console.log(err));

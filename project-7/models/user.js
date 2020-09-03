@@ -1,18 +1,26 @@
 "use strict";
 
 /*
- * A model for single entity from 'products'.
+ * A model for single entity from 'user'.
  *
  * Is a central place to organized, structured, manipulate your single entity
- * for products.
+ * for user.
  *
  * @param: next() is reserved method in MongoDB
  * @param: new mongodb.ObjectId() is converting userId into a string
  * @param: $in: reserved method in MongoDB
-
+ *
  * @NOTE: You could use @param: findOne(), ensure you just search only one element;
  * with @param: findOne() you do not need use @param: next() method cause
- * @param: findOne() not giving a cursor but immediately return that one element.
+ * @param: findOne() not giving a "cursor" but immediately return element.
+ *
+ * @NOTE: <embedded relation logic>:
+ * The information from @param: getCart() may changing because if it should
+ * change, for 'orders' we need only a snapshot, if the 'price' of 'product'
+ * changes that doesn't affect the 'past order'.  So we would not want to update
+ * the 'price' even the 'product' document are changed. The 'product' data might
+ * be duplicate but it doesn't need to change in the 'orders' collection because
+ * we only want to snapshot.
  */
 
 // Core Dependencies
@@ -27,6 +35,7 @@ const { getDb } = require("./../lib/database.js");
 const ObjectId = mongodb.ObjectId;
 
 class User {
+
     constructor(firstName, lastName, email, cart, id) {
 
         this.firstName = firstName;
@@ -112,7 +121,7 @@ class User {
     deleteItemFromCart(productId) {
 
         const updatedCartItems = this.cart.items.filter(item => item.productId.toString() !== productId.toString());
-        const db = getDb()
+        const db = getDb();
 
         return db.collection("users")
             .updateOne(
@@ -120,18 +129,31 @@ class User {
                 { $set: { cart: { items: updatedCartItems } } }
             )
             .then(result => {
+
                 // console.log("===> deleteItemFromCart:", result);
-                return productId
+                return productId;
             })
             .catch(err => console.log(err));
     }
 
     addOrder() {
 
-        const db= getDb();
+        const db = getDb();
 
-        return db.collection("orders")
-            .insertOne(this.cart)
+        return this.getCart()
+            .then(products => {
+
+                const order = {
+                    // @NOTE: <embedded relation logic>
+                    items: products,
+                    user: {
+                        _id: new ObjectId(this._id),
+                        name: this.firstName + " " + this.lastName
+                    }
+                };
+
+                return db.collection("orders").insertOne(order);
+            })
             .then(result => {
 
                 this.cart = { items: [] };
@@ -141,8 +163,15 @@ class User {
                         { $set: { cart: { items: [] } } }
                     )
             })
-            // .catch(err => console.log(err));
+            .catch(err => console.log(err));
     };
+
+    getOrders() {
+
+        const db = getDb();
+
+        return db.collection("orders")
+    }
 
     static findById(userId) {
 

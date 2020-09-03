@@ -125,6 +125,7 @@ const getCheckout = (request, response, next) => {
 const postOrder = (request, response, next) => {
 
     let fetchedCart;
+
     request.user.addOrder()
         .then(result => {
 
@@ -142,7 +143,7 @@ const getOrders = (request, response, next) => {
     request.user.getOrders({include: ["products"]})
         .then(orders => {
 
-            console.log(orders)
+            console.log("====> getOrders", orders);
             return response
                 .status(200)
                 .render("shop/orders", {
