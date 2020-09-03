@@ -6,10 +6,11 @@ const path = require("path");
 // 3rd party Dependencies
 const express    = require("express");
 const bodyParser = require("body-parser");
+const mongoose   = require("mongoose");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
-const { mongoConnect } = require("./lib/database.js");
+// const { mongoConnect } = require("./lib/database.js");
 const User             = require("./models/user.js");
 
 // Global variables
@@ -43,8 +44,19 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(errorController.get404);
 
+// Mongoose
+// @TODO: move this credential into .env
+mongoose.connect("mongodb+srv://daun:WW2thoti3v9mphPW@udemy-nodejs-maximillia.tz0sa.mongodb.net/udemy-nodejs-maximillian?retryWrites=true&w=majority",
+    {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    })
+    .then(result => {
+        console.log("Succeeds connect with MongoDB database with mongoose")
+        app.listen(port, () => console.log(`You run "project-8" in server running by "Express" in port: "${port}".`));
+    })
+
 // Mongo Connection
-mongoConnect(()=> {
-    app.listen(port, () => console.log(`You run "project-7" in server running by "Express" in port: "${port}".`));
-});
+// mongoConnect(()=> {
+// });
 
