@@ -4,6 +4,7 @@
 1. [Module Introduction](#module-introduction)
 2. [What is MongoDB](#what-is-mongodb)
 3. [Relation in NoSQL](#relation-in-nosql)
+4. [Module Summary](#module-summary)
 
 <br/>
 
@@ -185,6 +186,15 @@ These are NoSQL characteristic and there are among would be correct or mistakes,
 and these are all part of the reason why MongoDB to be is so popular because of
 the **speed** and **flexibility** it gives you.
 
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+<br/>
+
+![chapter-11-6.gif](./images/gif/chapter-11-6.gif "Module Summary")
 
 **[⬆ back to top](#table-of-contents)**
 <br/>

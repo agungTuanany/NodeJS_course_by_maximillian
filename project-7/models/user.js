@@ -96,6 +96,9 @@ class User {
             .catch(err => console.log(err));
     };
 
+    // @TODO: Create worker-process to check deleted Items from the Cart.
+    // for some cases in MongoDB database, eg: scan users, carts, and products, which
+    // don't find in products collection to clean up the Carts.
     getCart() {
 
         const db = getDb();
