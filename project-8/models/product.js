@@ -16,7 +16,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const productScehma = new Schema({
+const productSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -34,6 +34,8 @@ const productScehma = new Schema({
         required: true
     }
 });
+
+module.exports = mongoose.model("Product", productSchema);
 
 // // 3rd party library
 // const mongodb = require("mongodb");

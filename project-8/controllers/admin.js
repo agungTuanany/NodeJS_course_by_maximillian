@@ -3,6 +3,7 @@
 /*
  * Controller for all "product" either admin-product or user-product
  *
+ * @param: save() at @param: postAddProduct(), is a method provided by mongoose
  */
 
 // 3rd party Dependencies
@@ -46,7 +47,12 @@ const postAddProduct = (request, response, next) => {
     const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
     //(title, price, imageUrl, description, id, userId)
-    const product = new Product(title, price, imageUrl, description, null, request.user._id);
+    const product = new Product({
+        title       : title,
+        price       : price,
+        imageUrl    : imageUrl,
+        description : description
+    })
 
     product.save()
         .then(result => {
