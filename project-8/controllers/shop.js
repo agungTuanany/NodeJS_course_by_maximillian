@@ -14,7 +14,7 @@ const Product = require("./../models/product.js");
 
 const getProducts = (request, response, next) => {
 
-    Product.fetchAll()
+    Product.find()
         .then(products => {
 
             return response
@@ -48,7 +48,7 @@ const getProduct = (request, response, next) => {
 
 const getIndex = (request, response, next) => {
 
-    Product.fetchAll()
+    Product.find()
         .then(products => {
 
             return response

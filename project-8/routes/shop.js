@@ -17,9 +17,9 @@ const shopController = require("../controllers/shop.js");
 // Global variables
 const router = express.Router();
 
-// router.get("/", shopController.getIndex);
+router.get("/", shopController.getIndex);
 
-// router.get("/products", shopController.getProducts);
+router.get("/products", shopController.getProducts);
 
 // router.get("/products/:productId", shopController.getProduct);
 
