@@ -6,6 +6,8 @@
  * Sat Aug 29 05:07:10 AM WIB 2020
  * @TODO: change all promise with async-await
  *
+ * @param: find() is a method provided by mongoose
+ * @param: findById() is a method provided by mongoose
  */
 
 // Internal Dependencies
