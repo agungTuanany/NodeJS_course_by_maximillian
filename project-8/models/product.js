@@ -12,6 +12,8 @@
  */
 
 // Core Dependencies
+
+// 3rd party Dependencies
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;

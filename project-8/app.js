@@ -10,7 +10,7 @@ const mongoose   = require("mongoose");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
-// const User             = require("./models/user.js");
+const User             = require("./models/user.js");
 
 // Global variables
 const app = express();
@@ -28,15 +28,15 @@ const errorController = require("./controllers/404.js");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-//app.use((request, response, next) => {
-//    User.findById("5f4ed6baffb67c79467cb4db")
-//        .then(user => {
-//            //(firstName, lastName, email, cart, id)
-//            request.user = new User(user.firstName, user.lastName, user.email, user.cart, user._id);
-//            next();
-//        })
-//        .catch(err => console.log(err))
-//});
+app.use((request, response, next) => {
+    User.findById("5f53be3cb6e9934b390021e0")
+        .then(user => {
+            //(firstName, lastName, email, cart, id)
+            request.user = user;
+            next();
+        })
+        .catch(err => console.log(err))
+});
 
 // Routes handlers
 app.use("/admin", adminRoutes);
@@ -51,11 +51,23 @@ mongoose.connect("mongodb+srv://daun:WW2thoti3v9mphPW@udemy-nodejs-maximillia.tz
         useNewUrlParser: true
     })
     .then(result => {
+
+        User.findOne()
+            .then(user => {
+                if (!user) {
+                    const user = new User({
+                        firstName: "Dummy",
+                        lastName: "data",
+                        email: "Dummy@data.com",
+                        cart: {
+                            items: []
+                        }
+                    });
+                    user.save()
+                };
+            });
+
         console.log("Succeeds connect with MongoDB database with mongoose")
         app.listen(port, () => console.log(`You run "project-8" in server running by "Express" in port: "${port}".`));
     })
-
-// Mongo Connection
-// mongoConnect(()=> {
-// });
-
+    .catch(err => console.log(err));
