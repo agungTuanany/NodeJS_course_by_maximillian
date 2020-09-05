@@ -51,7 +51,8 @@ const postAddProduct = (request, response, next) => {
         title       : title,
         price       : price,
         imageUrl    : imageUrl,
-        description : description
+        description : description,
+        userId      : request.user
     })
 
     product.save()
