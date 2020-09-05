@@ -15,7 +15,7 @@ const Product = require("./../models/product.js");
 
 const getProducts = (request, response, next) => {
 
-    Product.fetchAll()
+    Product.find()
         .then(product => {
 
             return response.render('admin/products', {
@@ -110,9 +110,17 @@ const postEditProduct = (request, response, next) => {
 
 
     //(title, price, imageUrl, description, id)
-    const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, prodId);
+    // const product = new Product(updatedTitle, updatedPrice, updatedImageUrl, updatedDesc, prodId);
 
-    product.save()
+    Product.findById(prodId)
+        .then(product => {
+            product.title       = updatedTitle;
+            product.price       = updatedPrice;
+            product.imageUrl    = updatedImageUrl;
+            product.description = updatedDesc;
+
+            return product.save()
+        })
         .then(result => {
 
             console.log("Succeeded update product");
