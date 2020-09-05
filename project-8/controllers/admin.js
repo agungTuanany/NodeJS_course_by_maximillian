@@ -16,11 +16,14 @@ const Product = require("./../models/product.js");
 const getProducts = (request, response, next) => {
 
     Product.find()
+        // .select("title price -_id")          // which field you want retrieve from database
+        // .populate("userId", "firstName")     // retrieve any field instead writing query on your own
         .then(product => {
 
+            // console.log("====>", product)
             return response.render('admin/products', {
                 pageTitle: "Admin Products",
-                path: 'admin//products',
+                path: '/admin/products',
                 products: product
             });
         })
