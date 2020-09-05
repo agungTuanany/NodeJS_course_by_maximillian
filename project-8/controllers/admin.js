@@ -135,7 +135,7 @@ const postDeleteProduct = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    Product.deleteById(prodId)
+    Product.findByIdAndRemove(prodId)
         .then(result => {
 
             console.log("Succeeded delete product");
