@@ -9,20 +9,37 @@
 
 // Core Dependencies
 
-// // 3rd party Dependencies
-// const { DataTypes } = require("sequelize");
+// 3rd party  Dependencies
+const mongoose = require("mongoose");
 
-// // Internal Dependencies
-// const sequelize = require("./../lib/database.js");
+// Internal Dependencies
+const Schema = mongoose.Schema;
 
-// const Order = sequelize.define("order", {
-//     id: {
-//         type: DataTypes.INTEGER,
-//         autoIncrement: true,
-//         allowNull: false,
-//         primaryKey: true,
-//     }
-//     // @TODO: add more information like an address, etc...
-// })
+const orderSchema = new Schema({
 
-// module.exports = Order;
+    products: [
+        {
+            product: {
+                type: Object,
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
+    user: {
+        firstName: {
+            type: String,
+            required: true
+        },
+        userId: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: "User"
+        }
+    }
+});
+
+module.exports =  mongoose.model("Order", orderSchema);

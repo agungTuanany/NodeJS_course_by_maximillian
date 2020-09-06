@@ -12,7 +12,7 @@
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
-// const Order = require("./../models/order.js");
+const Order   = require("./../models/order.js");
 
 const getProducts = (request, response, next) => {
 
@@ -115,28 +115,35 @@ const postCartDeleteProduct = (request, response, next) => {
         .catch(err => console.log(err));
 };
 
-// @TODO work in this controllers with Sequelize
-const getCheckout = (request, response, next) => {
-
-    return response
-        .status(200)
-        .render("shop/checkout", {
-            pageTitle: "Checkout Page",
-            path: "/checkout",
-        });
-};
-
 const postOrder = (request, response, next) => {
 
-    let fetchedCart;
+    request.user.populate("cart.items.productId")
+        .execPopulate()
+        .then(user => {
 
-    request.user.addOrder()
+            const products = user.cart.items.map(i => {
+
+                return {
+                    product  : i.productId,
+                    quantity : i.quantity
+                };
+            });
+
+            const order = new Order({
+                user: {
+                    firstName: request.user.firstName,
+                    userId: request.user
+                },
+                products: products
+            });
+
+            order.save();
+        })
         .then(result => {
 
             return response
                 .status(301)
                 .redirect("/orders");
-
         })
         .catch(err => console.log(err));
 };
@@ -157,6 +164,17 @@ const getOrders = (request, response, next) => {
         })
         .catch(err => console.log(err));
 };
+//
+// @TODO work in this controllers with Sequelize
+const getCheckout = (request, response, next) => {
+
+    return response
+        .status(200)
+        .render("shop/checkout", {
+            pageTitle: "Checkout Page",
+            path: "/checkout",
+        });
+};
 
 module.exports = {
     getProducts,
@@ -165,7 +183,7 @@ module.exports = {
     getCart,
     postCart,
     postCartDeleteProduct,
-    getCheckout,
     postOrder,
-    getOrders
+    getOrders,
+    getCheckout
 };
