@@ -39,9 +39,7 @@ const userSchema = new Schema({
                     type: Schema.Types.ObjectId,
                     required: true,
                     ref: "Product"
-                }
-            },
-            {
+                },
                 quantity: {
                     type: Number,
                     required: true
@@ -50,6 +48,38 @@ const userSchema = new Schema({
         ]
     }
 });
+
+// Utility methods
+userSchema.methods.addToCart = function (product) {
+
+    const cartProductIndex = this.cart.items.findIndex(cartProductArray => {
+
+        // @NOTE: @param: toString() is to ensure that every update Cart is
+        // only work in string, as in MongoDB is not exactly 'type of string'
+        return cartProductArray.productId.toString() === product._id.toString();
+    });
+
+    let newQuantity = 1;
+    const updatedCartItems = [...this.cart.items];
+    console.log("==> BEFORE updatedCartItems", updatedCartItems)
+
+    if (cartProductIndex >= 0) {
+        newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+        updatedCartItems[cartProductIndex].quantity = newQuantity;
+        console.log("==> updatedCartItems", updatedCartItems)
+    }
+    else {
+        updatedCartItems.push({
+            productId: product._id,
+            quantity: newQuantity
+        });
+        console.log("==> updatedCartItems", updatedCartItems)
+    };
+
+    const updatedCart = { items: updatedCartItems };
+    this.cart = updatedCart;
+    return this.save()
+};
 
 module.exports = mongoose.model("User", userSchema);
 
@@ -191,10 +221,10 @@ module.exports = mongoose.model("User", userSchema);
 
 //     getOrders() {
 
-//         const db = getDb();
+    //         const db = getDb();
 
 //         return db.collection("orders")
-//             .find({ "user._id": new ObjectId(this._id) })
+    //             .find({ "user._id": new ObjectId(this._id) })
 //             .toArray()
 //             .catch(err => console.log(err));
 //     };
@@ -209,7 +239,7 @@ module.exports = mongoose.model("User", userSchema);
 
 //                 // console.log("===> model user.js| succeeded find user ", user);
 //                 return user;
-//             })
+    //             })
 //             .catch(err => console.log(err));
 //     };
 // };
