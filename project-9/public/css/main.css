@@ -8,6 +8,7 @@
 @import url("./product-detail.css");
 @import url("./cart.css");
 @import url("./orders.css");
+@import url("./auth.css");
 
 :root {
     /* this color name refer to: */
