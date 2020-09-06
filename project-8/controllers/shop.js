@@ -6,8 +6,7 @@
  * Sat Aug 29 05:07:10 AM WIB 2020
  * @TODO: change all promise with async-await
  *
- * @param: find() is a method provided by mongoose
- * @param: findById() is a method provided by mongoose
+ * @param: ._doc is a mongoose special field to access just the data
  */
 
 // Internal Dependencies
@@ -70,7 +69,7 @@ const getCart = (request, response, next) => {
         .execPopulate()
         .then(user => {
 
-            // console.log("====> getCart shop models:", user.cart.items);
+            // console.log("====> getCart:", user.cart.items);
             const products = user.cart.items;
             return response.render("shop/cart", {
                 pageTitle: "Your Cart",
@@ -121,10 +120,11 @@ const postOrder = (request, response, next) => {
         .execPopulate()
         .then(user => {
 
+            console.log("====> postOrder:", user.cart.items)
             const products = user.cart.items.map(i => {
 
                 return {
-                    product  : i.productId,
+                    product  : { ...i.productId._doc },
                     quantity : i.quantity
                 };
             });
@@ -164,7 +164,7 @@ const getOrders = (request, response, next) => {
         })
         .catch(err => console.log(err));
 };
-//
+
 // @TODO work in this controllers with Sequelize
 const getCheckout = (request, response, next) => {
 
