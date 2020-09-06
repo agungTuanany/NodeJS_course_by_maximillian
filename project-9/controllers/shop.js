@@ -23,7 +23,8 @@ const getProducts = (request, response, next) => {
                 .render("shop/index", {
                     pageTitle: "Shop",
                     path: "/",
-                    prods: products
+                    prods: products,
+                    isAuthenticated: request.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -41,7 +42,8 @@ const getProduct = (request, response, next) => {
                 .render('shop/product-detail', {
                     pageTitle: product.title,
                     path: '/products',
-                    product: product
+                    product: product,
+                    isAuthenticated: request.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -57,7 +59,8 @@ const getIndex = (request, response, next) => {
                 .render("shop/index", {
                     pageTitle: "Shop",
                     path: "/",
-                    prods: products
+                    prods: products,
+                    isAuthenticated: request.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -74,7 +77,8 @@ const getCart = (request, response, next) => {
             return response.render("shop/cart", {
                 pageTitle: "Your Cart",
                 path: "/cart",
-                products: products
+                products: products,
+                isAuthenticated: request.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -163,7 +167,8 @@ const getOrders = (request, response, next) => {
                 .render("shop/orders", {
                     pageTitle: "Orders Page",
                     path: "/orders",
-                    orders: orders
+                    orders: orders,
+                    isAuthenticated: request.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -177,6 +182,7 @@ const getCheckout = (request, response, next) => {
         .render("shop/checkout", {
             pageTitle: "Checkout Page",
             path: "/checkout",
+            isAuthenticated: request.isLoggedIn
         });
 };
 

@@ -1,7 +1,6 @@
-## What is Project-8 ?
+## What is Project-9 ?
 
-Project-8 base on
-"[chapter-12-working-with-mongoose](./../chapter-12-working-with-mongoose)".
-Using a third party library `mongodb` as database engine and `mongoose` as
-**ODM** for create `NoSQL` query automatically.
-
+Project-9 base on
+"[chapter-13-session-and-cookies](./../chapter-13-session-and-cookies)". Is
+explain what and when to Using constructs technologies Session and Cookies to
+passing persist data across request.
