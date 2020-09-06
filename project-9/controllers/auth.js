@@ -7,26 +7,27 @@
 
 const getLogin = (request, response, next) => {
 
-    const isLoggedIn = request.get("Cookie")
-        .split(";")[1]
-        .trim()
-        .split("=")[1];
+    // const isLoggedIn = request.get("Cookie")
+    //     .split(";")[0]                          // Changes the [0] values as your cookies sequence
+    //     .trim()
+    //     .split("=")[0] === "true";
 
-    console.log("===> isLoggedIn:", isLoggedIn)
+    // console.log("===> isLoggedIn:", isLoggedIn)
 
     return response
         .status(200)
         .render("auth/login", {
             pageTitle: "Login",
             path: "/login",
-            isAuthenticated: isLoggedIn
+            isAuthenticated: false
+            // isAuthenticated: isLoggedIn
         });
 };
 
 const postLogin = (request, response, next) => {
 
     // request.isLoggedIn = true;
-    response.setHeader("Set-Cookie", "loggedIn=true")
+    response.setHeader("Set-Cookie", "loggedIn=true; HttpOnly")
     return response
         .status(301)
         .redirect("/")
