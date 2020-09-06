@@ -7,6 +7,7 @@ const path = require("path");
 const express    = require("express");
 const bodyParser = require("body-parser");
 const mongoose   = require("mongoose");
+const session    = require("express-session");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
@@ -29,6 +30,14 @@ const authRoutes  = require("./routes/auth.js");
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+
+// @TODO move this into .env
+// Session
+app.use(session({
+    secert: "my secret",
+    resave: false,
+    saveUnititialized: false,
+}));
 
 app.use((request, response, next) => {
     User.findById("5f53be3cb6e9934b390021e0")
