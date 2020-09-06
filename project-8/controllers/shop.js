@@ -121,7 +121,6 @@ const postOrder = (request, response, next) => {
         .then(user => {
 
             console.log("====> postOrder:", user.cart.items);
-
             const products = user.cart.items.map(i => {
 
                 return {
@@ -155,7 +154,7 @@ const postOrder = (request, response, next) => {
 
 const getOrders = (request, response, next) => {
 
-    request.user.getOrders()
+    Order.find({ "user.userId": request.user._id })
         .then(orders => {
 
             // console.log("====> getOrders", orders);
