@@ -61,24 +61,24 @@ userSchema.methods.addToCart = function(product) {
 
     let newQuantity = 1;
     const updatedCartItems = [...this.cart.items];
-    console.log("==> BEFORE updatedCartItems", updatedCartItems)
+    // console.log("==> BEFORE updatedCartItems", updatedCartItems)
 
     if (cartProductIndex >= 0) {
         newQuantity = this.cart.items[cartProductIndex].quantity + 1;
         updatedCartItems[cartProductIndex].quantity = newQuantity;
-        console.log("==> updatedCartItems", updatedCartItems)
+        // console.log("==> updatedCartItems", updatedCartItems)
     }
     else {
         updatedCartItems.push({
             productId: product._id,
             quantity: newQuantity
         });
-        console.log("==> updatedCartItems", updatedCartItems)
+        // console.log("==> updatedCartItems", updatedCartItems)
     };
 
     const updatedCart = { items: updatedCartItems };
     this.cart = updatedCart;
-    return this.save()
+    return this.save();
 };
 
 userSchema.methods.removeFromCart = function(productId) {
@@ -89,6 +89,12 @@ userSchema.methods.removeFromCart = function(productId) {
     });
 
     this.cart.items = updatedCartItems;
+    return this.save();
+};
+
+userSchema.methods.clearCart = function() {
+
+    this.cart = { items: [] };
     return this.save();
 };
 

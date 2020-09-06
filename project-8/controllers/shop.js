@@ -120,7 +120,8 @@ const postOrder = (request, response, next) => {
         .execPopulate()
         .then(user => {
 
-            console.log("====> postOrder:", user.cart.items)
+            console.log("====> postOrder:", user.cart.items);
+
             const products = user.cart.items.map(i => {
 
                 return {
@@ -139,7 +140,11 @@ const postOrder = (request, response, next) => {
 
             order.save();
         })
-        .then(result => {
+        .then(() => {
+
+          return request.user.clearCart();
+        })
+        .then(()=> {
 
             return response
                 .status(301)
