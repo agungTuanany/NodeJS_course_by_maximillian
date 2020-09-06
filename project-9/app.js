@@ -34,9 +34,9 @@ app.use(express.static(path.join(__dirname, "public")));
 // @TODO move this into .env
 // Session
 app.use(session({
-    secert: "my secret",
+    secret: "my secret",
     resave: false,
-    saveUnititialized: false,
+    saveUninitialized: false,
 }));
 
 app.use((request, response, next) => {

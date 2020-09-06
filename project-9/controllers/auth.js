@@ -14,6 +14,7 @@ const getLogin = (request, response, next) => {
 
     // console.log("===> isLoggedIn:", isLoggedIn)
 
+    console.log("===> request.session:", request.session.isLoggedIn)
     return response
         .status(200)
         .render("auth/login", {
@@ -26,8 +27,7 @@ const getLogin = (request, response, next) => {
 
 const postLogin = (request, response, next) => {
 
-    // request.isLoggedIn = true;
-    response.setHeader("Set-Cookie", "loggedIn=true; HttpOnly")
+    request.session.isLoggedIn = true;
     return response
         .status(301)
         .redirect("/")
