@@ -66,10 +66,12 @@ const getIndex = (request, response, next) => {
 
 const getCart = (request, response, next) => {
 
-    request.user.getCart()
-        .then(products => {
+    request.user.populate("cart.items.productId")   //  cause populate() doesn't return a promise
+        .execPopulate()
+        .then(user => {
 
-            // console.log("====> getCart shop models:", products);
+            // console.log("====> getCart shop models:", user.cart.items);
+            const products = user.cart.items;
             return response.render("shop/cart", {
                 pageTitle: "Your Cart",
                 path: "/cart",

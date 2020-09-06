@@ -49,7 +49,7 @@ const userSchema = new Schema({
     }
 });
 
-// Utility methods
+// Utility | instant methods
 userSchema.methods.addToCart = function (product) {
 
     const cartProductIndex = this.cart.items.findIndex(cartProductArray => {
