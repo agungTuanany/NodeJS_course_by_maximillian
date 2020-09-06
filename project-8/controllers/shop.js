@@ -104,7 +104,7 @@ const postCartDeleteProduct = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    request.user.deleteItemFromCart(prodId)
+    request.user.removeFromCart(prodId)
         .then(result => {
 
             console.log("====> postCartDeleteProduct", result);
