@@ -11,13 +11,6 @@ const User = require("./../models/user.js");
 
 const getLogin = (request, response, next) => {
 
-    // const isLoggedIn = request.get("Cookie")
-    //     .split(";")[0]                          // Changes the [0] values as your cookies sequence
-    //     .trim()
-    //     .split("=")[0] === "true";
-
-    // console.log("===> isLoggedIn:", isLoggedIn)
-
     console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
     return response
         .status(200)
@@ -35,9 +28,12 @@ const postLogin = (request, response, next) => {
 
             request.session.isLoggedIn = true;
             request.session.user = user;
-            return response
-                .status(301)
-                .redirect("/")
+            request.session.save(err => {
+                console.log(err);
+                return response
+                    .status(301)
+                    .redirect("/")
+            })
         })
         .catch(err => console.log(err));
 };
