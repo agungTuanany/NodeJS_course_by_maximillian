@@ -7,6 +7,7 @@
 5. [Initializing the Session Middleware](#initializing-the-session-middleware)
 6. [Using the Session Middleware](#using-the-session-middleware)
 7. [Using MongoDB to Store Session](#using-mongodb-to-store-session)
+8. [Module Summary](#module-summary)
 
 <br/>
 
@@ -314,6 +315,15 @@ So in general, use a session for **any data that belongs to a User** that you
 don't want to lose after every response you send and that should not be visible
 to other Users.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+<br/>
+
+![chapter-13-7.gif](./images/gif/chapter-13-7.gif "Module Summary")
+<br/>
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
