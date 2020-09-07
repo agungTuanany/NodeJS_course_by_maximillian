@@ -4,6 +4,9 @@
 1. [Module Introduction](#module-introduction)
 2. [What is a Cookie](#what-is-a-cookie)
 3. [What is Session](#what-is-session)
+5. [Initializing the Session Middleware](#initializing-the-session-middleware)
+6. [Using the Session Middleware](#using-the-session-middleware)
+7. [Using MongoDB to Store Session](#using-mongodb-to-store-session)
 
 <br/>
 
@@ -117,6 +120,200 @@ contain the confidential data which you can't change from inside the browser,
 that the idea here.
 
 So **Session are stored on the server side. Cookie are on client side**.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Initializing the Session Middleware
+
+To implement a session, we'll need another third party package with managing
+Session. [express-session](https://github.com/expressjs/session) is the official
+ExpressJS suite but not baked into ExpressJS itself. After installation we setup
+Session-middleware:
+
+[app.js](./../project-9/app.js)
+
+```javascript
+...
+...
+
+app.use(session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+}));
+
+...
+...
+```
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Using the Session Middleware
+
+How do we use Session-middleware? We Used in
+[auth.js](./../project-9/controllers/auth.js)
+
+```javascript
+...
+...
+
+const postLogin = (request, response, next) => {
+
+    request.session.isLoggedIn = true;
+    return response
+        .status(301)
+        .redirect("/")
+};
+
+...
+...
+```
+<br/>
+
+![chapter-13-4.gif](./images/gif/chapter-13-4.gif "Using the Session Middleware")
+<br/>
+
+In Cookies you will see **connect.sid** have column named **value** with some
+strange string. The strange string is the **encrypted value**; And this is now
+the Cookie, by default it's a _session cookie_ it will expired  when you close the
+browser.
+
+That **Session Cookie** will identified your User here, your running instance of
+this website. You could say where you are browsing around, this will identify
+you to the server and to this Session.
+
+We can prove by log _request.sesion_ with getLogin() methods in
+[auth.js](./../project-9/controllers/auth.js) controllers
+
+```javascript
+const getLogin = (request, response, next) => {
+
+    // const isLoggedIn = request.get("Cookie")
+    //     .split(";")[0]                          // Changes the [0] values as your cookies sequence
+    //     .trim()
+    //     .split("=")[0] === "true";
+
+    // console.log("===> isLoggedIn:", isLoggedIn)
+
+    console.log("===> request.session:", request);
+    return response
+        .status(200)
+        .render("auth/login", {
+            pageTitle: "Login",
+            path: "/login",
+            isAuthenticated: false
+            // isAuthenticated: isLoggedIn
+        });
+};
+```
+![chapter-13-5.gif](./images/gif/chapter-13-5.gif "Using the Session Middleware")
+<br/>
+
+Now we have store the Session, we can go to different page and come back to
+_login_ page we still in same Session cause we never leave the browser. All the
+individual request from each other, totally separated and still we see
+**loggedIn** Cookies is still have a value **true** because we still store the
+Cookies in the Session on the server side by default, just in **memory** not in
+database yet, and the Session is identified for this browser because we have
+that Cookie.
+
+This is how we can store data that persist (stick out) across request but not
+across Users. That the power of using Session. It still needs a Cookies to
+identify the User but the **sensitive information is stored on server**, we
+can't modify it; And that of course will be super important for authentication;
+And what we see above already is the **core mechanisms** behind authenticating
+Users in the web; There are other techniques too for example when building
+a **REST API**, something we'll come back later.
+
+The explanation above is a core thing on how authentication generally work
+especially when **rendering views** as we are doing it with EJS and this is what
+we will build up on in the authentication section where we then also dive into
+things like **validating credential**, **logging Users out** and fun stuff like
+that.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Using MongoDB to Store Session
+
+Now we can use the Session, the problem here is the Session is stored in
+**memory**, and memory is not infinite resource. So for staging (development) is
+fine but for a production server, this would be horrible because if you have
+thousands or one hundred thousands of Users, your memory will quickly overflow
+if you store all the information (Cookies and Session). You don't want to do
+that. From **security** perspective it's also not ideal.
+
+So we want store Session differently, and on the
+[express-session](https://github.com/expressjs/session) documentation, you will
+find a list of **session store** you can use and basically all kinds of
+databases are supported. You could store in **files** though that might not give
+you the best performance and we will use
+[connect-mongodb-session](https://github.com/expressjs/session) package and
+register.
+
+So to setup the **MongoDB Store** we write on [app.js](./../project-9/app.js):
+
+```javascript
+...
+...;
+
+const session    = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+
+...
+...;
+// @TODO: move this credential into .env
+// MongoDB Session
+const MONGODB_URI = "mongodb://myDBReader:D1fficultP%40ssw0rd@mongodb0.example.com:27017/?authSource=admin"
+const store = new MongoDBStore({
+    uri: MONGODB_URI,
+    collection: "sessions"
+});
+
+...
+...;
+
+// @TODO: @param: secret move into .env
+// Session
+app.use(session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+    store: store        // Add another options
+}));
+
+...
+...;
+```
+<br/>
+
+![chapter-13-6.gif](./images/gif/chapter-13-6.gif "Using MongoDB to Store Sessions")
+<br/>
+
+This how Session are now **stored in database** and this is how you should store
+them for production, use a real Session store, don't use the **memory** store
+which is _less secure_ and which also is _less unlimited_ or which will reach
+limits when more Users use you application.
+
+With that Session are a powerful tool for storing data across request while
+still scoping to a single user and not sharing the data across Users, because
+now as you saw, different Users have different Sessions, but this is not a great
+way mostly for managing authentication, but you could also store something like
+the **shopping cart** in a session.
+
+We are storing _shopping cart_ in a database which is also a decent (reasonable)
+solution but you could store it in a Session and therefore indirectly in the
+database I guess, In the Session database collection.
+
+So in general, use a session for **any data that belongs to a User** that you
+don't want to lose after every response you send and that should not be visible
+to other Users.
+
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
