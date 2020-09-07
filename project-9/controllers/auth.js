@@ -3,6 +3,7 @@
 /*
  * Controller for authentication
  *
+ * @param: destroy() a method provided by session (express-session)
  */
 
 const getLogin = (request, response, next) => {
@@ -14,7 +15,8 @@ const getLogin = (request, response, next) => {
 
     // console.log("===> isLoggedIn:", isLoggedIn)
 
-    console.log("===> request.session:", request.session.isLoggedIn)
+    console.log("===> request.session:", request.session);
+    console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
     return response
         .status(200)
         .render("auth/login", {
@@ -33,7 +35,24 @@ const postLogin = (request, response, next) => {
         .redirect("/")
 };
 
+const postLogout = (request, response, next) => {
+
+    request.session.destroy(err => {
+
+        if(err) {
+            console.log("===> postLogout error:", err);
+            throw err;
+            return;
+        };
+
+        return response
+            .status(301)
+            .redirect("/")
+    });
+};
+
 module.exports = {
     getLogin,
-    postLogin
+    postLogin,
+    postLogout
 };
