@@ -35,8 +35,7 @@
   font                              : inherit;
   background                        : transparent;
   border                            : none;
-  text-decoration                   : none;
-  text-decoration                   : none;
+  text-decoration-line              : none;
   color                             : var(--white-solid);
 }
 

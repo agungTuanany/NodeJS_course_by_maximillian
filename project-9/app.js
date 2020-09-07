@@ -50,6 +50,7 @@ app.use(session({
 }));
 
 app.use((request, response, next) => {
+
     User.findById("5f53be3cb6e9934b390021e0")
         .then(user => {
             //(firstName, lastName, email, cart, id)

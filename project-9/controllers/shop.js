@@ -24,7 +24,7 @@ const getProducts = (request, response, next) => {
                     pageTitle: "Shop",
                     path: "/",
                     prods: products,
-                    isAuthenticated: request.isLoggedIn
+                    isAuthenticated: request.session.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -43,7 +43,7 @@ const getProduct = (request, response, next) => {
                     pageTitle: product.title,
                     path: '/products',
                     product: product,
-                    isAuthenticated: request.isLoggedIn
+                    isAuthenticated: request.session.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -60,7 +60,7 @@ const getIndex = (request, response, next) => {
                     pageTitle: "Shop",
                     path: "/",
                     prods: products,
-                    isAuthenticated: request.isLoggedIn
+                    isAuthenticated: request.session.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -68,6 +68,7 @@ const getIndex = (request, response, next) => {
 
 const getCart = (request, response, next) => {
 
+    console.log("====> getCart request.user", request.user);
     request.user.populate("cart.items.productId")   //  cause populate() doesn't return a promise
         .execPopulate()
         .then(user => {
@@ -78,7 +79,7 @@ const getCart = (request, response, next) => {
                 pageTitle: "Your Cart",
                 path: "/cart",
                 products: products,
-                isAuthenticated: request.isLoggedIn
+                isAuthenticated: request.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -168,7 +169,7 @@ const getOrders = (request, response, next) => {
                     pageTitle: "Orders Page",
                     path: "/orders",
                     orders: orders,
-                    isAuthenticated: request.isLoggedIn
+                    isAuthenticated: request.session.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -182,7 +183,7 @@ const getCheckout = (request, response, next) => {
         .render("shop/checkout", {
             pageTitle: "Checkout Page",
             path: "/checkout",
-            isAuthenticated: request.isLoggedIn
+            isAuthenticated: request.session.isLoggedIn
         });
 };
 

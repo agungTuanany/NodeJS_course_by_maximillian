@@ -15,7 +15,6 @@ const getLogin = (request, response, next) => {
 
     // console.log("===> isLoggedIn:", isLoggedIn)
 
-    console.log("===> request.session:", request.session);
     console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
     return response
         .status(200)
@@ -23,7 +22,6 @@ const getLogin = (request, response, next) => {
             pageTitle: "Login",
             path: "/login",
             isAuthenticated: false
-            // isAuthenticated: isLoggedIn
         });
 };
 
