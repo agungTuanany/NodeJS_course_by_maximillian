@@ -6,6 +6,8 @@
  * Is a central place to organized, structured, manipulate your single entity
  * for user.
  *
+ * @NOTE: @param: toString() is to ensure that every update Cart is only work in
+ * string, as in MongoDB is not exactly 'type of string'
  */
 
 // Core Dependencies
@@ -18,7 +20,6 @@ const mongoose = require("mongoose");
 // Global variables
 const Schema = mongoose.Schema;
 
-// const productSchema = new Schema({
 const userSchema = new Schema({
     firstName: {
         type: String,
@@ -54,26 +55,21 @@ userSchema.methods.addToCart = function(product) {
 
     const cartProductIndex = this.cart.items.findIndex(cartProductArray => {
 
-        // @NOTE: @param: toString() is to ensure that every update Cart is
-        // only work in string, as in MongoDB is not exactly 'type of string'
         return cartProductArray.productId.toString() === product._id.toString();
     });
 
     let newQuantity = 1;
     const updatedCartItems = [...this.cart.items];
-    // console.log("==> BEFORE updatedCartItems", updatedCartItems)
 
     if (cartProductIndex >= 0) {
         newQuantity = this.cart.items[cartProductIndex].quantity + 1;
         updatedCartItems[cartProductIndex].quantity = newQuantity;
-        // console.log("==> updatedCartItems", updatedCartItems)
     }
     else {
         updatedCartItems.push({
             productId: product._id,
             quantity: newQuantity
         });
-        // console.log("==> updatedCartItems", updatedCartItems)
     };
 
     const updatedCart = { items: updatedCartItems };

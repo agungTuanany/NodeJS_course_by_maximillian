@@ -6,6 +6,9 @@
  * @param: destroy() a method provided by session (express-session)
  */
 
+// Internal Dependencies
+const User = require("./../models/user.js");
+
 const getLogin = (request, response, next) => {
 
     // const isLoggedIn = request.get("Cookie")
@@ -27,10 +30,16 @@ const getLogin = (request, response, next) => {
 
 const postLogin = (request, response, next) => {
 
-    request.session.isLoggedIn = true;
-    return response
-        .status(301)
-        .redirect("/")
+    User.findById("5f53be3cb6e9934b390021e0")
+        .then(user => {
+
+            request.session.isLoggedIn = true;
+            request.session.user = user;
+            return response
+                .status(301)
+                .redirect("/")
+        })
+        .catch(err => console.log(err));
 };
 
 const postLogout = (request, response, next) => {

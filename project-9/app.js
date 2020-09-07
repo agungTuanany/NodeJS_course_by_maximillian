@@ -51,9 +51,13 @@ app.use(session({
 
 app.use((request, response, next) => {
 
-    User.findById("5f53be3cb6e9934b390021e0")
+    if(!request.session.user) {
+        return next();
+    };
+
+    User.findById(request.session.user._id)
         .then(user => {
-            //(firstName, lastName, email, cart, id)
+
             request.user = user;
             next();
         })
