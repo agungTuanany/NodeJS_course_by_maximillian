@@ -6,6 +6,9 @@
  * @param: destroy() a method provided by session (express-session)
  */
 
+// 3rd party Dependencies
+const bcrypt = require("bcryptjs");
+
 // Internal Dependencies
 const User = require("./../models/user.js");
 
@@ -64,13 +67,17 @@ const postSignup = (request, response, next) => {
                     .redirect("/signup");
             };
 
+            return bcrypt.hash(password, 12);
+        })
+        .then(hashedPassword => {
             const user = new User({
                 email    : email,
-                password : password,
+                password : hashedPassword,
                 cart     : { item: [] }
             });
 
             return user.save();
+
         })
         .then(result => {
 

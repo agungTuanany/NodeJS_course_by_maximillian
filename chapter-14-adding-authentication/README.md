@@ -5,6 +5,7 @@
 2. [What is Authentication](#what-is-authentication)
 3. [How is Authentication Implemented](#how-is-authentication-implemented)
 5. [Implementing an Authentication](#implementing-an-authentication)
+6. [Encrypting Password](#encrypting-password)
 
 <br/>
 
@@ -125,6 +126,16 @@ authentication approach.
 
 ![chapter-14-4.gif](./images/gif/chapter-14-4.gif "Implementing an Authentication")
 
+<br/>
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Encrypting Password
+<br/>
+
+![chapter-14-5.gif](./images/gif/chapter-14-5.gif "Encrypting password")
 <br/>
 
 **[⬆ back to top](#table-of-contents)**
