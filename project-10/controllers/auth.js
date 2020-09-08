@@ -14,7 +14,7 @@ const User = require("./../models/user.js");
 
 const getLogin = (request, response, next) => {
 
-    console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
+    // console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
     return response
         .status(200)
         .render("auth/login", {
@@ -26,17 +26,50 @@ const getLogin = (request, response, next) => {
 
 const postLogin = (request, response, next) => {
 
-    User.findById("5f53be3cb6e9934b390021e0")
+    const email = request.body.email;
+    const password = request.body.password;
+
+    User.findOne({ email: email })
         .then(user => {
 
-            request.session.isLoggedIn = true;
-            request.session.user = user;
-            request.session.save(err => {
-                console.log(err);
+            if (!user) {
+                // @TODO: Create notification if user not exists
                 return response
                     .status(301)
-                    .redirect("/")
-            })
+                    .redirect("/login");
+            };
+
+            bcrypt.compare(password, user.password)
+                .then(doMatch => {
+
+                    if (!doMatch) {
+                        return response
+                            .status(301)
+                            .redirect("/login");
+                    };
+
+                    request.session.isLoggedIn = true;
+                    request.session.user = user;
+                    request.session.save(err => {
+
+                        if(!err) {
+                            return response
+                                .status(303)
+                                .redirect("/")
+                        };
+
+                        console.log("===> session error:", err);
+                    });
+                })
+                .catch(err => {
+
+                    console.log("===> bcrypt error:", err);
+
+                    // @TODO: Create notification if password is false
+                    return response
+                        .status(301)
+                        .redirect("/login")
+                });
         })
         .catch(err => console.log(err));
 };
