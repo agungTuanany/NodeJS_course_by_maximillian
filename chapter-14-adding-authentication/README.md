@@ -6,6 +6,7 @@
 3. [How is Authentication Implemented](#how-is-authentication-implemented)
 5. [Implementing an Authentication](#implementing-an-authentication)
 6. [Encrypting Password](#encrypting-password)
+7. [Using Middleware to Protect Routes](#using-middleware-to-protect-routes)
 
 <br/>
 
@@ -136,6 +137,18 @@ authentication approach.
 <br/>
 
 ![chapter-14-5.gif](./images/gif/chapter-14-5.gif "Encrypting password")
+<br/>
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Using Middleware to Protect Routes
+
+[is-auth.js](../project-10/middleware/is-auth.js)
+<br/>
+
+![chapter-14-6.gif](./images/gif/chapter-14-6.gif "Using Middleware to protect routes")
 <br/>
 
 **[⬆ back to top](#table-of-contents)**
