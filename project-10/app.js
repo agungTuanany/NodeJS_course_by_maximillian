@@ -4,11 +4,12 @@
 const path = require("path");
 
 // 3rd party Dependencies
-const express    = require("express");
-const bodyParser = require("body-parser");
-const mongoose   = require("mongoose");
-const session    = require("express-session");
+const express      = require("express");
+const bodyParser   = require("body-parser");
+const mongoose     = require("mongoose");
+const session      = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf         = require("csurf");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
@@ -26,6 +27,8 @@ const store = new MongoDBStore({
     uri: MONGODB_URI,
     collection: "sessions"
 });
+
+const csrfProtection = csrf();
 
 // template engine config
 app.set("view engine", "ejs");
@@ -63,6 +66,8 @@ app.use((request, response, next) => {
         })
         .catch(err => console.log(err))
 });
+
+app.use(csrfProtection);
 
 // Routes handlers
 app.use("/admin", adminRoutes);

@@ -156,7 +156,7 @@ authentication approach.
 <br/>
 <br/>
 
-## CSRF Attacks
+## Understanding CSRF Attacks
 <br/>
 
 ![chapter-14-7.gif](./images/gif/chapter-14-7.gif "Understanding CSRF attacks")
