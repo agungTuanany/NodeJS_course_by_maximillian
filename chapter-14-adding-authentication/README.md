@@ -3,6 +3,7 @@
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
 2. [What is Authentication](#what-is-authentication)
+3. [How is Authentication Implemented](#how-is-authentication-implemented)
 
 <br/>
 
@@ -73,7 +74,49 @@ page, to _sign up_ and then to _sign in_ and then we can _use Sessions_ as last
 module  to _store the information_ whether a user is signed in and well let him
 interact with the page across request.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## How is Authentication Implemented
+<br/>
+
+![chapter-14-3.gif](./images/gif/chapter-14-3.gif "how is authentication implemented")
+<br/>
+
+We have same setup, we get a **user**, our backend, the **server** side code and
+**database**; now typically, a User will send a **login request**. A User or
+visitor needs to have signed up before but after you signed up User or visitor
+can login with email and password; and the server, we check whether that email
+and password combination is valid; whether we have a user with that email and
+password in our database.
+
+If that the case, we create a **session** for this user, and the session
+identifies only for specific user. This is required because otherwise without
+a session, even if we find out that the credential are valid, for the very next
+request the user would be logged out again because remember, **request interact
+separated from each other**; they don't know anything about each other, we need
+session to connect them, this is why we create one with the user or the
+authentication information.
+
+We then return 200 response, a success response and we obviously also **store the
+cookie** belonging that session on the client (frontend), we return that with
+that response so that we really established a session.
+
+Thereafter the user is able to visit our **restricted routes**, because now this
+cookie is sent with every request, on the server we can connect this cookie to
+a session and in the session we have the information whether that user is signed
+in or not; and if user is signed in, we can grant access to certain resources.
+
+This is how authentication is implemented in any web application that render
+views, we'll learn a different way of adding authentication later when we work
+with a **REST and GraphQL API's**; but for traditional web app as we are
+building it here where we do render EJS or handlebars or whatever templating
+engine you use, where we render such views, there will use this session based
+authentication approach.
+
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>
+
