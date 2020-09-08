@@ -25,7 +25,6 @@ const getProducts = (request, response, next) => {
                 pageTitle: "Admin Products",
                 path: '/admin/products',
                 products: product,
-                isAuthenticated: request.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -40,7 +39,6 @@ const getAddProduct = (request, response, next) => {
             pageTitle: "Add Product",
             path: "/admin/add-product",
             editing: false,
-            isAuthenticated: request.session.isLoggedIn
         });
 };
 
@@ -101,7 +99,6 @@ const getEditProduct = (request, response, next) => {
                 path: '/admin/edit-product',
                 editing:editMode,
                 product: product,
-                isAuthenticated: request.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));

@@ -12,7 +12,6 @@ const get404 = (request, response, next) => {
         .render("page-not-found", {
             pageTitle: "Page Not Found",
             path: "/404",
-            isAuthenticated: request.isLoggedIn
         });
 };
 

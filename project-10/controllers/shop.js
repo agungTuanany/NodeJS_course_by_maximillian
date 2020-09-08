@@ -24,7 +24,6 @@ const getProducts = (request, response, next) => {
                     pageTitle: "Shop",
                     path: "/",
                     prods: products,
-                    isAuthenticated: request.session.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -43,7 +42,6 @@ const getProduct = (request, response, next) => {
                     pageTitle: product.title,
                     path: '/products',
                     product: product,
-                    isAuthenticated: request.session.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -60,8 +58,6 @@ const getIndex = (request, response, next) => {
                     pageTitle: "Shop",
                     path: "/",
                     prods: products,
-                    // isAuthenticated: request.session.isLoggedIn,
-                    // csrfToken: request.csrfToken()
                 });
         })
         .catch(err => console.log(err));
@@ -80,7 +76,6 @@ const getCart = (request, response, next) => {
                 pageTitle: "Your Cart",
                 path: "/cart",
                 products: products,
-                isAuthenticated: request.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -170,7 +165,6 @@ const getOrders = (request, response, next) => {
                     pageTitle: "Orders Page",
                     path: "/orders",
                     orders: orders,
-                    isAuthenticated: request.session.isLoggedIn
                 });
         })
         .catch(err => console.log(err));
@@ -184,7 +178,6 @@ const getCheckout = (request, response, next) => {
         .render("shop/checkout", {
             pageTitle: "Checkout Page",
             path: "/checkout",
-            isAuthenticated: request.session.isLoggedIn
         });
 };
 

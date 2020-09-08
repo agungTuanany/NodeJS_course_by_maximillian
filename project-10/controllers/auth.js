@@ -20,7 +20,7 @@ const getLogin = (request, response, next) => {
         .render("auth/login", {
             pageTitle: "Login",
             path: "/login",
-            isAuthenticated: false
+            errorMessage: request.flash("error")
         });
 };
 
@@ -34,6 +34,7 @@ const postLogin = (request, response, next) => {
 
             if (!user) {
                 // @TODO: Create notification if user not exists
+                request.flash("error", "Invalid emal or password");
                 return response
                     .status(301)
                     .redirect("/login");
@@ -81,7 +82,6 @@ const getSignup = (request, response, next) => {
         .render("auth/signup", {
             pageTitle: "Signup",
             path: "/signup",
-            isAuthenticated: false
         });
 };
 

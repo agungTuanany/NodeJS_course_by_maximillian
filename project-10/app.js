@@ -10,6 +10,7 @@ const mongoose     = require("mongoose");
 const session      = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf         = require("csurf");
+const flash        = require("connect-flash");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
@@ -29,6 +30,7 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
+const flashUX = flash();
 
 // template engine config
 app.set("view engine", "ejs");
@@ -53,6 +55,7 @@ app.use(session({
 }));
 
 app.use(csrfProtection);
+app.use(flashUX);
 
 app.use((request, response, next) => {
 
