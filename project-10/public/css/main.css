@@ -1,0 +1,76 @@
+/* External Dependencies */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+
+/* Internal Dependencies */
+@import url("./shop.css");
+@import url("./form.css");
+@import url("./product.css");
+@import url("./product-detail.css");
+@import url("./cart.css");
+@import url("./orders.css");
+@import url("./auth.css");
+
+:root {
+    /* this color name refer to: */
+    /* http://chir.ag/projects/name-that-color/ */
+
+    --black-solid    : #000000;
+    --green-tropical : #00695C;
+    --gray-silver    : #A1A1A1;
+    --gray-tundaro   : #4D4D4D;
+    --purple-violet  : #6200FF;
+    --red-solid      : #FF0000;
+    --white-solid    : #FFFFFF;
+    --yellow-wattle  : #DBC441;
+    --yellow-grose   : #FFEB3B;
+}
+
+* {
+    box-sizing      : border-box;
+}
+
+body {
+    display         : flex;
+    flex-direction  : column;
+    /* align-items     : center; */
+    /* justify-content : center; */
+    margin          : 0;
+    padding         : 0;
+    font-family     : Helvetica, arial, sans-serif;
+}
+
+main {
+    padding         : 1rem;
+}
+
+.btn {
+    font              : inherit;
+    border            : 1px solid var(--green-tropical);
+    background        : var(--white-solid);
+    color             : var(--green-tropical);
+    padding           : 10px;
+    border-radius     : 5px;
+    /* width             : 100%; */
+    cursor            : pointer;
+}
+
+.centered {
+    text-align        : center;
+}
+
+.btn:active,
+.btn:hover {
+    color             : var(--yellow-wattle);
+    background-color  : var(--green-tropical);
+}
+
+.btn.danger {
+    color             : var(--red-solid);
+    border-color      : var(--red-solid);
+}
+
+.btn.danger:hover,
+.btn.danger:active {
+    background        : var(--red-solid);
+    color             : var(--white-solid);
+}
