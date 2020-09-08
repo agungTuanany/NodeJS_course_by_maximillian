@@ -7,6 +7,7 @@
 5. [Implementing an Authentication](#implementing-an-authentication)
 6. [Encrypting Password](#encrypting-password)
 7. [Using Middleware to Protect Routes](#using-middleware-to-protect-routes)
+8. [Understanding CSRF Attacks](#understanding-csrf-attacks)
 
 <br/>
 
@@ -150,6 +151,63 @@ authentication approach.
 
 ![chapter-14-6.gif](./images/gif/chapter-14-6.gif "Using Middleware to protect routes")
 <br/>
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## CSRF Attacks
+<br/>
+
+![chapter-14-7.gif](./images/gif/chapter-14-7.gif "Understanding CSRF attacks")
+<br/>
+
+Now that we have our authentication flow and route protection in place, let's
+talk about security and there, about **CSRF Attacks**.
+
+CSRF stands for **Cross-Site Request forgery**. This is special kind of attack
+pattern or approach where people can abuse your session and trick users of your
+application to execute malicious code.
+
+You have **User** in your application and now let's assume this is a visitor who
+indeed is logged in, you have server side code and your database with which you
+interact. Now the User interacts with your frontend views, so the pages you
+render back and you get a session for that user and of course cookie that belong
+to that session.
+
+So everything you knows; Now the user can do intended things like for example
+**send money** to B, if you are building a banking app in our application, order
+some products with his own shipping address; if we had a **checkout** page.
+
+Now in CSRF attack scenario, your user is tricked onto a fake site, and this can
+be done for example by **sending a link in an email**, that site can ;look like
+your own page but it technically is a different one. Now on that site there
+could be a link leading to your page, to your real page executing some request
+of course you could include a form for example which sends a post request to
+your page.
+
+So to your own NodeJS server where you added some fields to send money to
+another person, to **C** in this instead of **B**. To the user, this is pretty
+invisible because he saw a page that maybe looked like your page or clicked on
+a link that instantly redirecting to your page, but behind the scenes some data
+being sent there that does something the user would not want to do normally.
+
+Now why that is work? Well since you got valid session for that user if you send
+something to your site, to to your server, your session is used for that user
+and therefore that behind the scenes data that the user never sees that
+configures the money transferal or the order in a certain way is not OK to the
+user, this part is invisible to the user but the valid session gets used for it
+because your server is used and therefore this is accepted.
+
+This is an attack pattern where the session can be stolen; so to say, where you
+can abuse the fact the users are logged in and you can simply attack trick them
+into making request which they might not even notice and obviously w want to
+protect against this attack pattern and how can we protect now? Well the idea is
+that we want to ensure that people can only use your session if they are working
+with; so with the views rendered by your application, so that the session is not
+available on any fake page that might look like your page but that aren't your
+page; And to ensure this, to add feature, we will use so-called **CSRF-TOKEN**.
+
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
