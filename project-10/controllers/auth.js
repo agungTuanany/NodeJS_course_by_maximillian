@@ -49,7 +49,37 @@ const getSignup = (request, response, next) => {
         });
 };
 
-const postSignup = (request, response, next) => {};
+const postSignup = (request, response, next) => {
+
+    const email = request.body.email;
+    const password = request.body.password;
+    const confirmPassword =request.body.confirmPassword;
+
+    User.findOne({ email: email })
+        .then(userDoc => {
+
+            if (userDoc) {
+                return response
+                    .status(301)
+                    .redirect("/signup");
+            };
+
+            const user = new User({
+                email    : email,
+                password : password,
+                cart     : { item: [] }
+            });
+
+            return user.save();
+        })
+        .then(result => {
+
+            return response
+                .status(200)
+                .redirect("/login")
+        })
+        .catch(err => console.log(err));
+};
 
 const postLogout = (request, response, next) => {
 

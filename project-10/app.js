@@ -79,21 +79,6 @@ mongoose.connect(MONGODB_URI,
     })
     .then(result => {
 
-        User.findOne()
-            .then(user => {
-                if (!user) {
-                    const user = new User({
-                        firstName: "Dummy",
-                        lastName: "data",
-                        email: "Dummy@data.com",
-                        cart: {
-                            items: []
-                        }
-                    });
-                    user.save()
-                };
-            });
-
         console.log("Succeeds connect with MongoDB database with mongoose")
         app.listen(port, () => console.log(`You run "project-10" in server running by "Express" in port: "${port}".`));
     })

@@ -4,6 +4,7 @@
 1. [Module Introduction](#module-introduction)
 2. [What is Authentication](#what-is-authentication)
 3. [How is Authentication Implemented](#how-is-authentication-implemented)
+5. [Implementing an Authentication](#implementing-an-authentication)
 
 <br/>
 
@@ -115,8 +116,17 @@ building it here where we do render EJS or handlebars or whatever templating
 engine you use, where we render such views, there will use this session based
 authentication approach.
 
-
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>
 
+## Implementing an Authentication
+<br/>
+
+![chapter-14-4.gif](./images/gif/chapter-14-4.gif "Implementing an Authentication")
+
+<br/>
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
