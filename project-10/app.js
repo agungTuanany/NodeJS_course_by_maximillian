@@ -52,6 +52,8 @@ app.use(session({
     store: store
 }));
 
+app.use(csrfProtection);
+
 app.use((request, response, next) => {
 
     if(!request.session.user) {
@@ -67,7 +69,14 @@ app.use((request, response, next) => {
         .catch(err => console.log(err))
 });
 
-app.use(csrfProtection);
+app.use((request, response, next) => {
+
+    // @NOTE: locals() are special field on the ExpressJS response
+    response.locals.isAuthenticated = request.session.isLoggedIn;
+    response.locals.csrfToken = request.csrfToken();
+
+    next();
+})
 
 // Routes handlers
 app.use("/admin", adminRoutes);

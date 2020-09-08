@@ -60,8 +60,8 @@ const getIndex = (request, response, next) => {
                     pageTitle: "Shop",
                     path: "/",
                     prods: products,
-                    isAuthenticated: request.session.isLoggedIn,
-                    csrfToken: request.csrfToken()
+                    // isAuthenticated: request.session.isLoggedIn,
+                    // csrfToken: request.csrfToken()
                 });
         })
         .catch(err => console.log(err));
