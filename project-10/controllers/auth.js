@@ -67,23 +67,24 @@ const postSignup = (request, response, next) => {
                     .redirect("/signup");
             };
 
-            return bcrypt.hash(password, 12);
-        })
-        .then(hashedPassword => {
-            const user = new User({
-                email    : email,
-                password : hashedPassword,
-                cart     : { item: [] }
-            });
+            return bcrypt.hash(password, 12)
+            .then(hashedPassword => {
 
-            return user.save();
+                const user = new User({
+                    email    : email,
+                    password : hashedPassword,
+                    cart     : { item: [] }
+                });
 
-        })
-        .then(result => {
+                return user.save();
+            })
+                .then(result => {
 
-            return response
-                .status(200)
-                .redirect("/login")
+                    return response
+                        .status(200)
+                        .redirect("/login")
+                })
+                .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
 };
