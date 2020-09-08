@@ -34,6 +34,12 @@ const getProducts = (request, response, next) => {
 
 const getAddProduct = (request, response, next) => {
 
+    if (!request.session.isLoggedIn) {
+        //@TODO: Create notification is not authorize
+        return response
+        .status(301)
+        .redirect("/login");
+    }
     return response
         .status(200)
         .render("admin/edit-product", {
