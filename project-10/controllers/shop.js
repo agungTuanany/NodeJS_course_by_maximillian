@@ -137,7 +137,7 @@ const postOrder = (request, response, next) => {
 
             const order = new Order({
                 user: {
-                    firstName: request.user.firstName,
+                    email: request.user.email,
                     userId: request.user
                 },
                 products: products
