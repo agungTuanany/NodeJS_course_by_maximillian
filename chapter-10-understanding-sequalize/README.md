@@ -4,6 +4,7 @@
 1. [Module Introduction](#module-introduction)
 2. [What is Sequelize](#what-is-sequelize)
 3. [Association](#association)
+4. [Module Summary](#module-summary)
 
 <br/>
 
@@ -144,6 +145,16 @@ sell some products on the shop.
 
 Above a rough outline of how we can communicate or relate different models,
 these is what we can also reflect in [sequelize](https://sequelize.org).
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+<br/>
+
+![chapter-10-4.gif](./images/gif/chapter-10-4.gif "Module Summary")
+<br/>
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
