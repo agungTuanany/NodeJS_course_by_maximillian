@@ -14,7 +14,6 @@ const User = require("./../models/user.js");
 
 const getLogin = (request, response, next) => {
 
-    // console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
     let message = request.flash("error");
 
     if (message.length > 0) {
@@ -22,8 +21,9 @@ const getLogin = (request, response, next) => {
     }
     else {
         message = null;
-    }
+    };
 
+    // console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
     return response
         .status(200)
         .render("auth/login", {
@@ -42,8 +42,7 @@ const postLogin = (request, response, next) => {
         .then(user => {
 
             if (!user) {
-                // @TODO: Create notification if user not exists
-                request.flash("error", "Invalid email or password");
+                request.flash("error", "Invalid email address");
                 return response
                     .status(301)
                     .redirect("/login");
@@ -53,6 +52,7 @@ const postLogin = (request, response, next) => {
                 .then(doMatch => {
 
                     if (!doMatch) {
+                        request.flash("error", "Invalid password");
                         return response
                             .status(301)
                             .redirect("/login");
@@ -65,7 +65,7 @@ const postLogin = (request, response, next) => {
                         if(!err) {
                             return response
                                 .status(303)
-                                .redirect("/")
+                                .redirect("/");
                         };
 
                         console.log("===> session error:", err);
@@ -74,11 +74,9 @@ const postLogin = (request, response, next) => {
                 .catch(err => {
 
                     console.log("===> bcrypt error:", err);
-
-                    // @TODO: Create notification if password is false
                     return response
                         .status(301)
-                        .redirect("/login")
+                        .redirect("/login");
                 });
         })
         .catch(err => console.log(err));
@@ -86,11 +84,21 @@ const postLogin = (request, response, next) => {
 
 const getSignup = (request, response, next) => {
 
+    let message = request.flash("error");
+
+    if (message.length > 0) {
+        message = message[0];
+    }
+    else {
+        message = null;
+    };
+
     return response
         .status(200)
         .render("auth/signup", {
             pageTitle: "Signup",
             path: "/signup",
+            errorMessage: message
         });
 };
 
@@ -104,31 +112,49 @@ const postSignup = (request, response, next) => {
         .then(userDoc => {
 
             if (userDoc) {
+                request.flash("error", "E-Mail exists already, please pick a different one.");
                 return response
                     .status(301)
                     .redirect("/signup");
             };
 
             return bcrypt.hash(password, 12)
-            .then(hashedPassword => {
+                .then(hashedPassword => {
 
-                const user = new User({
-                    email    : email,
-                    password : hashedPassword,
-                    cart     : { item: [] }
-                });
+                    const user = new User({
+                        email    : email,
+                        password : hashedPassword,
+                        cart     : { item: [] }
+                    });
 
-                return user.save();
-            })
+                    if (!user.email) {
+
+                        console.log("===> user.email:", user.email);
+                        request.flash("error", "You are not fill the email or password");
+                        return;
+                    };
+
+                    return user.save();
+                })
                 .then(result => {
 
+                    if (!result) {
+                        console.log("===> A. bcrypt result", result);
+                        return response
+                            .status(200)
+                            .redirect("/signup");
+                    };
+
+                    console.log("===> B. bcrypt result", result);
                     return response
                         .status(200)
-                        .redirect("/login")
+                        .redirect("/login");
                 })
-                .catch(err => console.log(err));
+                //@NOTE: throw the error if user not fill the email or the password
+                //@TODO: create unit test
+                .catch(err => console.log("===> bcrypt error:", err));
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log("===> postSignup error:", err));
 };
 
 const postLogout = (request, response, next) => {
