@@ -9,17 +9,22 @@
 @import url("./cart.css");
 @import url("./orders.css");
 @import url("./auth.css");
+@import url("./login.css");
 
 :root {
     /* this color name refer to: */
     /* http://chir.ag/projects/name-that-color/ */
 
     --black-solid    : #000000;
+    --blue-dogder    : #4771FA;
+    --blue-malibu    : #8EA8FD;
+    --blue-melrose   : #B9C9FF;
     --green-tropical : #00695C;
     --gray-silver    : #A1A1A1;
     --gray-tundaro   : #4D4D4D;
     --purple-violet  : #6200FF;
     --red-solid      : #FF0000;
+    --red-sundown    : #FFB0B0;
     --white-solid    : #FFFFFF;
     --yellow-wattle  : #DBC441;
     --yellow-grose   : #FFEB3B;

@@ -34,7 +34,7 @@ const postLogin = (request, response, next) => {
 
             if (!user) {
                 // @TODO: Create notification if user not exists
-                request.flash("error", "Invalid emal or password");
+                request.flash("error", "Invalid email or password");
                 return response
                     .status(301)
                     .redirect("/login");
