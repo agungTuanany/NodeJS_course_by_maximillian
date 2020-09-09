@@ -8,6 +8,7 @@
 6. [Encrypting Password](#encrypting-password)
 7. [Using Middleware to Protect Routes](#using-middleware-to-protect-routes)
 8. [Understanding CSRF Attacks](#understanding-csrf-attacks)
+9. [Module Summary](#module-summary)
 
 <br/>
 
@@ -44,7 +45,7 @@ access and that we don't just hide the menu options but that we really check the
 ![chapter-14-2.gif](./images/gif/chapter-14-2.gif "What is authentication")
 <br/>
 
-Well w obviously got our **User** using our application, interacting with our
+Well we obviously got our **User** using our application, interacting with our
 views and we get the **server** and **database** with which our server works,
 these are all things we worked in this course already.
 
@@ -208,6 +209,16 @@ with; so with the views rendered by your application, so that the session is not
 available on any fake page that might look like your page but that aren't your
 page; And to ensure this, to add feature, we will use so-called **CSRF-TOKEN**.
 
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+<br/>
+
+![chapter-14-8.gif](./images/gif/chapter-14-8.gif "Module summary")
+<br/>
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
