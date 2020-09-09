@@ -15,12 +15,21 @@ const User = require("./../models/user.js");
 const getLogin = (request, response, next) => {
 
     // console.log("===> request.session.isLoggedIn:", request.session.isLoggedIn);
+    let message = request.flash("error");
+
+    if (message.length > 0) {
+        message = message[0]
+    }
+    else {
+        message = null;
+    }
+
     return response
         .status(200)
         .render("auth/login", {
             pageTitle: "Login",
             path: "/login",
-            errorMessage: request.flash("error")
+            errorMessage: message
         });
 };
 
