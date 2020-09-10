@@ -8,9 +8,19 @@
 
 // 3rd party Dependencies
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
 
 // Internal Dependencies
 const User = require("./../models/user.js");
+
+// Global variables
+const transporter = nodemailer.createTransport(sendgridTransport({
+    auth: {
+        // @TODO: move the credential into .env
+        api_key: "YOUR API KEYS"
+    }
+}))
 
 const getLogin = (request, response, next) => {
 
@@ -145,10 +155,19 @@ const postSignup = (request, response, next) => {
                             .redirect("/signup");
                     };
 
-                    console.log("===> B. bcrypt result", result);
-                    return response
+                    response
                         .status(200)
                         .redirect("/login");
+
+                    // console.log("===> B. bcrypt result", result);
+                    transport.sendMail({
+                        to: email,
+                        from: 'info@shopNode.com',
+                        subject: "Signup succeeded",
+                        html: `<h1>You successfully signed up!</h1>`
+                    });
+
+                    return;
                 })
                 //@NOTE: throw the error if user not fill the email or the password
                 //@TODO: create unit test
