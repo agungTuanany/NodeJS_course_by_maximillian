@@ -5,6 +5,8 @@
  *
  * @param: destroy() a method provided by session (express-session)
  */
+// Core Dependencies
+const crypto = require("crypto");
 
 // 3rd party Dependencies
 const bcrypt = require("bcryptjs");
@@ -169,8 +171,8 @@ const postSignup = (request, response, next) => {
 
                     return;
                 })
-                //@NOTE: throw the error if user not fill the email or the password
-                //@TODO: create unit test
+            //@NOTE: throw the error if user not fill the email or the password
+            //@TODO: create unit test
                 .catch(err => console.log("===> bcrypt error:", err));
         })
         .catch(err => console.log("===> postSignup error:", err));
@@ -194,6 +196,56 @@ const getReset = (request, response, next) => {
             path: "/reset",
             errorMessage: message
         });
+};
+
+const postReset = (request, response, next) => {
+
+    crypto.randomBuffer(32, (err, buffer) => {
+
+        if (err) {
+            return response
+                .status(302)
+                .redirect("/reset");
+        };
+
+        const token = buffer.toString("hex");
+
+        User.findOne({ email: request.body.email })
+            .then(user => {
+
+                if (!user) {
+                    request.flash("error", "No acccount with the email was found");
+
+                    return response
+                        .status(302)
+                        .redirect("/reset");
+                };
+
+                user.resetToken =token;
+                user.resetTokenExpiration = Date.now() + 3600000; // reset in one hour
+                return user.save();
+            })
+            .then(result => {
+
+                response
+                    .status(302)
+                    .redirect("/");
+
+                transporter.sendMail({
+                    to: request.body.email,
+                    from: "info@shop-node.com",
+                    subject: "Password Reset",
+                    //@TODO: solve the link to use https
+                    html: `
+                        <p>You request a password reset</p>
+                        <p>
+                            Click this <a href="/http://localhost:3000/reset/${token}">link</a> link to set a new password.
+                        </p>
+                    `
+                });
+            })
+        .catch(err => console.log("===> postReset error:", err));
+    });
 };
 
 const postLogout = (request, response, next) => {
