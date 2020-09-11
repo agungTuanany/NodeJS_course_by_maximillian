@@ -1,0 +1,11 @@
+.centered {
+    text-align: center;
+}
+
+.image {
+    height: 450px;
+}
+
+.image img {
+    height: 100%;
+}

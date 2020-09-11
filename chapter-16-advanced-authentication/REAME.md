@@ -18,8 +18,8 @@ also work on ensuring that only users who created a post can edit it; but let's
 start with resetting password.
 
 To be precise in this module (chapter) we'll start with **resetting password**
-but then we'll have a look at "authorization" which is part I just talked about
-with ensuring that you can only **edit**, **delete** what you **created**.
+but then we'll have a look at **authorization** which is part I just talked
+about with ensuring that you can only **edit**, **delete** what you **created**.
 
 
 **[⬆ back to top](#table-of-contents)**
