@@ -176,6 +176,26 @@ const postSignup = (request, response, next) => {
         .catch(err => console.log("===> postSignup error:", err));
 };
 
+const getReset = (request, response, next) => {
+
+    let message = request.flash("error");
+
+    if (message.length > 0) {
+        message = message[0];
+    }
+    else {
+        message = null;
+    };
+
+    response
+        .status(200)
+        .render("auth/reset", {
+            pageTitle: "Reset",
+            path: "/reset",
+            errorMessage: message
+        });
+};
+
 const postLogout = (request, response, next) => {
 
     request.session.destroy(err => {
@@ -197,5 +217,6 @@ module.exports = {
     postLogin,
     getSignup,
     postSignup,
+    getReset,
     postLogout
 };
