@@ -6,6 +6,7 @@
  * @TODO: create your own email server, with postfix
  *
  * @param: destroy() a method provided by session (express-session)
+ * @param: $gt, a special character MongoDB comparison Query Operators
  */
 // Core Dependencies
 const crypto = require("crypto");
@@ -263,6 +264,40 @@ const postReset = (request, response, next) => {
     });
 };
 
+const getNewPassword = (request, response, next) => {
+
+    const token = request.params.token;
+
+    User.findOne({
+        resetToken: token,
+        resetTokenExpiration: {
+            $gt: Date.now()
+        }
+    })
+        .then(user => {
+
+            let message = request.flash("error");
+
+            if (message.length > 0) {
+                message = message[0]
+            }
+            else {
+                message = null;
+            };
+
+            response
+                .status(200)
+                .render("auth/new-password", {
+                    pageTitle: "New Password",
+                    path: "/new-password",
+                    errorMessage: message,
+                    userId:  user._id.toString()
+                })
+        })
+    .catch(err => console.log("===> getNewPassword error:", err));
+
+};
+
 const postLogout = (request, response, next) => {
 
     request.session.destroy(err => {
@@ -286,5 +321,6 @@ module.exports = {
     postSignup,
     getReset,
     postReset,
+    getNewPassword,
     postLogout
 };
