@@ -119,28 +119,38 @@ const postEditProduct = (request, response, next) => {
     Product.findById(prodId)
         .then(product => {
 
+            if (product.userId !== request.user._id) {
+                return response
+                    .status(302)
+                    .redirect("/")
+            };
+
             product.title       = updatedTitle;
             product.price       = updatedPrice;
             product.imageUrl    = updatedImageUrl;
             product.description = updatedDesc;
 
             return product.save()
-        })
-        .then(result => {
+                .then(result => {
 
-            console.log("Succeeded update product");
-            return response
-                .status(301)
-                .redirect("/admin/products");
+                    console.log("Succeeded update product");
+                    return response
+                        .status(301)
+                        .redirect("/admin/products");
+                });
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 };
 
 const postDeleteProduct = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    Product.findByIdAndRemove(prodId)
+    // Product.findByIdAndRemove(prodId)
+    product.deleteOne({
+        _id: prodId,
+        userId: request.user._id
+    })
         .then(result => {
 
             console.log("Succeeded delete product");
