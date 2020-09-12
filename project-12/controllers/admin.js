@@ -15,7 +15,7 @@ const Product = require("./../models/product.js");
 
 const getProducts = (request, response, next) => {
 
-    Product.find()
+    Product.find({ userId: request.user._id })
         // .select("title price -_id")          // which field you want retrieve from database
         // .populate("userId", "firstName")     // retrieve any field instead writing query on your own
         .then(product => {
@@ -95,11 +95,11 @@ const getEditProduct = (request, response, next) => {
             return response
                 .status(200)
                 .render('admin/edit-product', {
-                pageTitle: "Edit Product",
-                path: '/admin/edit-product',
-                editing:editMode,
-                product: product,
-            });
+                    pageTitle: "Edit Product",
+                    path: '/admin/edit-product',
+                    editing:editMode,
+                    product: product,
+                });
         })
         .catch(err => console.log(err));
 };
@@ -118,6 +118,7 @@ const postEditProduct = (request, response, next) => {
 
     Product.findById(prodId)
         .then(product => {
+
             product.title       = updatedTitle;
             product.price       = updatedPrice;
             product.imageUrl    = updatedImageUrl;

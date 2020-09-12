@@ -296,8 +296,7 @@ const getNewPassword = (request, response, next) => {
                     passwordToken: token
                 });
         })
-    .catch(err => console.log("===> getNewPassword error:", err));
-
+        .catch(err => console.log("===> getNewPassword error:", err));
 };
 
 const postNewPassword = (request, response, next) => {
