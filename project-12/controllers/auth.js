@@ -3,6 +3,8 @@
 /*
  * Controller for authentication
  *
+ * @TODO: create your own email server, with postfix
+ *
  * @param: destroy() a method provided by session (express-session)
  */
 // Core Dependencies
@@ -200,12 +202,14 @@ const getReset = (request, response, next) => {
 
 const postReset = (request, response, next) => {
 
-    crypto.randomBuffer(32, (err, buffer) => {
+    crypto.randomBytes(32, (err, buffer) => {
 
         if (err) {
-            return response
+            console.log("postReset randomBytes error:", err);
+            response
                 .status(302)
                 .redirect("/reset");
+            return;
         };
 
         const token = buffer.toString("hex");
@@ -214,11 +218,14 @@ const postReset = (request, response, next) => {
             .then(user => {
 
                 if (!user) {
+                    console.log("===> postReset reqeust.body.email:", request.body.email);
+                    console.log("===> postReset user:", user);
                     request.flash("error", "No acccount with the email was found");
 
-                    return response
-                        .status(302)
-                        .redirect("/reset");
+                    return;
+                    // return response
+                    //     .status(302)
+                    //     .redirect("/reset");
                 };
 
                 user.resetToken =token;
@@ -226,6 +233,12 @@ const postReset = (request, response, next) => {
                 return user.save();
             })
             .then(result => {
+
+                if (!result) {
+                    return response
+                        .status(302)
+                        .redirect("/reset");
+                };
 
                 response
                     .status(302)
@@ -243,8 +256,10 @@ const postReset = (request, response, next) => {
                         </p>
                     `
                 });
+
+                return;
             })
-        .catch(err => console.log("===> postReset error:", err));
+            .catch(err => console.log("===> postReset error:", err));
     });
 };
 
@@ -270,5 +285,6 @@ module.exports = {
     getSignup,
     postSignup,
     getReset,
+    postReset,
     postLogout
 };
