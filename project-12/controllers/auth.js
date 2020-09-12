@@ -219,7 +219,7 @@ const postReset = (request, response, next) => {
             .then(user => {
 
                 if (!user) {
-                    console.log("===> postReset reqeust.body.email:", request.body.email);
+                    console.log("===> postReset request.body.email:", request.body.email);
                     console.log("===> postReset user:", user);
                     request.flash("error", "No acccount with the email was found");
 
@@ -285,17 +285,55 @@ const getNewPassword = (request, response, next) => {
                 message = null;
             };
 
-            response
+            // @TODO: Create proper error handling if someone inject a random token
+            return response
                 .status(200)
                 .render("auth/new-password", {
                     pageTitle: "New Password",
                     path: "/new-password",
                     errorMessage: message,
-                    userId:  user._id.toString()
-                })
+                    userId:  user._id.toString(),
+                    passwordToken: token
+                });
         })
     .catch(err => console.log("===> getNewPassword error:", err));
 
+};
+
+const postNewPassword = (request, response, next) => {
+
+    const newPassword = request.body.newPassword;
+    const userId = request.body.userId;
+    const passwordToken = request.body.passwordToken;
+    let resetUser;
+
+    user.findOne({
+        resetToken: passwordToken,
+        resetTokenExpiration: {
+            $gt: Date.now(),
+        },
+        _id: userId
+    })
+        .then(user => {
+
+            resetUser = user;
+            return bcrypt.hash(newPassword, 12);
+        })
+        .then(hashedPassword => {
+
+            resetUser.password = hashedPassword;
+            resetUser.resetToken = undefined;
+            resetUser.resetTokenExpiration = undefined;
+
+            return resetUser.save();
+        })
+        .then(result => {
+
+            return response
+                .status(302)
+                .redirect("/login")
+        })
+        .catch(err => console.log("===> postNewPassword error:", err))
 };
 
 const postLogout = (request, response, next) => {
@@ -322,5 +360,6 @@ module.exports = {
     getReset,
     postReset,
     getNewPassword,
+    postNewPassword,
     postLogout
 };
