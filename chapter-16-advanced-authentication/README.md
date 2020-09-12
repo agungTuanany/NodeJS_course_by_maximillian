@@ -1,11 +1,12 @@
 # Advanced Authentication
 
 ## Table of Contents
-1. [module introduction](#module-Introduction)
+1. [Module introduction](#module-Introduction)
+2. [Module Summary](#module-summary)
 
 <br/>
 
-## module Introduction
+## Module Introduction
 <br/>
 
 ![chapter-16-1.gif](./images/gif/chapter-16-1.gif "Module introduction")
@@ -21,6 +22,15 @@ To be precise in this module (chapter) we'll start with **resetting password**
 but then we'll have a look at **authorization** which is part I just talked
 about with ensuring that you can only **edit**, **delete** what you **created**.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+<br/>
+
+![chapter-16-2.gif](./images/gif/chapter-16-2.gif "Module summary")
+<br/>
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
