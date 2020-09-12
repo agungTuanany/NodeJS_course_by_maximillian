@@ -119,7 +119,7 @@ const postEditProduct = (request, response, next) => {
     Product.findById(prodId)
         .then(product => {
 
-            if (product.userId !== request.user._id) {
+            if (product.userId.toString() !== request.user._id.toString()) {
                 return response
                     .status(302)
                     .redirect("/")
