@@ -122,7 +122,7 @@ const postSignup = (request, response, next) => {
 
     const email = request.body.email;
     const password = request.body.password;
-    const confirmPassword = request.body.confirmPassword;
+
     const errors = validationResult(request);
 
     if (!errors.isEmpty()) {
@@ -136,62 +136,50 @@ const postSignup = (request, response, next) => {
             });
     }
 
-    User.findOne({ email: email })
-        .then(userDoc => {
+     bcrypt.hash(password, 12)
+        .then(hashedPassword => {
 
-            if (userDoc) {
-                request.flash("error", "E-Mail exists already, please pick a different one.");
+            const user = new User({
+                email    : email,
+                password : hashedPassword,
+                cart     : { item: [] }
+            });
+
+            if (!user.email) {
+
+                console.log("===> user.email:", user.email);
+                request.flash("error", "You are not fill the email or password");
+                return;
+            };
+
+            return user.save();
+        })
+        .then(result => {
+
+            if (!result) {
+                console.log("===> A. bcrypt result", result);
                 return response
-                    .status(301)
+                    .status(200)
                     .redirect("/signup");
             };
 
-            return bcrypt.hash(password, 12)
-                .then(hashedPassword => {
+            response
+                .status(200)
+                .redirect("/login");
 
-                    const user = new User({
-                        email    : email,
-                        password : hashedPassword,
-                        cart     : { item: [] }
-                    });
+            // console.log("===> B. bcrypt result", result);
+            transport.sendMail({
+                to: email,
+                from: 'info@shopNode.com',
+                subject: "Signup succeeded",
+                html: `<h1>You successfully signed up!</h1>`
+            });
 
-                    if (!user.email) {
-
-                        console.log("===> user.email:", user.email);
-                        request.flash("error", "You are not fill the email or password");
-                        return;
-                    };
-
-                    return user.save();
-                })
-                .then(result => {
-
-                    if (!result) {
-                        console.log("===> A. bcrypt result", result);
-                        return response
-                            .status(200)
-                            .redirect("/signup");
-                    };
-
-                    response
-                        .status(200)
-                        .redirect("/login");
-
-                    // console.log("===> B. bcrypt result", result);
-                    transport.sendMail({
-                        to: email,
-                        from: 'info@shopNode.com',
-                        subject: "Signup succeeded",
-                        html: `<h1>You successfully signed up!</h1>`
-                    });
-
-                    return;
-                })
-            //@NOTE: throw the error if user not fill the email or the password
-            //@TODO: create unit test
-                .catch(err => console.log("===> bcrypt error:", err));
+            return;
         })
-        .catch(err => console.log("===> postSignup error:", err));
+    //@NOTE: throw the error if user not fill the email or the password
+    //@TODO: create unit test
+        .catch(err => console.log("===> bcrypt error:", err));
 };
 
 const getReset = (request, response, next) => {
