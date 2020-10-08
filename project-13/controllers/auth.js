@@ -47,6 +47,11 @@ const getLogin = (request, response, next) => {
             pageTitle: "Login",
             path: "/login",
             errorMessage: message,
+            oldInput: {
+                email: "",
+                password: ""
+            },
+            validationErrors: []
         });
 };
 
@@ -57,13 +62,18 @@ const postLogin = (request, response, next) => {
 
     const errors = validationResult(request);
 
-    if (!erros.isEmpty()) {
+    if (!errors.isEmpty()) {
         return response
             .status(422)
             .render("auth/login", {
                 pageTitle: "Login",
                 path: "/login",
-                errorMessage: errors.array()[0].msg
+                errorMessage: errors.array()[0].msg,
+                oldInput: {
+                    email: email,
+                    password: password
+                },
+                validationErrors: errors.array()
             })
     };
 
@@ -71,20 +81,47 @@ const postLogin = (request, response, next) => {
         .then(user => {
 
             if (!user) {
-                request.flash("error", "Invalid email address");
                 return response
-                    .status(301)
-                    .redirect("/login");
+                    .status(442)
+                    .render("auth/login", {
+                        pageTitle: "Login",
+                        path: "/login",
+                        errorMessage: "Invalid email address",
+                        oldInput: {
+                            email: email,
+                            password: password
+                        },
+                        validationErrors: [
+                            // @NOTE: Ensure what exactly error and assign 'invalid' class
+                            {
+                                param: "email"
+                            }
+                        ]
+                    });
             };
 
             bcrypt.compare(password, user.password)
                 .then(doMatch => {
 
                     if (!doMatch) {
-                        request.flash("error", "Invalid password");
                         return response
-                            .status(301)
-                            .redirect("/login");
+                            .status(442)
+                            .render("auth/login", {
+                                pageTitle: "Login",
+                                path: "/login",
+                                errorMessage: "Invalid password",
+                                oldInput: {
+                                    email: email,
+                                    password: password
+                                },
+                                validationErrors: [
+                                    // @NOTE: Ensure what exactly error and assign 'invalid' class
+                                    {
+                                        param: "password"
+                                    }
+                                ]
+                            });
+
                     };
 
                     request.session.isLoggedIn = true;
