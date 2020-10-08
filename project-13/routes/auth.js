@@ -10,6 +10,7 @@ const path = require("path");
 
 // 3rd party Dependencies
 const express = require("express");
+const { check } = require("express-validator")
 
 // Internal Dependencies
 const authController = require("./../controllers/auth.js");
@@ -23,7 +24,7 @@ router.post("/login", authController.postLogin);
 
 router.get("/signup", authController.getSignup);
 
-router.post("/signup", authController.postSignup);
+router.post("/signup", check("email").isEmail(), authController.postSignup);
 
 router.get("/reset", authController.getReset);
 
