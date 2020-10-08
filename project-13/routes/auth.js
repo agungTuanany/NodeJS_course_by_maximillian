@@ -10,7 +10,7 @@ const path = require("path");
 
 // 3rd party Dependencies
 const express = require("express");
-const { check } = require("express-validator")
+const { check, body } = require("express-validator")
 
 // Internal Dependencies
 const authController = require("./../controllers/auth.js");
@@ -25,16 +25,22 @@ router.post("/login", authController.postLogin);
 router.get("/signup", authController.getSignup);
 
 router.post("/signup",
-    check("email")
-    .isEmail()
-    .withMessage("Enter a valid email")
-    .custom((value, {request}) => {
+    [
 
-        if (value === "test@test.com") {
-            throw new Error("This email address is forbidden");
-        }
-        return true;
-    }),
+        check("email")
+        .isEmail()
+        .withMessage("Enter a valid email")
+        .custom((value, {request}) => {
+
+            if (value === "test@test.com") {
+                throw new Error("This email address is forbidden");
+            }
+            return true;
+        }),
+        body("password", "Please enter a password with only numbers and text at least 5 characters")
+        .isLength({ min:5 })
+        .isAlphanumeric()
+    ],
     authController.postSignup);
 
 router.get("/reset", authController.getReset);

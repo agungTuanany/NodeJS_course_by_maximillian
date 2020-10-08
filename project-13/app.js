@@ -23,7 +23,7 @@ const port = 8080;
 
 // @TODO: move this credential into .env
 // MongoDB Session
-const MONGODB_URI = "mongodb+srv://daun:WW2thoti3v9mphPW@udemy-nodejs-maximillia.tz0sa.mongodb.net/mongooseShop?retryWrites=true&w=majority"
+const MONGODB_URI = "mongodb+srv://daun:bMSKaebmN7o4Tmsk@udemy-nodejs-maximillia.tz0sa.mongodb.net/mongooseShop?retryWrites=true&w=majority"
 const store = new MongoDBStore({
     uri: MONGODB_URI,
     collection: "sessions"
