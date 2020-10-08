@@ -34,12 +34,22 @@ router.post("/signup",
 
             if (value === "test@test.com") {
                 throw new Error("This email address is forbidden");
-            }
+            };
+
             return true;
         }),
         body("password", "Please enter a password with only numbers and text at least 5 characters")
         .isLength({ min:5 })
-        .isAlphanumeric()
+        .isAlphanumeric(),
+        body("confirmPassword")
+        .custom((value, {request}) => {
+
+            if (value !== reqeust.body.password) {
+                throw new Error ("Password not match, Please enter the matched password");
+            };
+
+            return true;
+        })
     ],
     authController.postSignup);
 
