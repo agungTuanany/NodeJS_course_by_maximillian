@@ -24,6 +24,7 @@ const User = require("./../models/user.js");
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
         // @TODO: move the credential into .env
+        // @NOTE: Fill api_key with your sendgrid API KEY
         api_key: "YOUR API KEYS"
     }
 }))
@@ -45,7 +46,7 @@ const getLogin = (request, response, next) => {
         .render("auth/login", {
             pageTitle: "Login",
             path: "/login",
-            errorMessage: message
+            errorMessage: message,
         });
 };
 
@@ -53,6 +54,18 @@ const postLogin = (request, response, next) => {
 
     const email = request.body.email;
     const password = request.body.password;
+
+    const errors = validationResult(request);
+
+    if (!erros.isEmpty()) {
+        return response
+            .status(422)
+            .render("auth/login", {
+                pageTitle: "Login",
+                path: "/login",
+                errorMessage: errors.array()[0].msg
+            })
+    };
 
     User.findOne({ email: email })
         .then(user => {
@@ -114,7 +127,12 @@ const getSignup = (request, response, next) => {
         .render("auth/signup", {
             pageTitle: "Signup",
             path: "/signup",
-            errorMessage: message
+            errorMessage: message,
+            oldInput: {
+                email: "",
+                password: "",
+                confirmPassword: ""
+            }
         });
 };
 
@@ -132,7 +150,12 @@ const postSignup = (request, response, next) => {
             .render("auth/signup", {
                 pageTitle: "Signup",
                 path: "/signup",
-                errorMessage: errors.array()[0].msg
+                errorMessage: errors.array()[0].msg,
+                oldInput: {
+                    email: email,
+                    password: password,
+                    confirmPassword: request.body.confirmPassword
+                }
             });
     }
 

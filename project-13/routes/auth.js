@@ -21,7 +21,16 @@ const router = express.Router();
 
 router.get("/login", authController.getLogin);
 
-router.post("/login", authController.postLogin);
+router.post("/login",
+    [
+        body("email")
+            .isEmail()
+            .withMessage("Please enter a valid email address"),
+        body("password", "Password not valid")
+            .isLength({ min:5 })
+            .isAlphanumeric()
+    ],
+    authController.postLogin);
 
 router.get("/signup", authController.getSignup);
 
@@ -29,28 +38,28 @@ router.post("/signup",
     [
 
         check("email")
-        .isEmail()
-        .withMessage("Enter a valid email")
-        .custom((value, {request}) => {
+            .isEmail()
+            .withMessage("Enter a valid email")
+            .custom((value, {request}) => {
 
-//             if (value === "test@test.com") {
-//                 throw new Error("This email address is forbidden");
-//             };
+                // if (value === "test@test.com") {
+                //     throw new Error("This email address is forbidden");
+                // };
 
-//             return true;
-            return User.findOne({ email: value })
-                .then(userDoc => {
+                // return true;
+                return User.findOne({ email: value })
+                    .then(userDoc => {
 
-                    if (userDoc) {
-                        return Promise.reject("E-Mail exists already, please pick a different one.")
-                    }
-                })
+                        if (userDoc) {
+                            return Promise.reject("E-Mail exists already, please pick a different one.")
+                        }
+                    })
         }),
         body("password", "Please enter a password with only numbers and text at least 5 characters")
-        .isLength({ min:5 })
-        .isAlphanumeric(),
+            .isLength({ min:5 })
+            .isAlphanumeric(),
         body("confirmPassword")
-        .custom((value, {request}) => {
+            .custom((value, {request}) => {
 
             if (value !== reqeust.body.password) {
                 throw new Error ("Password not match, Please enter the matched password");
