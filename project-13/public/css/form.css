@@ -35,3 +35,7 @@
 .form-control textarea:focus {
     outline-color               : var(--green-tropical);
 }
+
+.form-control input.invalid {
+    border-color                : var(--red-solid);
+}

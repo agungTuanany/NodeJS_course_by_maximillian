@@ -132,7 +132,8 @@ const getSignup = (request, response, next) => {
                 email: "",
                 password: "",
                 confirmPassword: ""
-            }
+            },
+            validationErrors: []
         });
 };
 
@@ -155,7 +156,8 @@ const postSignup = (request, response, next) => {
                     email: email,
                     password: password,
                     confirmPassword: request.body.confirmPassword
-                }
+                },
+                validationErrors: errors.array()
             });
     }
 
