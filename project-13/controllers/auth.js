@@ -132,7 +132,7 @@ const postSignup = (request, response, next) => {
             .render("auth/signup", {
                 pageTitle: "Signup",
                 path: "/signup",
-                errorMessage: errors.array()
+                errorMessage: errors.array()[0].msg
             });
     }
 
