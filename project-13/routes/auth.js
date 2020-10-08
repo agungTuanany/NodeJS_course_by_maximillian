@@ -3,7 +3,10 @@
 /*
  * A router for users or admin for logging in.
  *
- */
+ * @param: normalizeEmail:
+ * https://github.com/validatorjs/validator.js
+ * Sanitizing data is also something make sense to ensure that your data is stored in a uniform format
+*/
 
 // Core Dependencies
 const path = require("path");
@@ -25,10 +28,12 @@ router.post("/login",
     [
         body("email")
             .isEmail()
-            .withMessage("Please enter a valid email address"),
+            .withMessage("Please enter a valid email address")
+            .normalizeEmail(),
         body("password", "Password not valid")
             .isLength({ min:5 })
             .isAlphanumeric()
+            .trim()
     ],
     authController.postLogin);
 
@@ -47,6 +52,7 @@ router.post("/signup",
                 // };
 
                 // return true;
+            // @NOTE: async validation
                 return User.findOne({ email: value })
                     .then(userDoc => {
 
@@ -54,11 +60,14 @@ router.post("/signup",
                             return Promise.reject("E-Mail exists already, please pick a different one.")
                         }
                     })
-        }),
+            })
+            .normalizeEmail(),
         body("password", "Please enter a password with only numbers and text at least 5 characters")
             .isLength({ min:5 })
-            .isAlphanumeric(),
+            .isAlphanumeric()
+            .trim(),
         body("confirmPassword")
+            .trim()
             .custom((value, {request}) => {
 
             if (value !== reqeust.body.password) {
