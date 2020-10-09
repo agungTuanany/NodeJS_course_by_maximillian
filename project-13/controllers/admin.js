@@ -42,6 +42,7 @@ const getAddProduct = (request, response, next) => {
             editing: false,
             hasError: false,
             errorMessage: null,
+            validationErrors: []
         });
 };
 
@@ -69,7 +70,8 @@ const postAddProduct = (request, response, next) => {
                     price: price,
                     description: description
                 },
-                errorMessage: errors.array()[0].msg
+                errorMessage: errors.array()[0].msg,
+                validationErrors: errors.array()
             });
     };
 
@@ -125,6 +127,7 @@ const getEditProduct = (request, response, next) => {
                     product: product,
                     hasError: false,
                     errorMessage: null,
+                    validationErrors: []
                 });
         })
         .catch(err => console.log(err));
@@ -137,6 +140,29 @@ const postEditProduct = (request, response, next) => {
     const updatedPrice    = request.body.price;
     const updatedImageUrl = request.body.imageUrl;
     const updatedDesc     = request.body.description;
+
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+        console.log("===> validationResult errors:", errors.array())
+        return response
+            .status(422)
+            .render('admin/edit-product', {
+                pageTitle: "Edit Product",
+                path: '/admin/edit-product',
+                editing: true,
+                hasError: true,
+                product: {
+                    title: updatedTitle,
+                    imageUrl: updatedImageUrl,
+                    price: updatedPrice,
+                    description: updatedDesc,
+                    _id: prodId
+                },
+                errorMessage: errors.array()[0].msg,
+                validationErrors: errors.array()
+            });
+    };
 
 
     //(title, price, imageUrl, description, id)
