@@ -7,6 +7,7 @@
  */
 
 // 3rd party Dependencies
+const { validationResult } = require("express-validator");
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
@@ -39,6 +40,8 @@ const getAddProduct = (request, response, next) => {
             pageTitle: "Add Product",
             path: "/admin/add-product",
             editing: false,
+            hasError: false,
+            errorMessage: null,
         });
 };
 
@@ -48,6 +51,27 @@ const postAddProduct = (request, response, next) => {
     const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
     const imageUrl    = typeof(request.body.imageUrl) === "string" && request.body.imageUrl.trim().length > 0 ? request.body.imageUrl : false;
     const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
+
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+        console.log("===> validationResult errors:", errors.array())
+        return response
+            .status(422)
+            .render('admin/edit-product', {
+                pageTitle: "Add Product",
+                path: '/admin/edit-product',
+                editing: false,
+                hasError: true,
+                product: {
+                    title: title,
+                    imageUrl: imageUrl,
+                    price: price,
+                    description: description
+                },
+                errorMessage: errors.array()[0].msg
+            });
+    };
 
     //(title, price, imageUrl, description, id, userId)
     const product = new Product({
@@ -99,6 +123,8 @@ const getEditProduct = (request, response, next) => {
                     path: '/admin/edit-product',
                     editing:editMode,
                     product: product,
+                    hasError: false,
+                    errorMessage: null,
                 });
         })
         .catch(err => console.log(err));
