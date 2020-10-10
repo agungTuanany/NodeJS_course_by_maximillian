@@ -3,6 +3,7 @@
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
 2. [Types of Errors](#types-of-errors)
+3. [Analyzing the Error handling](#analyzing-the-error-handling)
 
 <br/>
 
@@ -162,9 +163,201 @@ So these are different tools. We have different ways of working with errors we
 have. Now let's dive into our code and see what we're already using and what we
 can use.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
 
+## Analyzing the Error handling
 
+So in our application we get a bunch of error handling in place already. Let
+start in `app.js`
 
+```javascript
+app.use((request, response, next) => {
+
+    if (!request.session.user)  {
+        return next();
+    };
+
+    User.findById(request.user._id)
+        .then(user => {
+
+            request.user = user;
+            next()
+        })
+        .catch(err => console.log(err));
+});
+```
+
+There I do already handle the case or I do have a _catch block_ at least where
+I try to fetch my _user_ . I do have a _catch block_ at least where I try to
+fetch my _user_ `User.findById(request.user._id)`, and fetch the user from the
+session; And then store the user object `request.user = user`.  We will improve
+that in the second.
+
+In my `controller/auth.js` I also have some error handling,
+
+```javascript
+...
+...
+const postLogin = (request, response , next) => {
+
+    User.findOne({ email: email })
+        .then(user => {                                         // @NOTE: Error check
+
+            if (!user) {
+                return response
+                    .status(442)
+                    .render("auth/login", {
+                        pageTitle: "Login",
+                        path: "/login",
+                        errorMessage: "Invalid email address",
+                        oldInput: {
+                            email: email,
+                            password: password
+                        },
+                        validationErrors: [
+                            // @NOTE: Ensure what exactly error and assign 'invalid' class
+                            {
+                                param: "email"
+                            }
+                        ]
+                    });
+            };
+
+            bcrypt.compare(password, user.password)
+                .then(doMatch => {
+
+                    if (!doMatch) {
+                        return response
+                            .status(442)
+                            .render("auth/login", {
+                                pageTitle: "Login",
+                                path: "/login",
+                                errorMessage: "Invalid password",
+                                oldInput: {
+                                    email: email,
+                                    password: password
+                                },
+                                validationErrors: [
+                                    // @NOTE: Ensure what exactly error and assign 'invalid' class
+                                    {
+                                        param: "password"
+                                    }
+                                ]
+                            });
+
+                    };
+
+                    request.session.isLoggedIn = true;
+                    request.session.user = user;
+                    request.session.save(err => {
+
+                        if(!err) {
+                            return response
+                                .status(303)
+                                .redirect("/");
+                        };
+
+                        console.log("===> session error:", err);
+                    });
+                })
+                .catch(err => {
+
+                    console.log("===> bcrypt error:", err);
+                    return response
+                        .status(301)
+                        .redirect("/login");
+                });
+        })
+        .catch(err => console.log(err));                        // @NOTE: Catch the error
+}
+...
+...
+```
+
+I do check in `postLogin` whether his email address does exist; And if not, I do
+already return the same page with an error code actually, where I do pass that
+information, _that the input was invalid_ `errorMessage: 'invalid email
+address'`.
+
+We do the same with the validation logic in `routes/auth.js` when we used the
+`express-validator` package to add built in validation.
+
+```javascript
+...
+...
+
+router.post("/login",
+    [
+        body("email")
+            .isEmail()
+            .withMessage("Please enter a valid email address")
+            .normalizeEmail(),
+        body("password", "Password not valid")
+            .isLength({ min:5 })
+            .isAlphanumeric()
+            .trim()
+    ],
+    authController.postLogin);
+...
+...
+```
+
+There behind the scenes the `express-validator` also _froze_ and _handles
+errors_ and allows us to simply collect all these errors which are now is _not
+technical error object_; But which are simply we're  just data managed by that
+package.
+
+We collect the error in `controllers/auth.js` with,
+
+```javascript
+const error = validationResult(request);
+```
+
+And then handle them manually,
+
+```javascript
+if (!errors.isEmpty) {
+...
+...
+}
+```
+
+And we _handle them manually_ or we added the `if` check where we check if data
+we got is enough (fulfillment) to continue or not. We get _no technical error_
+being frozen here. These _technical error_ can always be seen if you have an
+error message on terminal.
+
+We have no such error but we still have invalid code and therefore we checked
+this manually `if (!errors.isEmpty())`  and proceed on our own.
+
+In our custom validator `routes/auth` however if we have a look at that there
+I do _throw_ a _technical error_. for example when password do not match.
+
+```javascript
+
+...
+...
+body("confirmPassword")
+    .trim()
+    .custom((value, {request}) => {
+
+    if (value !== reqeust.body.password) {
+        throw new Error ("Password not match, Please enter the matched password");
+    };
+
+    return true;
+})
+...
+...
+```
+
+Now this error would normally bubble up and would be handled by ExpressJS but
+this `express-validator` or package happens to also handle it.
+
+This error handling which I want to dive into first before we then start
+implementing proper solution for the different kinds of errors we could have.
 
 
 
