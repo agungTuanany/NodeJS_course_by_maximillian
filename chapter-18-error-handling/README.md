@@ -4,6 +4,7 @@
 1. [Module Introduction](#module-introduction)
 2. [Types of Errors](#types-of-errors)
 3. [Analyzing the Error handling](#analyzing-the-error-handling)
+4. [Some Error Theory](#some-error-theory)
 
 <br/>
 
@@ -359,7 +360,392 @@ this `express-validator` or package happens to also handle it.
 This error handling which I want to dive into first before we then start
 implementing proper solution for the different kinds of errors we could have.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
 
+## Some Error Theory
+
+### Synchronous Errors
+
+Let's say I have temporary file named
+[error-playground.js](./playground/error-playground.js); And inside of it
+I create a function named `sum` function, be written like.
+
+```javascript
+const sum = (a, b) => {
+
+    return a + b;
+};
+
+console.log (sum (1, 2));
+```
+
+We take two values `a` and `b`, and return it `a + b`; And then I call `sum (1,
+2)` and console.log the result.
+
+If we execute this with NodeJS,
+
+```bash
+$: node error-playground.js
+3
+```
+
+We get the result is `3`.
+
+But now let's add an error, let's say I only pass one argument instead of two;
+
+```javascript
+const sum = (a, b) => {
+
+    return a + b;
+};
+
+console.log (sum (2));
+```
+
+Now if I execute this again I get not a number `NaN`, but not an error; Exactly,
+not a _technical error object_.
+
+```bash
+$: node error-playground.js
+NaN
+```
+
+Let's we ad `if` check statement,
+
+```javascript
+const sum = (a, b) => {
+
+    if (a && b) {
+        return a + b;
+    }
+
+    throw new Error("invalid arguments.");
+};
+
+console.log (sum (2));
+```
+
+If `a` and `b` or both are `true`, then I will return `a + b`; otherwise I'll
+`throw` (throw is a build in keyword), a `new Error` (new Error is a build in
+object with no chips); where is says `invalid arguments`.
+
+Now if I execute this file again,
+
+```bash
+$: node error-playground.js
+
+${HOME}/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:7
+    throw new Error("invalid arguments");
+    ^
+
+Error: invalid arguments
+    at sum (${HOME}/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:7:11)
+    at Object.<anonymous> (${HOME}/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:10:14)
+    at Module._compile (internal/modules/cjs/loader.js:1201:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1221:10)
+    at Module.load (internal/modules/cjs/loader.js:1050:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:938:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:71:12)
+    at internal/main/run_main_module.js:17:47
+```
+
+Now we see such an error message, which we saw before in the course as well.
+Here we _have our own error message_ `invalid arguments`; And then we got
+a call stack which allows us to find out at which functions and which line
+number this error was thrown and what was called before that error.
+
+We saw that before because that is the _unhandled error_; we've `throw` an error
+and that is built in functionality throwing such errors; And node with a lot of
+the packages we use also throw errors behind the scenes. For example, MongoDB
+will throw an error if it can't connect or if an operation fails.
+
+So such errors can be thrown and if we don't handle them then our application
+just crashes (stop immediately); And that's what we saw earlier in the course
+too. You might remember a cases where I did something and we got stack and that
+refreshed icon in the browser kept on spinning and nothing happened. _That was
+because our server crashed because we had an error which we did not handle_.
+
+Now how can we handle errors? Well one solution for _synchronous_ code that
+executes line by line immediately and does not wait for anything. For example,
+where we don't interact with files or where we don't send request; Well such
+code can be wrapped with _try catch_ another build in language feature,
+
+```javascript
+const sum = (a, b) => {
+
+    if (a && b) {
+        return a + b;
+    };
+
+    throw new Error("invalid arguments");
+};
+
+try {
+
+    console.log (sum (2));
+}
+catch (error) {
+    console.log("===> Error occured!")
+    console.log("===>", error)
+}
+```
+
+We use `try` block for certain code `console.log(sum(2))`; And then we have to
+add `catch` block; Where we catch a potential error that might have been thrown.
+With catch we can now handle the error. For example, we could output `error
+occured!` with also logging the error.
+
+Now, if I re execute `error-playground.js`,
+
+```bash
+===> Error occured!: Error: invalid arguments
+===> Error: invalid arguments
+    at sum (${HOME}/javascript/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:7:11)
+    at Object.<anonymous> (/home/daun/Project/javascript/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:12:18)
+    at Module._compile (internal/modules/cjs/loader.js:1201:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1221:10)
+    at Module.load (internal/modules/cjs/loader.js:1050:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:938:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:71:12)
+    at internal/main/run_main_module.js:17:47
+```
+
+I still get the errors, but I get this additional error message `===> Error
+occured!: Error: invalid arguments`; And I'm not log my error object here
+
+```javascript
+const sum = (a, b) => {
+
+    if (a && b) {
+        return a + b;
+    };
+
+    throw new Error("invalid arguments");
+};
+
+try {
+
+    console.log (sum (2));
+}
+catch (error) {
+    console.log("===> Error occured!:")
+    //console.log("===>", error)
+}
+```
+
+I get the result,
+
+```bash
+$: node error-playground.js
+===> Error occured!
+```
+
+I actually get only logged `Error occured`; So then My app ti odes not crash and
+log it automatically; But we could do anything we want.
+
+We could continue with adding a code,
+
+```javascript
+const sum = (a, b) => {
+
+    if (a && b) {
+        return a + b;
+    };
+
+    throw new Error("invalid arguments");
+};
+
+try {
+
+    console.log (sum (2));
+}
+catch (error) {
+    console.log("===> Error occured!")
+    // console.log("===>", error)
+}
+
+console.log("This is called after sum function")        // @NOTE: Adding another code
+```
+
+I run the code, we get the result,
+
+```bash
+$: node error-playground.js
+===> Error occured!
+This is called after sum function
+```
+
+Just to demonstrate, as if I comment out `try catch` block, and I just try to
+`console.log(sum(2))`
+
+```javascript
+const sum = (a, b) => {
+
+    if (a && b) {
+        return a + b;
+    };
+
+    throw new Error("invalid arguments");
+};
+
+// try {
+
+//     console.log (sum (2));
+// }
+// catch (error) {
+//     console.log("===> Error occured!")
+//     // console.log("===>", error)
+// }
+
+console.log(sum(4));
+console.log("This is called after sum function")        // @NOTE: Adding another code
+```
+
+And I run the code above with the error been thrown,
+
+```bash
+node error-playground.js
+${HOME}/javascript/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:7
+    throw new Error("invalid arguments");
+    ^
+
+Error: invalid arguments
+    at sum ({HOME}/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:7:11)
+    at Object.<anonymous> (/home/daun/Project/javascript/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:19:13)
+    at Module._compile (internal/modules/cjs/loader.js:1201:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1221:10)
+    at Module.load (internal/modules/cjs/loader.js:1050:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:938:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:71:12)
+    at internal/main/run_main_module.js:17:47
+```
+
+Then we don't see this works anywhere, because it crashes with our error at it's
+being thrown and it; And does not continue with other code. `console.log("This is called
+after sum function")`
+
+So this is why handling code like this is a good thing to do,
+
+```javascript
+ try {
+
+     console.log (sum (2));
+ }
+ catch (error) {
+     console.log("===> Error occured!")
+     // console.log("===>", error)
+ }
+```
+
+Because this ensure that we can continue with code, and we can handle the error
+gracefully in our NodeJS-Express application. We could send the error response
+here which renders a valid page without crashing everything, but which inform
+the user that something bad happened.
+
+In the end this is what the `express-validator` package does for us with our
+`thrown` error in `router/auth.js` where throwing the error. And
+`express-validator` also `catch` the thrown error and then just adds it to its
+own error array and allows us to read that list of error it caught.
+
+That what happens behind the scenes you could say.
+
+### Asynchronous Error
+
+We also have async operation that can fail of course; And such operation when
+using _promises_ are handled with `then-catch` block. That is what we can see
+a lot in our code.
+
+```javascript
+User.findOne({ email: email })
+    .then(user => {
+
+        if (!user) {                                            // @NOTE: Custom check case
+            return response
+                .status(442)
+                .render("auth/login", {
+                    pageTitle: "Login",
+                    path: "/login",
+                    errorMessage: "Invalid email address",
+                    oldInput: {
+                        email: email,
+                        password: password
+                    },
+                    validationErrors: [
+                        // @NOTE: Ensure what exactly error and assign 'invalid' class
+                        {
+                            param: "email"
+                        }
+                    ]
+                });
+        }
+
+        bcrypt.compare(password, user.password)
+            .then(doMatch => {                                  // @NOTE: [1] then
+
+                if (!doMatch) {
+                    return response
+                        .status(442)
+                        .render("auth/login", {
+                            pageTitle: "Login",
+                            path: "/login",
+                            errorMessage: "Invalid password",
+                            oldInput: {
+                                email: email,
+                                password: password
+                            },
+                            validationErrors: [
+                                // @NOTE: Ensure what exactly error and assign 'invalid' class
+                                {
+                                    param: "password"
+                                }
+                            ]
+                        });
+
+                };
+
+                request.session.isLoggedIn = true;
+                request.session.user = user;
+                request.session.save(err => {
+
+                    if(!err) {
+                        return response
+                            .status(303)
+                            .redirect("/");
+                    };
+
+                    console.log("===> session error:", err);
+                });
+            })
+            .catch(err => {                                     //@NOTE: [1] catch
+
+                console.log(err);
+                return response
+                    .status(301)
+                    .redirect("/login");
+            })
+    })
+    .catch(err => console.log(err));                            //@NOTE: [2] catch
+```
+
+Above code do something where a find a `User` I have my `[1] then` block where
+I handle the case that the database operation succeeded. We also still have
+custom case `if (!user)` to see if we did get a `User` because the database
+operation can succeed even without retrieving a `User`. But then we have `[1]
+catch` block; where I catch any errors that happen.
+
+Here for example, `[2] catch` block, that would be the match block related to my
+`findOne()` method. If the database operation fails because we don't have read
+access, or because the database server is down temporarily, or anything like
+that, then we make it into this `[2] catch` block.
+
+Above example, are `try-catch` with a synchronous code you could say then is
+your success case; And `[2] catch` allow you to execute code if that fails, `[2] catch`
+by the away collects all errors that are thrown by any prior `[1] then` block or
+any operation executed in a `[1] then` block. That just a side note.
+
+So this is how we can work with errors, how we can handle the errors.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>

@@ -1,9 +1,5 @@
-## What is Project-13 ?
+## What is Project-14 ?
 
-Project-13 base on
-"[chapter-17-understanding-validation](./../chapter-17-understanding-validation)".
-This project implement **_validation_** with NodeJS. There's three different
-validation that we can use:
-1. Client side validation (Optional)
-2. Server side validation (Recommend)
-3. Database validation (Optional)
+Project-14 base on
+"[chapter-18-error-handling](./../chapter-18-error-handling)".
+This project explain how to handle errors in NodeJS in elegant way.
