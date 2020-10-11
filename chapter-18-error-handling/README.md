@@ -6,6 +6,7 @@
 3. [Analyzing the Error handling](#analyzing-the-error-handling)
 4. [Some Error Theory](#some-error-theory)
 5. [Error and HTTP Response Codes](#error-and-http-response-codes)
+6. [Module Summary](#module-summary)
 
 <br/>
 
@@ -803,3 +804,55 @@ Again in the next lecture you find a full list.
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>
+
+## Module Summary
+<br/>
+
+![chapter-8-6.gif](./images/gif/chapter-18-6.gif "Module Summary")
+<br/>
+
+You can differentiate between a couple of errors. There are _technical errors_
+where you get this error object and where is someplace and your application
+throw an error with `throw` keyword and you can do that on your own or some
+package or ExpressJS or NodeJS itself does this.
+
+You can handle this error with `try-catch`, or with `then-catch` in a promise
+for example.
+
+There are _expected error_ which are not technically errors. There's no error
+being thrown at least not necessarily; But there you could dealing with invalid
+user input, an invalid email, or some file access that should work most of the
+time but might fail occasionally depending on how you treat that case. If you
+thrown an error or not you might still need `try-catch` or `then-catch` as well,
+but you could also just use `if-checks` to see that email address exists in the
+database.
+
+Normally `if-check` could do there and if you want to _throw an error_ or if you
+were once you forward an error in `then` or `catch` you'll learn that you can
+use that _Global Express error handling middleware_, which you can have multiple
+of it; Which  are an executed step by step. You can use that and ExpressJS will
+automatically call it whenever your `next(error)` or you `throw new Error(...)`
+in synchronous code.
+
+We also had a brief to look at status codes, and it is a good practices or it is
+definitely something you should consider, that you set the right status code on
+your _response_ so that you don't always return `200` codes; But that instead
+let the browser know abut certain issues.
+
+Returning status code will become more important later in the _REST API section_
+of course when the browser gains more power when more UI logic is executed in
+the browser.
+
+You've get different types of status codes. You can have success code `2xx`,
+redirect `3xx`, client-side error `4xx`, and server-side error `5xx`; And you
+should look at all these code and see which code is best set for your scenario
+your use case.
+
+Important as I mentioned, when you set a status code this does not mean that the
+app crashed or that the response is incomplete, it's simply an extra piece of
+information you passed yo the browser.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
