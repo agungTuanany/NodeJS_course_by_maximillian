@@ -26,7 +26,12 @@ const getProducts = (request, response, next) => {
                     prods: products,
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const getProduct = (request, response, next) => {
@@ -44,7 +49,12 @@ const getProduct = (request, response, next) => {
                     product: product,
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const getIndex = (request, response, next) => {
@@ -60,7 +70,12 @@ const getIndex = (request, response, next) => {
                     prods: products,
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const getCart = (request, response, next) => {
@@ -78,7 +93,12 @@ const getCart = (request, response, next) => {
                 products: products,
             });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const postCart = (request, response, next) => {
@@ -97,7 +117,12 @@ const postCart = (request, response, next) => {
                 .status(301)
                 .redirect("/cart");
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const postCartDeleteProduct = (request, response, next) => {
@@ -112,7 +137,12 @@ const postCartDeleteProduct = (request, response, next) => {
                 .status(301)
                 .redirect("/cart");
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const postOrder = (request, response, next) => {
@@ -150,7 +180,12 @@ const postOrder = (request, response, next) => {
                 .status(301)
                 .redirect("/orders");
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const getOrders = (request, response, next) => {
@@ -167,7 +202,12 @@ const getOrders = (request, response, next) => {
                     orders: orders,
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 // @TODO work in this controllers with Sequelize

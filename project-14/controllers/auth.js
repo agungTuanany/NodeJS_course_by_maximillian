@@ -145,7 +145,13 @@ const postLogin = (request, response, next) => {
                         .redirect("/login");
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+
+            console.log("===> bcrypt error:", err);
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const getSignup = (request, response, next) => {
@@ -230,18 +236,23 @@ const postSignup = (request, response, next) => {
                 .redirect("/login");
 
             // console.log("===> B. bcrypt result", result);
-            transport.sendMail({
-                to: email,
-                from: 'info@shopNode.com',
-                subject: "Signup succeeded",
-                html: `<h1>You successfully signed up!</h1>`
-            });
+            // transport.sendMail({
+            //     to: email,
+            //     from: 'info@shopNode.com',
+            //     subject: "Signup succeeded",
+            //     html: `<h1>You successfully signed up!</h1>`
+            // });
 
-            return;
+            // return;
         })
     //@NOTE: throw the error if user not fill the email or the password
     //@TODO: create unit test
-        .catch(err => console.log("===> bcrypt error:", err));
+        .catch(err => {
+            console.log("===> bcrypt error:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const getReset = (request, response, next) => {
@@ -323,7 +334,12 @@ const postReset = (request, response, next) => {
 
                 return;
             })
-            .catch(err => console.log("===> postReset error:", err));
+            .catch(err => {
+                console.log("===> postReset error:", err)
+                const error = new Error(err);
+                error.httpsStatusCode = 500;
+                return next(error);
+            });
     });
 };
 
@@ -359,7 +375,12 @@ const getNewPassword = (request, response, next) => {
                     passwordToken: token
                 });
         })
-        .catch(err => console.log("===> getNewPassword error:", err));
+        .catch(err => {
+            console.log("===> getNewPassword error:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const postNewPassword = (request, response, next) => {
@@ -395,7 +416,12 @@ const postNewPassword = (request, response, next) => {
                 .status(302)
                 .redirect("/login")
         })
-        .catch(err => console.log("===> postNewPassword error:", err))
+        .catch(err => {
+            console.log("===> postNewPassword error:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const postLogout = (request, response, next) => {
