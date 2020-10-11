@@ -59,6 +59,16 @@ app.use(flashUX);
 
 app.use((request, response, next) => {
 
+    // @NOTE: locals() are special field on the ExpressJS response
+    response.locals.isAuthenticated = request.session.isLoggedIn;
+    response.locals.csrfToken = request.csrfToken();
+
+    next();
+});
+
+app.use((request, response, next) => {
+
+    // throw new Error(" %% ===> Dummy Error, Caused throw an error in Synchronous request %%") // @NOTE: Constructed scenario
     if(!request.session.user) {
         return next();
     };
@@ -66,6 +76,7 @@ app.use((request, response, next) => {
     User.findById(request.session.user._id)
         .then(user => {
 
+            throw new Error(" %% ===> Dummy Error, Caused throw an error in Asynchronous request %%") // @NOTE: Constructed scenario
             if (!user) {
                 return next();
             }
@@ -75,18 +86,11 @@ app.use((request, response, next) => {
         })
         .catch(err => {
 
-            throw new Error(err);
+            // @NOTE: You should avoid infinite loop triggered for error handling middleware
+            // @NOTE: Using 'next()' instead with 'throw' cause we handled Async code ('then', 'catch' or 'callback' not work with 'throw')
+            next(new Error(err));
         });
 });
-
-app.use((request, response, next) => {
-
-    // @NOTE: locals() are special field on the ExpressJS response
-    response.locals.isAuthenticated = request.session.isLoggedIn;
-    response.locals.csrfToken = request.csrfToken();
-
-    next();
-})
 
 // Routes handlers
 app.use("/admin", adminRoutes);
@@ -100,11 +104,17 @@ app.use(errorController.get404);
 app.use((error, request, response, next) => {
 
     // response.status(error.httpsStatusCode).render(...); // @NOTE: pass extra information with the error object
-    response
-        .status(500)
-        .redirect("/500");
+    // return response
+    //     .status(500)
+    //     .redirect("/500");
 
-    return;
+    return response
+        .status(500)
+        .render("500", {
+            pageTitle: "Server Error",
+            path: "/500",
+            isAuthenticated: request.session.isLoggedIn
+        });
 });
 
 // Mongoose
