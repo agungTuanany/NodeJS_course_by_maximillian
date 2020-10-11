@@ -1,0 +1,21 @@
+.user-message {
+    margin          : auto;
+    width           : 90%;
+    padding         : 1rem;
+    border-radius   : 3px;
+    border          : 1px solid var(--blue-dogder);
+    background      : var(--blue-melrose);
+    margin-bottom   : 2rem;
+    text-align      : center;
+}
+
+.user-message--error {
+    border-color: var(--red-solid);
+    background: var(--red-sundown);
+}
+
+@media (min-width: 768px) {
+    .user-message {
+        width       : 20rem;
+    }
+}
