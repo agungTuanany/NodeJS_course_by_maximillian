@@ -8,6 +8,7 @@
 
 // 3rd party Dependencies
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
@@ -61,7 +62,7 @@ const postAddProduct = (request, response, next) => {
             .status(422)
             .render('admin/edit-product', {
                 pageTitle: "Add Product",
-                path: '/admin/edit-product',
+                path: '/admin/add-product',
                 editing: false,
                 hasError: true,
                 product: {
@@ -77,6 +78,7 @@ const postAddProduct = (request, response, next) => {
 
     //(title, price, imageUrl, description, id, userId)
     const product = new Product({
+        _id         : new mongoose.Types.ObjectId("5f541166c8d34519048a04c5"), // Constructed scenario
         title       : title,
         price       : price,
         imageUrl    : imageUrl,
@@ -91,7 +93,31 @@ const postAddProduct = (request, response, next) => {
                 .status(301)
                 .redirect("/admin/products");
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+
+            console.log("===> An error occured!");
+            console.log("===>", err);
+            // return response
+            //     .status(500)
+            //     .render('admin/edit-product', {
+            //         pageTitle: "Add Product",
+            //         path: '/admin/add-product',
+            //         editing: false,
+            //         hasError: true,
+            //         product: {
+            //             title: title,
+            //             imageUrl: imageUrl,
+            //             price: price,
+            //             description: description
+            //         },
+            //         errorMessage: "Database operation falied, please try again",
+            //         validationErrors: []
+            //     });
+
+            return response
+                .status(500)
+                .redirect("/500");
+        });
 };
 
 // http://localhost:8080/admin/edit-product/123aabb?edit=true

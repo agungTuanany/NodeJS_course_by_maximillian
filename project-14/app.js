@@ -15,7 +15,7 @@ const flash        = require("connect-flash");
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
 const User             = require("./models/user.js");
-const errorController  = require("./controllers/404.js");
+const errorController  = require("./controllers/error.js");
 
 // Global variables
 const app = express();
@@ -93,6 +93,8 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+app.get("/500", errorController.get500);
+
 app.use(errorController.get404);
 
 // Mongoose
@@ -104,6 +106,6 @@ mongoose.connect(MONGODB_URI,
     .then(result => {
 
         console.log("Succeeds connect with MongoDB database with mongoose")
-        app.listen(port, () => console.log(`You ru3 "project-14" in server running by "Express" in port: "${port}".`));
+        app.listen(port, () => console.log(`You run "project-14" in server running by "Express" in port: "${port}".`));
     })
     .catch(err => console.log(err));
