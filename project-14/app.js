@@ -76,7 +76,7 @@ app.use((request, response, next) => {
     User.findById(request.session.user._id)
         .then(user => {
 
-            throw new Error(" %% ===> Dummy Error, Caused throw an error in Asynchronous request %%") // @NOTE: Constructed scenario
+            // throw new Error(" %% ===> Dummy Error, Caused throw an error in Asynchronous request %%") // @NOTE: Constructed scenario
             if (!user) {
                 return next();
             }

@@ -5,6 +5,7 @@
 2. [Types of Errors](#types-of-errors)
 3. [Analyzing the Error handling](#analyzing-the-error-handling)
 4. [Some Error Theory](#some-error-theory)
+5. [Error and HTTP Response Codes](#error-and-http-response-codes)
 
 <br/>
 
@@ -487,7 +488,7 @@ try {
     console.log (sum (2));
 }
 catch (error) {
-    console.log("===> Error occured!")
+    console.log("===> Error occurred!")
     console.log("===>", error)
 }
 ```
@@ -495,12 +496,12 @@ catch (error) {
 We use `try` block for certain code `console.log(sum(2))`; And then we have to
 add `catch` block; Where we catch a potential error that might have been thrown.
 With catch we can now handle the error. For example, we could output `error
-occured!` with also logging the error.
+occurred!` with also logging the error.
 
 Now, if I re execute `error-playground.js`,
 
 ```bash
-===> Error occured!: Error: invalid arguments
+===> Error occurred!: Error: invalid arguments
 ===> Error: invalid arguments
     at sum (${HOME}/javascript/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:7:11)
     at Object.<anonymous> (/home/daun/Project/javascript/nodejs-maximillian-course/chapter-18-error-handling/playground/error-playground.js:12:18)
@@ -513,7 +514,7 @@ Now, if I re execute `error-playground.js`,
 ```
 
 I still get the errors, but I get this additional error message `===> Error
-occured!: Error: invalid arguments`; And I'm not log my error object here
+occurred!: Error: invalid arguments`; And I'm not log my error object here
 
 ```javascript
 const sum = (a, b) => {
@@ -530,7 +531,7 @@ try {
     console.log (sum (2));
 }
 catch (error) {
-    console.log("===> Error occured!:")
+    console.log("===> Error occurred!:")
     //console.log("===>", error)
 }
 ```
@@ -539,10 +540,10 @@ I get the result,
 
 ```bash
 $: node error-playground.js
-===> Error occured!
+===> Error occurred!
 ```
 
-I actually get only logged `Error occured`; So then My app ti odes not crash and
+I actually get only logged `Error occurred`; So then My app ti odes not crash and
 log it automatically; But we could do anything we want.
 
 We could continue with adding a code,
@@ -562,7 +563,7 @@ try {
     console.log (sum (2));
 }
 catch (error) {
-    console.log("===> Error occured!")
+    console.log("===> Error occurred!")
     // console.log("===>", error)
 }
 
@@ -573,7 +574,7 @@ I run the code, we get the result,
 
 ```bash
 $: node error-playground.js
-===> Error occured!
+===> Error occurred!
 This is called after sum function
 ```
 
@@ -595,7 +596,7 @@ const sum = (a, b) => {
 //     console.log (sum (2));
 // }
 // catch (error) {
-//     console.log("===> Error occured!")
+//     console.log("===> Error occurred!")
 //     // console.log("===>", error)
 // }
 
@@ -634,7 +635,7 @@ So this is why handling code like this is a good thing to do,
      console.log (sum (2));
  }
  catch (error) {
-     console.log("===> Error occured!")
+     console.log("===> Error occurred!")
      // console.log("===>", error)
  }
 ```
@@ -746,6 +747,58 @@ by the away collects all errors that are thrown by any prior `[1] then` block or
 any operation executed in a `[1] then` block. That just a side note.
 
 So this is how we can work with errors, how we can handle the errors.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Error and HTTP Response Codes
+<br/>
+
+![chapter-18-5](./images/gif/chapter-18-5.gif "Error and HTTP response code")
+<br/>
+
+There's one thing which I also want to cover in this module and that are the
+_HTTP status codes_, which codes do we have and why do we use them? First of all
+we start with what the codes are.
+
+Therefore the codes are simply extra information we passed to the browser which
+helps the browser understand if an operation succeeded or not. If you're writing
+an application with a lot of client side JavaScript or a mobile app and you will
+_fetch_ only data instead of complete HTML pages, something will do the rest
+module later. Status codes also allow you to understand if an error happened,
+which kind of error? Because you typically _map certain kind of errors to
+certain kind of status codes_.
+
+For example you have `2xx` status codes, most importantly is `200` in `2001`.
+These are all the success status code. They indicate that the operation simply
+succeeded.
+
+You have `3xx` status code, which simply indicates that _redirection_ happened.
+
+You have `4xx` status code, which show you that something happened because an
+error was done by the _client_. For example, incorrect data was entered into
+a form, well then we returned to `422` error code , if you remember correctly.
+
+Last we have `5xx` status code, which indicate that a _server_ error occurred.
+
+For success case we have `200` and `201`, the differences that we use `201`
+typically when we _created a resource on the server (database)_. It's _not
+a must but it's a pattern_ you can use.
+
+You often see `300` or `301` simply is a code that is used in combination with
+redirection to inform us; However for example this resource move permanently or
+just a temporary thing.
+
+The `400`, there we have `401`for _not authenticated_, `403` which you could
+translate _not authorized_, So you might be authenticated but you were still not
+allowed to do that specific operation. `404` for a _page that's not found_.
+`422` which we often use for _invalid input_ and a couple of error codes.
+
+For `500` the most common one is `500`, which indicates hey that was a _server
+side error_ but you got also other code for _timeout_ and so on.
+
+Again in the next lecture you find a full list.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
