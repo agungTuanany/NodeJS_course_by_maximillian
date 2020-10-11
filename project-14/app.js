@@ -97,6 +97,16 @@ app.get("/500", errorController.get500);
 
 app.use(errorController.get404);
 
+app.use((error, request, response, next) => {
+
+    // response.status(error.httpsStatusCode).render(...); // @NOTE: pass extra information with the error object
+    response
+        .status(500)
+        .redirect("/500");
+
+    return;
+});
+
 // Mongoose
 mongoose.connect(MONGODB_URI,
     {

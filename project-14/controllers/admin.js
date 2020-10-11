@@ -78,7 +78,7 @@ const postAddProduct = (request, response, next) => {
 
     //(title, price, imageUrl, description, id, userId)
     const product = new Product({
-        _id         : new mongoose.Types.ObjectId("5f541166c8d34519048a04c5"), // Constructed scenario
+        _id         : new mongoose.Types.ObjectId("5f541166c8d34519048a04c5"), // @NOTE: Constructed scenario
         title       : title,
         price       : price,
         imageUrl    : imageUrl,
@@ -97,6 +97,7 @@ const postAddProduct = (request, response, next) => {
 
             console.log("===> An error occured!");
             console.log("===>", err);
+            // // @NOTE: Option 1. Return Response
             // return response
             //     .status(500)
             //     .render('admin/edit-product', {
@@ -114,9 +115,15 @@ const postAddProduct = (request, response, next) => {
             //         validationErrors: []
             //     });
 
-            return response
-                .status(500)
-                .redirect("/500");
+            // // @NOTE: Option 2. Return Response
+            // return response
+            //     .status(500)
+            //     .redirect("/500");
+            // throw new Error()
+
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
         });
 };
 
@@ -135,6 +142,8 @@ const getEditProduct = (request, response, next) => {
 
     Product.findById(prodId)
         .then(product => {
+
+            // throw new Error("Dummy Error") // @NOTE: Constructed scenario
 
             // @NOTE: It's bad approach in UX, most of the time you want to show an
             // error instead redirect
@@ -156,7 +165,13 @@ const getEditProduct = (request, response, next) => {
                     validationErrors: []
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+
+            console.log("===> An error occured:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const postEditProduct = (request, response, next) => {
