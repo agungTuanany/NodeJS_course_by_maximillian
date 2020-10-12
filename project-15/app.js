@@ -35,12 +35,24 @@ const flashUX = flash();
 
 const fileStorage = multer.diskStorage({
     destination: (request, file, callback) => {
+
         callback(null, 'images');
     },
     filename: (request, file, callback) => {
+
         callback(null, new Date().toISOString() + "-" + file.originalname);
     }
-})
+});
+
+const fileFitler = (request, file, callback) => {
+
+    if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
+        callback(null, true);
+    }
+    else {
+        callback(null, false);
+    };
+};
 
 // template engine config
 app.set("view engine", "ejs");
@@ -53,7 +65,7 @@ const authRoutes  = require("./routes/auth.js");
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ storage: fileStorage }).single('image'));
+app.use(multer({ storage: fileStorage, fileFitler: fileFitler }).single('image'));
 app.use(express.static(path.join(__dirname, "public")));
 
 // @TODO: @param: secret move into .env
