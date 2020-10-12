@@ -228,25 +228,45 @@ const getCheckout = (request, response, next) => {
 const getInvoice = (request, response, next) => {
 
     const orderId = request.params.orderId;
-    const invoiceName = "invoice-" + orderId + ".pdf";
-    const invoicePath = path.join(".data", "invoices", invoiceName);
 
-    fs.readFile(invoicePath, (err, data) => {
+    Order.findById(orderId)
+        .then(order => {
 
-        if (err) {
-            console.log("===> invoicePath:", invoicePath)
-            console.log("===> data:", data)
-            console.log("===> getInvoice error:", err);
+            // Validation Check
+            if (!order) {
+                return next(new Error("No order be found for certain user"));
+            };
+
+            if (order.user.userId.toString() !== request.user._id.toString()) {
+
+                return next(new Error("Unauthorized User to check orderId"));
+            };
+
+            const invoiceName = "invoice-" + orderId + ".pdf";
+            const invoicePath = path.join(".data", "invoices", invoiceName);
+
+            fs.readFile(invoicePath, (err, data) => {
+
+                if (err) {
+                    console.log("===> invoicePath:", invoicePath)
+                    console.log("===> getInvoice data:", data)
+                    console.log("===> getInvoice error:", err);
+                    return next(err);
+                };
+
+                console.log("===> getInvoice data:", data)
+                response.setHeader("Content-type", "application/pdf");
+                response.setHeader("Content-disposition", `inline; filename="${invoiceName}"`);
+                // response.setHeader("Content-disposition", `attachment; filename="${invoiceName}"`);
+                return response.send(data);
+            });
+
+        })
+        .catch(err => {
+            console.log("===> error Occured at getInvoice", err);
             return next(err);
-        };
-
-        console.log("===> data:", data)
-        response.setHeader("Content-type", "application/pdf");
-        // response.setHeader("Content-disposition", `inline; filename="${invoiceName}"`);
-        response.setHeader("Content-disposition", `attachment; filename="${invoiceName}"`);
-        return response.send(data);
-    });
-}
+        });
+};
 
 module.exports = {
     getProducts,
