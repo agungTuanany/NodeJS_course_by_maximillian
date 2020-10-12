@@ -9,6 +9,10 @@
  * @param: ._doc is a mongoose special field to access just the data
  */
 
+// Core Dependencies
+const fs = require("fs");
+const path = require("path");
+
 // Internal Dependencies
 const Product = require("./../models/product.js");
 const Order   = require("./../models/order.js");
@@ -221,6 +225,26 @@ const getCheckout = (request, response, next) => {
         });
 };
 
+const getInvoice = (request, response, next) => {
+
+    const orderId = request.params.orderId;
+    const invoiceName = "invoice-" + orderId + ".pdf";
+    const invoicePath = path.join(".data", "invoices", invoiceName);
+
+    fs.readFile(invoicePath, (err, data) => {
+
+        if (err) {
+            console.log("===> invoicePath:", invoicePath)
+            console.log("===> data:", data)
+            console.log("===> getInvoice error:", err);
+            return next(err);
+        };
+
+        console.log("===> data:", data)
+        return response.send(data);
+    });
+}
+
 module.exports = {
     getProducts,
     getProduct,
@@ -230,5 +254,6 @@ module.exports = {
     postCartDeleteProduct,
     postOrder,
     getOrders,
-    getCheckout
+    getCheckout,
+    getInvoice,
 };
