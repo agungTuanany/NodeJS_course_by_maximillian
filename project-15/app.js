@@ -33,6 +33,15 @@ const store = new MongoDBStore({
 const csrfProtection = csrf();
 const flashUX = flash();
 
+const fileStorage = multer.diskStorage({
+    destination: (request, file, callback) => {
+        callback(null, 'images');
+    },
+    filename: (request, file, callback) => {
+        callback(null, new Date().toISOString() + "-" + file.originalname);
+    }
+})
+
 // template engine config
 app.set("view engine", "ejs");
 app.set("views", "views"); // Config explicitly
@@ -44,7 +53,7 @@ const authRoutes  = require("./routes/auth.js");
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ dest: 'images' }).single('image'));
+app.use(multer({ storage: fileStorage }).single('image'));
 app.use(express.static(path.join(__dirname, "public")));
 
 // @TODO: @param: secret move into .env
