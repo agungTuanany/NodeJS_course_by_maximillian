@@ -10,8 +10,11 @@
  */
 
 // Core Dependencies
-const fs = require("fs");
+const fs   = require("fs");
 const path = require("path");
+
+// 3rd party Dependencies
+const PDFDocument = require("pdfkit");
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
@@ -245,6 +248,19 @@ const getInvoice = (request, response, next) => {
             const invoiceName = "invoice-" + orderId + ".pdf";
             const invoicePath = path.join(".data", "invoices", invoiceName);
 
+            const pdfDoc = new PDFDocument();
+
+            response.setHeader("Content-type", "application/pdf");
+            response.setHeader("Content-disposition", `inline; filename="${invoiceName}"`);
+            // response.setHeader("Content-disposition", `attachment; filename="${invoiceName}"`);
+            pdfDoc.pipe(fs.createWriteStream(invoicePath));
+            pdfDoc.pipe(response);
+
+            pdfDoc.text("hello world!");
+
+            // Sign to end the writable stream
+            pdfDoc.end();
+
             // // @NOTE: Reading file data with "Preloading" into memory. It's not good practice.
             // fs.readFile(invoicePath, (err, data) => {
 
@@ -264,15 +280,15 @@ const getInvoice = (request, response, next) => {
 
 
             // @NOTE: Read file data with "Stream". It's good practice.
-            const file = fs.createReadStream(invoicePath);
+            // const file = fs.createReadStream(invoicePath);
 
-            console.log("===> getInvoice data:", data)
-            response.setHeader("Content-type", "application/pdf");
-            response.setHeader("Content-disposition", `inline; filename="${invoiceName}"`);
-            // response.setHeader("Content-disposition", `attachment; filename="${invoiceName}"`);
-            response.send(data);
+            // console.log("===> getInvoice data:", data)
+            // response.setHeader("Content-type", "application/pdf");
+            // response.setHeader("Content-disposition", `inline; filename="${invoiceName}"`);
+            // // response.setHeader("Content-disposition", `attachment; filename="${invoiceName}"`);
+            // response.send(data);
 
-            file.pipe(respose);
+            // file.pipe(respose);
         })
         .catch(err => {
             console.log("===> error Occured at getInvoice", err);
