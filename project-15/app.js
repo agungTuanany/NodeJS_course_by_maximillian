@@ -11,6 +11,7 @@ const session      = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf         = require("csurf");
 const flash        = require("connect-flash");
+const multer       = require("multer");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
@@ -43,6 +44,7 @@ const authRoutes  = require("./routes/auth.js");
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({ dest: 'images' }).single('image'));
 app.use(express.static(path.join(__dirname, "public")));
 
 // @TODO: @param: secret move into .env

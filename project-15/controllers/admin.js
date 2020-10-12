@@ -61,7 +61,7 @@ const postAddProduct = (request, response, next) => {
     // const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
     const title       = request.body.title;
-    const imageUrl    = request.body.image;
+    const imageUrl    = request.file;
     const price       = request.body.price;
     const description = request.body.description;
 
