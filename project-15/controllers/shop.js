@@ -241,6 +241,9 @@ const getInvoice = (request, response, next) => {
         };
 
         console.log("===> data:", data)
+        response.setHeader("Content-type", "application/pdf");
+        // response.setHeader("Content-disposition", `inline; filename="${invoiceName}"`);
+        response.setHeader("Content-disposition", `attachment; filename="${invoiceName}"`);
         return response.send(data);
     });
 }
