@@ -61,13 +61,34 @@ const postAddProduct = (request, response, next) => {
     // const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
     const title       = request.body.title;
-    const imageUrl    = request.file;
+    const image       = request.file;
     const price       = request.body.price;
     const description = request.body.description;
 
-    console.log("===> imageUrl:", imageUrl)
+    // Validation Check the image is defined for multer
+    if (!image) {
+        // console.log("===> validationResult errors:", errors.array())
+        return response
+            .status(422)
+            .render('admin/edit-product', {
+                pageTitle: "Add Product",
+                path: '/admin/add-product',
+                editing: false,
+                hasError: true,
+                product: {
+                    title: title,
+                    price: price,
+                    description: description
+                },
+                errorMessage: "Attached file is not an image",
+                validationErrors: []
+            });
+    }
+
+    // console.log("===> imageUrl:", imageUrl)
     const errors = validationResult(request);
 
+    // Validation Check
     if (!errors.isEmpty()) {
         console.log("===> validationResult errors:", errors.array())
         return response
@@ -87,6 +108,8 @@ const postAddProduct = (request, response, next) => {
                 validationErrors: errors.array()
             });
     };
+
+    const imageUrl = image.path
 
     //(title, price, imageUrl, description, id, userId)
     const product = new Product({
@@ -191,11 +214,12 @@ const postEditProduct = (request, response, next) => {
     const prodId          = request.body.productId;
     const updatedTitle    = request.body.title;
     const updatedPrice    = request.body.price;
-    const updatedImageUrl = request.body.imageUrl;
+    const image           = request.file;
     const updatedDesc     = request.body.description;
 
     const errors = validationResult(request);
 
+    // Validation Check
     if (!errors.isEmpty()) {
         console.log("===> validationResult errors:", errors.array())
         return response
@@ -207,7 +231,7 @@ const postEditProduct = (request, response, next) => {
                 hasError: true,
                 product: {
                     title: updatedTitle,
-                    imageUrl: updatedImageUrl,
+                    // imageUrl: updatedImageUrl,
                     price: updatedPrice,
                     description: updatedDesc,
                     _id: prodId
@@ -232,7 +256,11 @@ const postEditProduct = (request, response, next) => {
 
             product.title       = updatedTitle;
             product.price       = updatedPrice;
-            product.imageUrl    = updatedImageUrl;
+
+            if (image) {
+                product.imageUrl    = image.path;
+            };
+
             product.description = updatedDesc;
 
             return product.save()

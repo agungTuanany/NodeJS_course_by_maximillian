@@ -44,7 +44,7 @@ const fileStorage = multer.diskStorage({
     }
 });
 
-const fileFitler = (request, file, callback) => {
+const fileFilter = (request, file, callback) => {
 
     if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
         callback(null, true);
@@ -65,7 +65,7 @@ const authRoutes  = require("./routes/auth.js");
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ storage: fileStorage, fileFitler: fileFitler }).single('image'));
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
 app.use(express.static(path.join(__dirname, "public")));
 
 // @TODO: @param: secret move into .env
