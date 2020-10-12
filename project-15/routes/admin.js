@@ -31,9 +31,9 @@ router.post("/add-product",
             .isLength({ min: 3 })
             .trim()
             .withMessage("The title must at least 3 characters"),
-        body("imageUrl")
-            .isURL()
-            .withMessage("Please enter the correct URL"),
+        // body("imageUrl")
+        //     .isURL()
+        //     .withMessage("Please enter the correct URL"),
         body("price")
             .isFloat()
             .withMessage("Please enter the correct price"),

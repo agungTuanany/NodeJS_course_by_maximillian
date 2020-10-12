@@ -55,11 +55,17 @@ const getAddProduct = (request, response, next) => {
 
 const postAddProduct = (request, response, next) => {
 
-    const title       = typeof(request.body.title) === "string" && request.body.title.trim().length > 0 ? request.body.title : false;
-    const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
-    const imageUrl    = typeof(request.body.imageUrl) === "string" && request.body.imageUrl.trim().length > 0 ? request.body.imageUrl : false;
-    const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
+    // const title       = typeof(request.body.title) === "string" && request.body.title.trim().length > 0 ? request.body.title : false;
+    // const price       = typeof(parseFloat(request.body.price)) === "number" && parseFloat(request.body.price.length) > -1 ? parseFloat(request.body.price) : false;
+    // const imageUrl    = typeof(request.body.image) === "string" && request.body.image.trim().length > 0 ? request.body.image : false;
+    // const description = typeof(request.body.description) === "string" && request.body.description.trim().length > 0 ? request.body.description : false;
 
+    const title       = request.body.title;
+    const imageUrl    = request.body.image;
+    const price       = request.body.price;
+    const description = request.body.description;
+
+    console.log("===> imageUrl:", imageUrl)
     const errors = validationResult(request);
 
     if (!errors.isEmpty()) {
