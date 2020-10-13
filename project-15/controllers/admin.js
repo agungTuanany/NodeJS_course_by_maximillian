@@ -12,6 +12,7 @@ const mongoose = require("mongoose");
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
+const fileHelper = require("./../lib/file.js");
 
 // Global variables
 
@@ -256,12 +257,12 @@ const postEditProduct = (request, response, next) => {
 
             product.title       = updatedTitle;
             product.price       = updatedPrice;
+            product.description = updatedDesc;
 
             if (image) {
+                fileHelper/deleteFile(product.imageUrl);
                 product.imageUrl    = image.path;
             };
-
-            product.description = updatedDesc;
 
             return product.save()
                 .then(result => {
@@ -285,21 +286,27 @@ const postDeleteProduct = (request, response, next) => {
 
     const prodId = request.body.productId;
 
-    // Product.findByIdAndRemove(prodId)
-    product.deleteOne({
-        _id: prodId,
-        userId: request.user._id
-    })
-        .then(result => {
+    Product.findById(prodId)
+        .then(product => {
 
-            console.log("Succeeded delete product");
-            return response
-                .status(301)
-                .redirect("/admin/products");
+            if (!product) {
+                return next(new Error("Deleted Product not found"));
+            };
+
+            fileHelper.deleteFile(product.imageUrl);
+            return Product.deleteOne({
+                _id: prodId,
+                userId: request.user._id
+            });
+        })
+        .then(() => {
+
+            console.log("Destroyed Product");
+            response.redirect("/admin/products");
         })
         .catch(err => {
 
-            console.log("===> An error occured:", err)
+            console.log("===> An error occured:", err);
             const error = new Error(err);
             error.httpsStatusCode = 500;
             return next(error);
