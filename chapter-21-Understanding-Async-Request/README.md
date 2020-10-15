@@ -61,6 +61,11 @@ the scenes without interrupting the user flow without reloading the page.
 
 Let's have look at how that would work in this module.
 
+### Miscellaneous
+
+- [fetch](https://developers.google.com/web/updates/2015/03/introduction-to-fetch)
+- [Ajax](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX/Getting_Started)
+
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>

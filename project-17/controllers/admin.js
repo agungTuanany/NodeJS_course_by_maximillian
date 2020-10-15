@@ -321,12 +321,12 @@ const deleteProduct = (request, response, next) => {
         })
         .then(() => {
 
-            console.log("Destroyed Product");
+            console.log(" ===> Destroyed Product");
             // response.redirect("/admin/products");
             return response
                 .status(200)
                 .json({
-                    message: "Success Deleting product"
+                    message: "Server Message: Success Deleting product"
                 });
         })
         .catch(err => {
