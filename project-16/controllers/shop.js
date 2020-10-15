@@ -70,10 +70,17 @@ const getProduct = (request, response, next) => {
 const getIndex = (request, response, next) => {
 
     const page = request.query.page;
+    let totalItems;
 
     Product.find()
-        .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE)
+        .countDocuments()
+        .then(numberOfProducts => {
+
+            totalItems = numberOfProducts;
+            return Product.find()
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+        })
         .then(products => {
 
             return response
@@ -82,6 +89,12 @@ const getIndex = (request, response, next) => {
                     pageTitle: "Shop",
                     path: "/",
                     prods: products,
+                    totalProducts: totalItems,
+                    hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+                    hasPreviousPage: page > 1,
+                    nextPage: page + 1,
+                    previousPage: page - 1,
+                    lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
                 });
         })
         .catch(err => {
