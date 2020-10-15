@@ -302,9 +302,9 @@ const postEditProduct = (request, response, next) => {
         });
 };
 
-const postDeleteProduct = (request, response, next) => {
+const deleteProduct = (request, response, next) => {
 
-    const prodId = request.body.productId;
+    const prodId = request.params.productId;
 
     Product.findById(prodId)
         .then(product => {
@@ -322,14 +322,24 @@ const postDeleteProduct = (request, response, next) => {
         .then(() => {
 
             console.log("Destroyed Product");
-            response.redirect("/admin/products");
+            // response.redirect("/admin/products");
+            return response
+                .status(200)
+                .json({
+                    message: "Success Deleting product"
+                });
         })
         .catch(err => {
 
-            console.log("===> An error occured:", err);
-            const error = new Error(err);
-            error.httpsStatusCode = 500;
-            return next(error);
+            // console.log("===> An error occured:", err);
+            // const error = new Error(err);
+            // error.httpsStatusCode = 500;
+            // return next(error);
+            return response
+                .status(500)
+                .json({
+                    message: "Failed Deleting product"
+                })
         });
 };
 
@@ -339,5 +349,5 @@ module.exports = {
     postAddProduct,
     getEditProduct,
     postEditProduct,
-    postDeleteProduct
+    deleteProduct
 };

@@ -5,4 +5,18 @@ const deleteProduct = (btn) => {
     const csrfToken = btn.parentNode.querySelector("[name=_csrf]").value;
 
     console.log(productId, csrfToken)
-}
+
+    fetch(`/admin/product/${productId}`, {
+        method: "DELETE",
+        headers: {
+            // @NOTE:  csurf package on github
+            "csrf-token": csrfToken
+        }
+    })
+        .then(result => {
+            console.log("===> deleteProduct result", result);
+        })
+        .catch(err => {
+            console.log("===> deleteProduct error:", err);
+        })
+};
