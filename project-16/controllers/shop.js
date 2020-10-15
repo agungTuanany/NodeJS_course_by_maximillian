@@ -20,6 +20,9 @@ const PDFDocument = require("pdfkit");
 const Product = require("./../models/product.js");
 const Order   = require("./../models/order.js");
 
+// Global Variables
+const ITEMS_PER_PAGE = 2;
+
 const getProducts = (request, response, next) => {
 
     Product.find()
@@ -66,7 +69,11 @@ const getProduct = (request, response, next) => {
 
 const getIndex = (request, response, next) => {
 
+    const page = request.query.page;
+
     Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE)
         .then(products => {
 
             return response
