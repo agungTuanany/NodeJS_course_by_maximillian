@@ -1,7 +1,7 @@
 # Adding Pagination
 
 ## Table of Contents
-1. [Module Introduction](#module-Introduction)
+1. [Module Introduction](#module-introduction)
 
 <br/>
 

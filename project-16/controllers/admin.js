@@ -15,29 +15,48 @@ const Product = require("./../models/product.js");
 const fileHelper = require("./../lib/file.js");
 
 // Global variables
+const ITEMS_PER_PAGE = 2;
 
 const getProducts = (request, response, next) => {
+
+    const page = +request.query.page || 1;
+    let totalItems;
+
 
     Product.find({ userId: request.user._id })
         // .select("title price -_id")          // which field you want retrieve from database
         // .populate("userId", "firstName")     // retrieve any field instead writing query on your own
-        .then(product => {
+        .countDocuments()
+        .then(numberOfProducts => {
 
-            // console.log("====>", product)
-            return response.render('admin/products', {
-                pageTitle: "Admin Products",
-                path: '/admin/products',
-                products: product,
-            });
+            totalItems = numberOfProducts;
+            return Product.find()
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+        })
+        .then(products => {
+
+            return response
+                .status(200)
+                .render("shop/product-list", {
+                    pageTitle: "Admin Product",
+                    path: "/admin/products",
+                    products: products,
+                    totalProducts: totalItems,
+                    currentPage: page,
+                    hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+                    hasPreviousPage: page > 1,
+                    nextPage: page + 1,
+                    previousPage: page - 1,
+                    lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
+                });
         })
         .catch(err => {
-
-            console.log("===> An error occured:", err)
+            console.log("===> An error occurred:", err)
             const error = new Error(err);
             error.httpsStatusCode = 500;
             return next(error);
         });
-
 };
 
 const getAddProduct = (request, response, next) => {
