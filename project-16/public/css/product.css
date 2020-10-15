@@ -40,7 +40,8 @@
 }
 
 .pagination a:hover,
-.pagination a:active {
+.pagination a:active,
+.pagination a.active {
     background          : var(--green-tropical);
     color               : var(--white-solid);
 }

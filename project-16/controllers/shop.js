@@ -21,7 +21,7 @@ const Product = require("./../models/product.js");
 const Order   = require("./../models/order.js");
 
 // Global Variables
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 1;
 
 const getProducts = (request, response, next) => {
 
@@ -69,7 +69,7 @@ const getProduct = (request, response, next) => {
 
 const getIndex = (request, response, next) => {
 
-    const page = request.query.page;
+    const page = +request.query.page || 1;
     let totalItems;
 
     Product.find()
@@ -90,6 +90,7 @@ const getIndex = (request, response, next) => {
                     path: "/",
                     prods: products,
                     totalProducts: totalItems,
+                    currentPage: page,
                     hasNextPage: ITEMS_PER_PAGE * page < totalItems,
                     hasPreviousPage: page > 1,
                     nextPage: page + 1,

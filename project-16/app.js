@@ -132,6 +132,7 @@ app.use((error, request, response, next) => {
     //     .status(500)
     //     .redirect("/500");
 
+    console.log("===> get500", error);
     return response
         .status(500)
         .render("500", {
