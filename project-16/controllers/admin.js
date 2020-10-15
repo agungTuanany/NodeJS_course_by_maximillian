@@ -260,7 +260,7 @@ const postEditProduct = (request, response, next) => {
             product.description = updatedDesc;
 
             if (image) {
-                fileHelper/deleteFile(product.imageUrl);
+                fileHelper.deleteFile(product.imageUrl);
                 product.imageUrl    = image.path;
             };
 

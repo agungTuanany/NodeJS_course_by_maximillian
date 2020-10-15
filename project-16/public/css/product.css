@@ -25,3 +25,22 @@
 .product__description {
     text-align          : center;
 }
+
+.pagination {
+    margin-top          : 2rem;
+    text-align          : center;
+}
+
+.pagination a {
+    text-decoration     : none;
+    color               : var(--green-tropical);
+    padding             : 0.5rem;
+    border              : 1px solid var(--green-tropical);
+    margin              : 0 1rem;
+}
+
+.pagination a:hover,
+.pagination a:active {
+    background          : var(--green-tropical);
+    color               : var(--white-solid);
+}
