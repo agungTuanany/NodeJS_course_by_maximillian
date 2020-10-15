@@ -2,9 +2,18 @@
 <body>
     <%- include("../includes/navigation.ejs") %>
     <main>
-        <h1>Checkout Page</h1>
-        <p>List of all chosen products.</p>
-
+        <ul class="cart__item-list">
+            <% products.forEach(product => { %>
+                <li class="cart__item">
+                    <h1><%= product.productId.title %></h1>
+                    <h2>Quantity: <%= product.quantity %></h2>
+                </li>
+            <% }) %>
+        </ul>
+        <div class="centered">
+            <h2>Total: <%= totalSum %></h2>
+        </div>
     </main>
 
     <%- include("../includes/end.ejs") %>
+
