@@ -1,0 +1,20 @@
+.login-form {
+  width                   : 20rem;
+  max-width               : 90%;
+  margin                  : auto;
+  display                 : block;
+}
+
+.centered a {
+  text-decoration         : none;
+  color                   : var(--green-tropical);
+  cursor                  : pointer;
+}
+
+.centered a:hover {
+  color                   : var(--black-solid);
+}
+
+.main-header__item form {
+  display                 : inline;
+}
