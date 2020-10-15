@@ -38,7 +38,7 @@ const getProducts = (request, response, next) => {
 
             return response
                 .status(200)
-                .render("shop/product-list", {
+                .render("admin/products", {
                     pageTitle: "Admin Product",
                     path: "/admin/products",
                     products: products,
@@ -52,6 +52,7 @@ const getProducts = (request, response, next) => {
                 });
         })
         .catch(err => {
+
             console.log("===> An error occurred:", err)
             const error = new Error(err);
             error.httpsStatusCode = 500;
