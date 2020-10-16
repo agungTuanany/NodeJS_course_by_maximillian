@@ -15,6 +15,7 @@ const path = require("path");
 
 // 3rd party Dependencies
 const PDFDocument = require("pdfkit");
+const stripe = require('stripe')('sk_test_cVADl5LfP2UhZsHwYj2u6W6Q');
 
 // Internal Dependencies
 const Product = require("./../models/product.js");
@@ -267,19 +268,39 @@ const getOrders = (request, response, next) => {
 // @TODO work in this controllers with Sequelize
 const getCheckout = (request, response, next) => {
 
+    // const products = user.cart.items;
+    let products;
+    let total = 0;
+
     request.user
         .populate("cart.items.productId")
         .execPopulate()
         .then(user => {
 
-            const products = user.cart.items;
-            let total = 0;
+            products = user.cart.items;
 
             products.forEach(prod => {
 
                 total += prod.quantity * prod.productId.price;
             });
 
+            return stripe.checkout.sessions.create({
+                payment_method_types: ["card"],
+                line_items: products.map(prod => {
+
+                    return {
+                        name: prod.productId.title,
+                        description: prod.productId.description,
+                        amount: prod.productId.price * 100,
+                        currency: "usd",
+                        quantity: prod.quantity
+                    };
+                }),
+                success_url: request.protocol + '://' + request.get('host') + '/checkout/success',
+                cancel_url: request.protocol + '://' + request.get('host') + '/checkout/cancel'
+            });
+        })
+        .then(session => {
             return response
                 .status(200)
                 .render("shop/checkout", {
@@ -287,6 +308,7 @@ const getCheckout = (request, response, next) => {
                     path: "/checkout",
                     products: products,
                     totalSum: total,
+                    sessionId: session.id
                 });
         })
         .catch(err => {
@@ -297,6 +319,49 @@ const getCheckout = (request, response, next) => {
             return next(error);
         });
 
+};
+
+const getCheckoutSuccess = (request, response, next) => {
+
+    request.user
+        .populate("cart.items.productId")
+        .execPopulate()
+        .then(user => {
+
+            const products = user.cart.items.map(i => {
+
+                return {
+                    quantity: i.quantity,
+                    product: { ...i.productId._doc }
+                };
+            });
+
+            const order = new Order({
+                user: {
+                    email: request.user.email,
+                    userId: request.user
+                },
+                products: products
+            });
+
+            return order.save();
+        })
+        .then(result => {
+
+            return request.user.clearCart();
+        })
+        .then(() => {
+            response
+                .status(301)
+                .redirect("/orders");
+        })
+        .catch(err => {
+
+            console.log("===> An error occurred:", err)
+            const error = new Error(err);
+            error.httpsStatusCode = 500;
+            return next(error);
+        });
 };
 
 const getInvoice = (request, response, next) => {
@@ -390,5 +455,6 @@ module.exports = {
     postOrder,
     getOrders,
     getCheckout,
+    getCheckoutSuccess,
     getInvoice,
 };

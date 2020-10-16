@@ -1,4 +1,6 @@
 <%- include("../includes/head.ejs") %>
+<head>
+</head>
 <body>
     <%- include("../includes/navigation.ejs") %>
     <main>
@@ -12,6 +14,19 @@
         </ul>
         <div class="centered">
             <h2>Total: <%= totalSum %></h2>
+        </div>
+        <div class="centered">
+            <button id="order-btn" class="btn">Order</button>
+            <script src="https://js.stripe.com/v3/"></script>
+            <script>
+                 const stripe = Stripe('pk_test_nubEaj7IKO6XRCLxQ6EjzXCw');
+                 const orderBtn = document.getElementById('order-btn');
+                    orderBtn.addEventListener('click', function() {
+                        stripe.redirectToCheckout({
+                            sessionId: '<%= sessionId %>'
+                        });
+                    });
+            </script>
         </div>
     </main>
 
