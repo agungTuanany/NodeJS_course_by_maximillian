@@ -3,6 +3,7 @@
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
 2. [What are REST API and Why we do use Them](#what-are-rest-api-and-why-we-do-use-them)
+3. [Accessing Data with REST APIs](#accessing-data-with-rest-apis)
 
 <br/>
 
@@ -135,7 +136,123 @@ learned thus far is now not redundant. Actually we'll reuse 99% of the
 knowledge. We'll only _tune our data usage or data handling_; And to response
 a little bit
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
 
+## Accessing Data with REST APIs
+<br/>
+
+![chapter-23-4.gif](./images/gif/chapter-23-4.gif "REST API big picture")
+<br/>
+
+We know what are REST API generally is, or which problem it solves. Let me give
+you a big picture of how REST API works.
+
+We have a client and server, the client is _mobile app_ or _SPA_, _on the server
+we built our API_. So here we build an API for these apps we might be building;
+And one advantage by the way is, we can use in the same API for multiple
+clients. So we might be building a web app and mobile app, not that uncommon
+these days. Most companies have mobile apps and web apps but we can use one at
+the same API, because both apps use the same data.
+
+They might present it differently and that is what I was talking about. About
+the user interface being handled by the frontend by the client. They might
+present it differently but they work with the same data.
+
+So that is our API we might be building. Or we might have any kind of app
+including our traditional web app, which just need a _service API_ or we might
+be building our own service API, maybe to also sell our services. Maybe were
+building a _stock API_ where any application which we might not even know is
+able to query data from; And we just sell access to that API, that is our
+business model.
+
+All this cases, we obviously exchange something and the something we exchange is
+_data_ as I mentioned before. _Only the data not the user interface_; and that
+of course leads us to one important question in which format do we exchange that
+data?.
+
+### Data Formats
+<br/>
+
+![chapter-23-5.gif](./images/gif/chapter-23-5.gif "Data formats")
+<br/>
+
+We've learned about HTML this far, but there are different kinds of _data we
+could attach to a request and a response_. We can send _plain text_ for example,
+we could send some _XML_, we could send _JSON_, and there are other formats too,
+but these are some well-known format.
+
+#### HTML
+
+HTML of course look something like `<p>Node.js</p>`. We can send HTML code, and
+this is what we did thus far in the course, when we rendered EJS to what we
+essentially did is we sent HTML code to the browser, because the view rendered
+on the server, and the result of that rendering process simply was HTML page or
+HTML code.
+
+So this is how we could send data. HTML code contains both the _data and the
+structure_ of course. The HTML elements, the CSS style we might be adding; that
+all adds structure and designs, and what's between HTML elements is our data. So
+therefore does also _contains our user interface_. It defines how our user
+interface should look like.
+
+The problem is of course if we just want the data, we got all the overhead all
+the HTML content. It's unnecessarily difficult to parse, because even thought
+the HTML elements are of course defined and regulated; how we use them and how
+we well structure our documents is not really enforced on to us. It's
+unnecessarily difficult to parse
+
+#### Plain Text
+
+If we only need the data, we can of course send a _plain text_. The thing
+here's, this is only data of course, there's no structure, there's no design
+element at it, and therefore we make no user interface; and that as user
+interface of course we make no UI assumptions.
+
+Still if you want to transfer data with Plain Text, it's unnecessarily difficult
+to parse, because text is easier to understand for humans, but for computer it
+isn't. There's no clear pattern in the Plain Text, and therefore it's not really
+great way of exchanging data.
+
+#### XML
+
+XML looks a lot like HTML and actually HTML is special kind of XML you could
+say. The differences is, XML allows you to use any text; And of course with XML
+allows you to transfer data.
+
+It's also not making any UI assumptions, because it's not possible by the
+browser. The XML elements are totally made up by you.
+
+The good thing is, it's easier to read by machines then plain text. You can also
+of course define clear structure there, but you'll need a special XML parser,
+because traversing true an XML node tree is kind of challenging, not impossible
+to solve, but you need a special parser; And all these elements of course add
+some _overhead to the data you transfer_.
+
+There's a lot of extra text that is only required to read your data, that's not
+really your core data though.
+
+#### JSON
+
+The last data format and you might already guess that will be our winner, is
+JSON, looks like `{"title": :Node.JS}`. We already used in this course. When we
+had a look at asynchronous request, at couple of module ago.
+
+This also transfer only a data, It makes no UI assumptions, and it's also
+machine readable.
+
+The good thing is, it's a but more concise than XML, and it can be easily be
+converted to JavaScript, and that's of course a huge plus when working with
+NodeJS on the server; But also with well JavaScript in the browser (frontend)
+which happens to be our only programming language we can use there.
+
+Therefore, this us our winner data format. If we just want to transfer data and
+see the most common format in API you communicating with these days. All the
+other formats are not asked great for transmitting data as JSON is.
+
+Therefore JSON is what we'll use. It's important for you to understand why we
+use it, and I hope this became clear.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
