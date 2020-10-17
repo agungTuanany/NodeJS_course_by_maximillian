@@ -5,6 +5,7 @@
 2. [What are REST API and Why we do use Them](#what-are-rest-api-and-why-we-do-use-them)
 3. [Accessing Data with REST APIs](#accessing-data-with-rest-apis)
 4. [Understanding Routing HTTP Method](#understanding-routing-http-method)
+5. [REST Principles](#rest-principles)
 
 <br/>
 
@@ -17,7 +18,7 @@ _rendering templates_, _working with files_; A lot of crucial things that you
 will need for any NodeJS application you're going to build.
 
 Now, I want to move away from one important thing that we always did thus far
-and that's the rending of template with EJS. It's common thing to do that in
+and that's the rendering of template with EJS. It's common thing to do that in
 a lot of NodeJS applications but there also is a very popular alternative kind
 of, or a very common over kind of NodeJS application that you'll work with or
 that you'll build as a web developer; and that are REST API.
@@ -304,14 +305,14 @@ reaches such Endpoints.
 ![chapter-23-7.gif](./images/gif/chapter-23-7.gif "HTTP verbs")
 <br/>
 
-Talking about HTTP method, there are more methods that just _get_ and _post_.
+Talking about HTTP method, there are more methods that just _GET_ and _POST_.
 I did mention this before in the course, but when working with the browser only,
 and not with JavaScript in the browser, Just with `forms` and `links`; then we
 only have GET and POST available. These are the two methods the browser natively
 knows or the browser HTML elements knows.
 
 When using asynchronous requests for JavaScript or when building mobile apps and
-so on, using their respective HTTP clients, you have yo access to more HTTP
+so on, using their respective HTTP clients, you have to access to more HTTP
 methods. We actually already saw that in the asynchronous request module of
 course.
 
@@ -335,7 +336,7 @@ automatically to find out, if the next request tries to do, for example DELETE
 something if that is actually allowed and it will come back to that.
 
 These are HTTP method we'll works with. The method we typically work with when
-building a REST API. Especially the first five ones the orange ones are
+building a REST API. Especially the first five ones; the orange ones are
 important.
 
 I also want to highlight, that in theory you can do whatever you want when
@@ -350,9 +351,94 @@ implement the REST API that follows these idea here, but you don't have to; And
 that's just important to highlight.
 
 It's common and it's good practice, it's bets practice to use these methods in
-this way, because then anyone who's using your APO clearly knows what to expect
+this way, because then anyone who's using your API clearly knows what to expect
 to happen on the server for a given method; But in theory no one is stopping you
 from doing something else.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## REST Principles
+<br/>
+
+![chapter-23-8.gif](./images/gif/chapter-23-8.gif "REST principles")
+<br/>
+
+We're almost done with the theory part. Now there are some **_core principles_**
+that are indeed defined in theory, and that are important to you to keep in
+mind, where at least there are two core principles, I want you to keep in mind
+When building the REST API.
+
+### Uniform Interface
+
+This principles simply define that your API will have or should have clearly
+_defined API Endpoints. You remember Endpoints were the combination of HTTP
+method and Path_, with clearly defined request and response data structure. We
+put in another words, your API should be predictable and if possible and if open
+to the public it should all be well documented.
+
+People should know which data does your API expect, which data does it gives
+back, which Endpoints do I have; And the thing that happens when a request
+reaches to Endpoints should of course not change overtime. It should be
+predictable, it should be clearly defined.
+
+### Stateless Interactions
+
+This is _super important_ when we later talk about _authentication_. When
+building a REST API the server and client are totally separate, that they don't
+share common history. So _no connection history is stored_, and _no session will
+be used_ therefore. Because every incoming request is treated as if no prior
+request were sent. The server has a look at every request on it's own. It does
+not store as session for a client. It does not care about the client at all
+actually. That is also a cool thing about REST API.
+
+You can build REST API, open it up to the public, like Google Maps API's, for
+example; And you don't care about the individual client. You just say 'Hey, here
+are the Endpoints I have; Here's the data you get back for each Endpoints;
+Here's the data I expect from you for my Endpoints, and then I don't care about
+you; I don't store the session with you'.
+
+We have strong decoupling of the client and the server; Even if the were to run
+on the same server, because we're building our own API for our own frontend. We
+still would decoupled both, so that they work independently and just exchange
+data. This means, that every time we set up a new Endpoints we have to make sure
+that works independent from prior requests. A typical problem here is
+authentication where once we locked in future request should be treated locked
+in; And I will show you how to solve this in this course too of course.
+
+Now other principles which are less important which you don't need to lean by
+hard, like below:
+
+### Cacheable
+
+It means, on your REST API you could send back some headers that tell the client
+how long the response is valid, so that the client may cached a response.
+
+### Client-Server
+
+Client server separation is mentioned again here. It's more thinking about the
+data storage. Client and server are decoupled as a set; and the client should
+not worry about persistent data storage therefore. The server will  be
+responsible for this.
+
+### Layered System
+
+Is simply means, as a client when we send the request to an API we can't rely on
+that server. We sent it to immediately handling the request to server might
+instead forward the request or distribute it to another server. Ultimately we
+only care about the data we get back, which should of course follow the
+structure that was defined by the API.
+
+### Code on Demand
+
+This is means, the REST API could also for some Endpoints transfer executable
+code to the client.
+
+To be honest in reality you don't see that too often we're mostly talking about
+normal data we're using; but still these are the best principles the top two
+ones are the important ones, which will have great implications especially on
+authentication.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
