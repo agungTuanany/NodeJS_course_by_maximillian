@@ -4,6 +4,7 @@
 1. [Module Introduction](#module-introduction)
 2. [What are REST API and Why we do use Them](#what-are-rest-api-and-why-we-do-use-them)
 3. [Accessing Data with REST APIs](#accessing-data-with-rest-apis)
+4. [Understanding Routing HTTP Method](#understanding-routing-http-method)
 
 <br/>
 
@@ -253,6 +254,105 @@ other formats are not asked great for transmitting data as JSON is.
 
 Therefore JSON is what we'll use. It's important for you to understand why we
 use it, and I hope this became clear.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Understanding Routing HTTP Method
+<br/>
+
+![chapter-23-6.gif](./images/gif/chapter-23-6.gif "Routing")
+<br/>
+
+We've learned what the core idea is and how we transfer data and that is King in
+REST API, let's have look the routing. How do we communicate between client and
+server?.
+
+We've client-server, and on the server we've our _sort of logic_, we _reach out to
+databases_, and so on.
+
+We send the request from the client to the server, how we do that? Well in
+a traditional web app, as we built it thus far, of course we did it by simply
+adding a link `a href=` on our HTML page, for example; or we've a `<form>` with
+a `<button>` and we defined the form `action` and form `method`. Well it's not
+that far off for REST API. We still send the request to a combination of _HTTP
+method_ also called HTTP world; and a path onto a server. What we defined thus
+far still will be used kind of, we still find such path on the server side
+routing where we wait for incoming request; and we also define certain HTTP
+method we want to handle for this path. Not all request can reach all POST.
+
+These request would be sent from the client (when working on the browser)
+through Asynchronous JavaScript, with the _fetch API_, for example; or with
+AJAX, and on mobile apps, and so on. We all get special clients.
+
+The core thing here is we in the end still sent a _normal requests_. These are
+totally normal request that just don't expect any HTML response, and we send
+a combination of _HTTP method_ and _path_. This is how we communicate with our
+server.
+
+In the REST world or in the API wild we like to call these things your _API
+Endpoints_. So when you here me talked about an API Endpoints, I'm talking about
+combination of HTTP method, like POST and GET and the respect of _path_ or
+written like `GET /posts/:postid`. These already Endpoints, we define on our
+REST API. We defined a logic that should execute on the server when a request
+reaches such Endpoints.
+
+### HTTP Verbs
+<br/>
+
+![chapter-23-7.gif](./images/gif/chapter-23-7.gif "HTTP verbs")
+<br/>
+
+Talking about HTTP method, there are more methods that just _get_ and _post_.
+I did mention this before in the course, but when working with the browser only,
+and not with JavaScript in the browser, Just with `forms` and `links`; then we
+only have GET and POST available. These are the two methods the browser natively
+knows or the browser HTML elements knows.
+
+When using asynchronous requests for JavaScript or when building mobile apps and
+so on, using their respective HTTP clients, you have yo access to more HTTP
+methods. We actually already saw that in the asynchronous request module of
+course.
+
+Besides GET, which is responsible _getting a resource from the server_; And POST,
+which is _responsible for posting a resource to the server_ which means create
+it on the server or append it to existing, let's say array of resources.
+
+We have access to PUT, which we would use if we want to put a resource onto the
+server which means you want to created or overwrite an existing resource. POST
+will never overwrite or should never overwrite.
+
+We also have access to PATCH, which is used for updating parts of an existing
+resource, so not override it entirely necessarily but update parts of it.
+
+We have access to DELETE, which allows us to delete a resource on the server.
+
+We also have a special method called OPTIONS, which we will use too in this
+module. Indirectly though it is sent automatically by the browser and there will
+come back to it. This basically is a request which the browser will send
+automatically to find out, if the next request tries to do, for example DELETE
+something if that is actually allowed and it will come back to that.
+
+These are HTTP method we'll works with. The method we typically work with when
+building a REST API. Especially the first five ones the orange ones are
+important.
+
+I also want to highlight, that in theory you can do whatever you want when
+a request with a certain method reaches a certain path.
+
+For the REST world, we should use a POST request to create or append a resource.
+No one is stopping you from deleting something on a server, because ultimately
+you only _define a method path pair_ on your server-side, and then you run any
+code you want; And what happens with that code is not restricted by the method
+that was used to execute that code. You can restricted yourself and you want to
+implement the REST API that follows these idea here, but you don't have to; And
+that's just important to highlight.
+
+It's common and it's good practice, it's bets practice to use these methods in
+this way, because then anyone who's using your APO clearly knows what to expect
+to happen on the server for a given method; But in theory no one is stopping you
+from doing something else.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
