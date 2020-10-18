@@ -1,4 +1,4 @@
-# Working with REST APIs the Basic
+# Working with REST APIs - The Basic
 
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
@@ -7,6 +7,7 @@
 4. [Understanding Routing HTTP Method](#understanding-routing-http-method)
 5. [REST Principles](#rest-principles)
 6. [REST API Clients CORS Errors](#rest-api-clients-cors-errors)
+7. [Module Summary](#module-summary)
 
 <br/>
 
@@ -517,7 +518,50 @@ app.use((request, response, next) => {
     next();
 });
 ```
-
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>
+
+## Module Summary
+<br/>
+
+![chapter-23-10.gif](./images/gif/chapter-23-10.gif "Module summary")
+<br/>
+
+That's it for the basics of REST API, we'll dive much deeper into REST API, and
+build a real project with REST API in the next module.
+
+The core concept are that REST API, _all about data_, _no user interface logic
+is exchange_. REST API are normal node service though; that is really important
+to keep in mind, we're not building totally different kind of apps of a sudden.
+Just the data format and the way we send response changes, because now we simply
+expose of Endpoints, which is a combination of _HTML method and path_; but we
+did this before too. We just have more methods available now, and we exchange
+data in JSON format, for both request and responses. We don't return HTML pages
+as a response anymore.
+
+REST API are decoupled from the client stuff, they are totally decoupled. They
+don't share any connection history, or store any connection history.
+
+
+When we have a look at the request and response, it's important to understand.
+That you **_should attach data_**, for request and response in JSON format; and
+that you should let the other end know by setting "Content-Type"  header.
+ExpressJS just run automatically when using the `.json()` method in the browser.
+It depends on which method you use when using the `fetch` API. We had to set it
+manually when you would use Axios, another common libraries in browser side
+JavaScript for sending _Async request_, it would be done automatically.
+
+CORS error are also something we had to look at. They occur when the API and
+your client are sitting on different service or different domains, and they want
+to exchange data. You fix them in quotation mark, because they are security
+mechanism; But you can bypass that on purpose by setting the right CORS-Headers;
+which basically tell the client 'hey it's fine, I'm a public API, you may use my
+data'.
+
+These are the basic, let's dive much deeper into REST API. Using different HTTP
+method, add authentication on it, and so on, by working on a real project.
+
+
+
+
