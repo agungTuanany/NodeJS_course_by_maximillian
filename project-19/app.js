@@ -1,18 +1,20 @@
 "use strict"
 
 // 3rd party Dependencies
-const express = require("express");
+const express    = require("express");
+const bodyParser = require("body-parser");
 
 // Internal Dependencies
 const feedRoutes = require("./router/feed.js");
 
 // Global variables
-const app =express()
+const app  = express()
 const port = 8081;
 
-app.use("/feeds", feedRoutes)
+// app.use(bodyParser.urlencoded());    // for: x-www-form-urlencoded <form>
+app.use(bodyParser.json())              // for: application/json
 
-
+app.use("/feed", feedRoutes)
 
 
 
