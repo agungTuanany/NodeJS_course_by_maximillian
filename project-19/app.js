@@ -14,6 +14,14 @@ const port = 8081;
 // app.use(bodyParser.urlencoded());    // for: x-www-form-urlencoded <form>
 app.use(bodyParser.json())              // for: application/json
 
+app.use((request, response, next) => {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+    response.setHeder("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    next();
+});
+
 app.use("/feed", feedRoutes)
 
 

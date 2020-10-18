@@ -6,6 +6,7 @@
 3. [Accessing Data with REST APIs](#accessing-data-with-rest-apis)
 4. [Understanding Routing HTTP Method](#understanding-routing-http-method)
 5. [REST Principles](#rest-principles)
+6. [REST API Clients CORS Errors](#rest-api-clients-cors-errors)
 
 <br/>
 
@@ -439,6 +440,83 @@ To be honest in reality you don't see that too often we're mostly talking about
 normal data we're using; but still these are the best principles the top two
 ones are the important ones, which will have great implications especially on
 authentication.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## REST API Clients CORS Errors
+<br/>
+
+![chapter-23-9.gif](./images/gif/chapter-23-9.gif "What is CORS")
+<br/>
+
+Often as you build an REST API you get an error: `No
+'Access-Control-Allow-Origin'` in your frontend, or in your client-side
+JavaScript. This is an error you see a lot when building modern web
+applications, modern SPA, and it often leads to a lot of confusion.
+
+Now what is CORS? And what's causing it? And most importantly how can we solve
+it?.
+
+CORS stand for _Cross Origin Resource Sharing_, and by _default this is not
+allowed by browsers_.
+
+If you have a client in the server and they run with the same domain and the
+domain could be `localhost:3000`; Important, the port as part of the domain, if
+they run on the same server we can send requests and responses as we want to,
+without issues; and that is why we had no issue before in the course. We
+rendered our HTML files on the server and therefore they were served by the same
+server as you send your requests to. So we never had any issues.
+
+However, if client-server run on different domains, like the client on
+`localhost:4000`, which is different domain with the server, it's run on
+`localhost:3000`, then _we'll have issues_.
+
+Of course, in production you would run on `my-app.com`, and let's say
+`my-api.com`; if you send requests and response here, you get problem; you get
+a _CORS error_, because it's a security mechanism provided by the browser, that
+_you can't share resource across domains, across service, across origin_, as it's
+called here.
+
+However we can overwrite this, because this mechanism makes senses for some
+applications; for _REST API typically does not_. We want to allow our server to
+share its data. We _want to offer data from our server to different clients_,
+and _these client will often bot be served by the same server as our API runs
+on_. For example, we take Google Maps, you're not running tour app on Google's
+service, but still you can access it; And the same is true, for your own API,
+and even if you built both the frontend and backend you will often serve the two
+ends from different service, because you can choose a server for the
+frontend that optimize for frontend-code, that really servers that really well,
+and you serve your server-side code your NodeJS code from different server. So
+you'll have different domains, different addresses there too.
+
+Therefore, we need to solve such a CORS error, or we need to tell the browser,
+that it _may accept the response_ sent by our server, and to tell the browser
+we have to change on the server.
+
+This is a common gotcha. A lot of people see that error, and want to _solve it in
+their browser side JavaScript code, You just can't_. **_You can only solve on the
+server_**.
+
+
+you just add some special `setHeader`. We want set this headers on any response
+that leaves our server.  So [app.js](./../project-19/app.js) the general
+middleware is a great place.
+
+So you add the `Headers` before you forward request to `feedRoutes`, where
+I ultimately send the response, I want to add a `Headers` to any response,
+I setup a general middleware like this,
+
+```javascript
+app.use((request, response, next) => {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+    response.setHeder("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    next();
+});
+```
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
