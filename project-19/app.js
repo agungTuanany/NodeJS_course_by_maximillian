@@ -17,7 +17,7 @@ app.use(bodyParser.json())              // for: application/json
 app.use((request, response, next) => {
     response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
-    response.setHeder("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
     next();
 });
