@@ -5,12 +5,19 @@ const getPosts = (request, response, next) => {
     return response
         .status(200)
         .json({
-        posts: [{
-            "title": "First Post",
-            "content": "This is the firts post!"
-        }]
-    });
-
+            posts: [
+                {
+                    _id: "1",
+                    title: "First Post",
+                    content: "This is the firts post!",
+                    imgeUrl: "images/wholemeal.jpg",
+                    creator: {
+                        name: "Donald Humpery"
+                    },
+                    createdAt: new Date()
+                }
+            ]
+        });
 };
 
 const createPost = (request, response, next) => {
