@@ -29,11 +29,15 @@ const createPost = (request, response, next) => {
     return response
         .status(201) // @NOTE:201 = resource created successfully
         .json({
-            "message": "Post created successfully",
+            message: "Post created successfully",
             post: {
-                id: new Date().toISOString(),
+                _id: new Date().toISOString(),
                 title: title,
-                content: content
+                content: content,
+                creator: {
+                    name: "Donald Humpery"
+                },
+                createdAt: new Date()
             }
         })
 
