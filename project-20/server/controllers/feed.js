@@ -31,12 +31,10 @@ const createPost = (request, response, next) => {
     const errors = validationResult(request);
 
     if (!errors.isEmpty()) {
-        return response
-            .status(422)
-            .json({
-                message: "Validation failed, the entered data  is incorrect",
-                errors: errors.array()
-            });
+        const error = new Error("Validation falied, please correct the entered data");
+        error.statusCode = 422;
+
+        throw error;
     };
 
     const title = request.body.title;
@@ -66,12 +64,14 @@ const createPost = (request, response, next) => {
         })
         .catch(err => {
 
+            if (!err.statusCode) {
             console.log("===> post.save() error:", err);
-        })
+                err.statusCode = 500;
+            };
 
-    // Create post in DB
-
-}
+            next(err);
+        });
+};
 
 module.exports = {
     getPosts,

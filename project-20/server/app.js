@@ -1,5 +1,8 @@
 "use strict"
 
+// Core Dependencies
+const path = require("path");
+
 // 3rd party Dependencies
 const express    = require("express");
 const bodyParser = require("body-parser");
@@ -16,6 +19,7 @@ const MONGODB_URI = "mongodb+srv://daun:bMSKaebmN7o4Tmsk@udemy-nodejs-maximillia
 
 // app.use(bodyParser.urlencoded());    // for: x-www-form-urlencoded <form>
 app.use(bodyParser.json())              // for: application/json
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use((request, response, next) => {
     response.setHeader("Access-Control-Allow-Origin", "*");
@@ -27,6 +31,18 @@ app.use((request, response, next) => {
 
 app.use("/feed", feedRoutes)
 
+// General error handling
+app.use((error, request, response, next) => {
+    console.log("===> General error handling middleware:", error);
+    const status = error.statusCode || 500;
+    const message = error.message;
+
+    return response
+        .status(status)
+        .json({
+            message: message
+        })
+})
 
 
 // Mongoose
