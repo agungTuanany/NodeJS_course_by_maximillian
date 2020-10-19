@@ -1,5 +1,8 @@
 "user strict"
 
+// 3rd party Dependencies
+const { validationResult } = require("express-validator");
+
 const getPosts = (request, response, next) => {
 
     return response
@@ -21,6 +24,17 @@ const getPosts = (request, response, next) => {
 };
 
 const createPost = (request, response, next) => {
+
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+        return response
+            .status(422)
+            .json({
+                message: "Validation failed, the entered data  is incorrect",
+                errors: errors.array()
+            });
+    };
 
     const title = request.body.title;
     const content = request.body.content;
