@@ -3,7 +3,7 @@
 // 3rd party Dependencies
 const mongoose   = require("mongoose");
 
-Const Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
 

@@ -3,6 +3,9 @@
 // 3rd party Dependencies
 const { validationResult } = require("express-validator");
 
+// Internal Dependencies
+const Post = require("./../models/post.js");
+
 const getPosts = (request, response, next) => {
 
     return response
@@ -39,21 +42,34 @@ const createPost = (request, response, next) => {
     const title = request.body.title;
     const content = request.body.content;
 
-    // Create post in DB
-    return response
-        .status(201) // @NOTE:201 = resource created successfully
-        .json({
-            message: "Post created successfully",
-            post: {
-                _id: new Date().toISOString(),
-                title: title,
-                content: content,
-                creator: {
-                    name: "Donald Humpery"
-                },
-                createdAt: new Date()
-            }
+    const post = new Post({
+        title: title,
+        content: content,
+        imageUrl: "images/wholemeal.jpg",
+        creator: {
+            name: "Donald Humpery"
+        },
+    })
+
+    // Save new post into MongoDB
+    post.save()
+        .then(result => {
+
+            console.log("===> post.save():", result);
+
+            return response
+                .status(201) // @NOTE:201 = resource created successfully
+                .json({
+                    message: "Post created successfully",
+                    post: result
+                });
         })
+        .catch(err => {
+
+            console.log("===> post.save() error:", err);
+        })
+
+    // Create post in DB
 
 }
 
