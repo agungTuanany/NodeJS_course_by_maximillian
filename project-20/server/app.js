@@ -11,6 +11,7 @@ const multer     = require("multer");
 
 // Internal Dependencies
 const feedRoutes = require("./router/feed.js");
+const authRoutes = require("./router/auth.js");
 
 // Global variables
 const app  = express()
@@ -60,7 +61,8 @@ app.use((request, response, next) => {
     next();
 });
 
-app.use("/feed", feedRoutes)
+app.use("/feed", feedRoutes);
+app.use("/auth", authRoutes);
 
 // General error handling
 app.use((error, request, response, next) => {
