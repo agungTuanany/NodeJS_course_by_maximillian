@@ -12,24 +12,37 @@ const Post = require("./../models/post.js");
 
 const getPosts = (request, response, next) => {
 
+    const currentPage = request.query.page || 1;
+    const perPage = 2;
+    let totalItems;
+
     Post.find()
+        .countDocuments()
+        .then(count => {
+
+            totalItems = count;
+            return Post.find()
+                .skip((currentPage - 1) * perPage)
+                .limit(perPage)
+        })
         .then(posts => {
 
             return response
                 .status(200)
                 .json({
                     message: "Successfully fetched the all Posts",
-                    posts: posts
+                    posts: posts,
+                    totalItems: totalItems
                 });
         })
         .catch(err => {
 
             if (!err.statusCode) {
-                console.log("===> post.find() getPosts error", err);
+                console.log("===> post.find().countDocuments() getPosts error", err);
                 err.statusCode = 500;
             };
                 next(err);
-        })
+        });
 };
 
 const createPost = (request, response, next) => {
