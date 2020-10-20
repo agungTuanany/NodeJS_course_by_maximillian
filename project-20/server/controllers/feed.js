@@ -18,7 +18,7 @@ const getPosts = (request, response, next) => {
             return response
                 .status(200)
                 .json({
-                    message: "Fetched Post Successfully",
+                    message: "Successfully fetched the all Posts",
                     posts: posts
                 });
         })
@@ -104,7 +104,7 @@ const getPost = (request, response, next) => {
             return response
                 .status(200)
                 .json({
-                    message: "Post fetched",
+                    message: "Successfully fetched the Post",
                     post: post
                 });
         })
@@ -176,7 +176,7 @@ const updatePost = (request, response, next) => {
             return response
                 .status(200)
                 .json({
-                    message: "Successfully Updated Post",
+                    message: "Successfully Updated the Post",
                     post: result
                 });
         })
@@ -184,6 +184,46 @@ const updatePost = (request, response, next) => {
 
             if (!err.statusCode) {
                 console.log("===> post.save() error:", err);
+                err.statusCode = 500;
+            };
+
+            next(err);
+        });
+};
+
+const deletePost = (request, response, next) => {
+
+    const postId = request.params.postId;
+
+    Post.findById(postId)
+        .then(post => {
+
+            if (!post) {
+                const error = new Error("Could not find the post");
+                error.status = 404;
+
+                throw error;
+            };
+
+            // @TODO Check logged in user for auth
+            clearImage(post.imageUrl);
+
+            return Post.findByIdAndRemove(postId);
+        })
+        .then(result => {
+
+            console.log("===> deletePost findByIdAndRemove - result:", result);
+
+            return response
+                .status(200)
+                .json({
+                    message: "Successfully Deleted the post"
+                });
+        })
+        .catch(err => {
+
+            if (!err.statusCode) {
+                console.log("===> deletePost - post.findById() error:", err);
                 err.statusCode = 500;
             };
 
@@ -203,9 +243,12 @@ const clearImage = filePath => {
     });
 };
 
+
+
 module.exports = {
     getPosts,
     createPost,
     getPost,
-    updatePost
+    updatePost,
+    deletePost
 };
