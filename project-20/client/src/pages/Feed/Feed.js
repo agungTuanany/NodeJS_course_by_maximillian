@@ -38,28 +38,42 @@ class Feed extends Component {
   }
 
   loadPosts = direction => {
+
     if (direction) {
       this.setState({ postsLoading: true, posts: [] });
-    }
+    };
+
     let page = this.state.postPage;
+
     if (direction === 'next') {
       page++;
       this.setState({ postPage: page });
-    }
+    };
+
     if (direction === 'previous') {
       page--;
       this.setState({ postPage: page });
-    }
+    };
+
     fetch('http://localhost:8081/feed/posts')
       .then(res => {
+
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.');
-        }
+        };
+
         return res.json();
       })
       .then(resData => {
+
         this.setState({
-          posts: resData.posts,
+          posts: resData.posts.map(post => {
+
+            return {
+              ...post,
+              imagePath: post.imageUrl
+            }
+          }),
           totalPosts: resData.totalItems,
           postsLoading: false
         });
@@ -114,11 +128,13 @@ class Feed extends Component {
     formData.append("content", postData.content);
     formData.append("image", postData.image);
 
-    let url = 'http://localhost:8081/feed/post';
+    let url = "http://localhost:8081/feed/post";
     let method = "POST";
+
     if (this.state.editPost) {
-      url = 'URL';
-    }
+      url = "http://localhost:8081/feed/post/" + this.state.editPost._id;
+      method = "PUT";
+    };
 
     fetch(url, {
       method: method,
@@ -126,11 +142,14 @@ class Feed extends Component {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
+
+          console.log("===> response.status", res.status)
           throw new Error('Creating or editing a post failed!');
         }
         return res.json();
       })
       .then(resData => {
+
         console.log("===> finishEditHandler resData:", resData);
 
         const post = {
@@ -140,6 +159,7 @@ class Feed extends Component {
           creator: resData.post.creator,
           createdAt: resData.post.createdAt
         };
+
         this.setState(prevState => {
           let updatedPosts = [...prevState.posts];
           if (prevState.editPost) {

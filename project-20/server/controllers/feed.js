@@ -1,5 +1,9 @@
 "user strict"
 
+// Core Dependencies
+const fs   = require("fs");
+const path = require("path");
+
 // 3rd party Dependencies
 const { validationResult } = require("express-validator");
 
@@ -114,8 +118,94 @@ const getPost = (request, response, next) => {
         });
 };
 
+const updatePost = (request, response, next) => {
+
+    const postId = request.params.postId;
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+        const error = new Error("Validation falied, please correct the entered data");
+        error.statusCode = 422;
+
+        console.log("===> errors", errors)
+        throw error;
+    };
+
+    const title = request.body.title;
+    const content = request.body.content;
+    let imageUrl = request.body.image;
+
+    if (request.file) {
+        imageUrl = request.file.path;
+    };
+
+    if (!imageUrl) {
+        console.log("===> imageUrl", imageUrl)
+        const error = new Error("updatePost error: No file for image selected");
+        error.statusCode = 422;
+
+        // console.log("===> errors", errors)
+        // console.log("===> imageUrl error", error);
+        throw error;
+    };
+
+    // Update the database
+    Post.findById(postId)
+        .then(post => {
+
+            if (!post) {
+                const error = new Error("Could not find the post");
+                error.status = 404;
+
+                throw error;
+            };
+
+            if (imageUrl !== post.imageUrl) {
+                clearImage(post.imageUrl)
+            };
+
+            post.title = title;
+            post.imageUrl = imageUrl;
+            post.content = content;
+
+            return post.save();
+
+        })
+        .then(result => {
+
+            return response
+                .status(200)
+                .json({
+                    message: "Successfully Updated Post",
+                    post: result
+                });
+        })
+        .catch(err => {
+
+            if (!err.statusCode) {
+                console.log("===> post.save() error:", err);
+                err.statusCode = 500;
+            };
+
+            next(err);
+        });
+};
+
+// Helper function
+const clearImage = filePath => {
+
+    filePath = path.join(__dirname, "..", filePath);
+
+    fs.unlink(filePath, error => {
+
+        // @TODO: Handle the error correctly
+        console.log("clearImage error:", error);
+    });
+};
+
 module.exports = {
     getPosts,
     createPost,
-    getPost
+    getPost,
+    updatePost
 };
