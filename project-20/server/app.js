@@ -7,6 +7,7 @@ const path = require("path");
 const express    = require("express");
 const bodyParser = require("body-parser");
 const mongoose   = require("mongoose");
+const multer     = require("multer");
 
 // Internal Dependencies
 const feedRoutes = require("./router/feed.js");
@@ -15,10 +16,40 @@ const feedRoutes = require("./router/feed.js");
 const app  = express()
 const port = 8081;
 
+const fileStorage = multer.diskStorage({
+    destination: (request, file, callback) => {
+
+        callback(null, "images");
+    },
+    filename: (request, file, callback) => {
+
+        callback(null, `${new Date().toISOString()} - ${file.originalname}`);
+    }
+});
+
+const fileFilter = (request, file, callback) => {
+
+    if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
+        callback(null, true);
+    }
+    else {
+        callback(null, false);
+    }
+};
+
 const MONGODB_URI = "mongodb+srv://daun:bMSKaebmN7o4Tmsk@udemy-nodejs-maximillia.tz0sa.mongodb.net/rest-api-max-course?retryWrites=true&w=majority"
 
 // app.use(bodyParser.urlencoded());    // for: x-www-form-urlencoded <form>
 app.use(bodyParser.json())              // for: application/json
+
+app.use(
+    multer({
+        storage: fileStorage,
+        fileFilter: fileFilter
+    })
+    .single("image")
+);
+
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use((request, response, next) => {

@@ -36,16 +36,25 @@ const createPost = (request, response, next) => {
         const error = new Error("Validation falied, please correct the entered data");
         error.statusCode = 422;
 
+        console.log("===> errors", errors)
         throw error;
     };
 
+    if (!request.file) {
+        const error = new Error("No Image provided");
+        error.statusCode = 422;
+
+        throw error;
+    };
+
+    const imageUrl = request.file.path;
     const title = request.body.title;
     const content = request.body.content;
 
     const post = new Post({
         title: title,
         content: content,
-        imageUrl: "images/wholemeal.jpg",
+        imageUrl: imageUrl,
         creator: {
             name: "Donald Humpery"
         },
