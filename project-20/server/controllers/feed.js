@@ -8,22 +8,24 @@ const Post = require("./../models/post.js");
 
 const getPosts = (request, response, next) => {
 
-    return response
-        .status(200)
-        .json({
-            posts: [
-                {
-                    _id: "1",
-                    title: "First Post",
-                    content: "This is the firts post!",
-                    imgeUrl: "images/wholemeal.jpg",
-                    creator: {
-                        name: "Donald Humpery"
-                    },
-                    createdAt: new Date()
-                }
-            ]
-        });
+    Post.find()
+        .then(posts => {
+
+            return response
+                .status(200)
+                .json({
+                    message: "Fetched Post Successfully",
+                    posts: posts
+                });
+        })
+        .catch(err => {
+
+            if (!err.statusCode) {
+                console.log("===> post.find() getPosts error", err);
+                err.statusCode = 500;
+            };
+                next(err);
+        })
 };
 
 const createPost = (request, response, next) => {
@@ -53,8 +55,6 @@ const createPost = (request, response, next) => {
     post.save()
         .then(result => {
 
-            console.log("===> post.save():", result);
-
             return response
                 .status(201) // @NOTE:201 = resource created successfully
                 .json({
@@ -73,7 +73,40 @@ const createPost = (request, response, next) => {
         });
 };
 
+// Fetching single post
+const getPost = (request, response, next) => {
+
+    const postId = request.params.postId;
+
+    Post.findById(postId)
+        .then(post => {
+
+            if (!post) {
+                const error = new Error("Could not find the post");
+                error.statusCode = 404;
+
+                throw error;
+            };
+
+            return response
+                .status(200)
+                .json({
+                    message: "Post fetched",
+                    post: post
+                });
+        })
+        .catch(err => {
+
+            if (!err.statusCode) {
+                console.log("===> post.findById() getPost error", err);
+                err.statusCode = 500;
+            };
+                next(err);
+        });
+};
+
 module.exports = {
     getPosts,
-    createPost
+    createPost,
+    getPost
 };
