@@ -77,8 +77,8 @@ app.use((error, request, response, next) => {
         .json({
             message: message,
             data: data
-        })
-})
+        });
+});
 
 
 // Mongoose

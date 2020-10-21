@@ -17,7 +17,7 @@ class App extends Component {
   state = {
     showBackdrop: false,
     showMobileNav: false,
-    isAuth: true,
+    isAuth: false,
     token: null,
     userId: null,
     authLoading: false,
@@ -100,8 +100,19 @@ class App extends Component {
   signupHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('URL')
+    fetch("http://localhost:8081/auth/signup", {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        email: authData.signupForm.email.value,
+        name: authData.signupForm.name.value,
+        password: authData.signupForm.password.value
+      })
+    })
       .then(res => {
+
         if (res.status === 422) {
           throw new Error(
             "Validation failed. Make sure the email address isn't used yet!"
@@ -114,12 +125,14 @@ class App extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
+
+        console.log("response resData:", resData);
         this.setState({ isAuth: false, authLoading: false });
         this.props.history.replace('/');
       })
       .catch(err => {
-        console.log(err);
+
+        console.log("signupHandler error:", err);
         this.setState({
           isAuth: false,
           authLoading: false,
