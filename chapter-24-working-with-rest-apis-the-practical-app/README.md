@@ -4,6 +4,7 @@
 
 1. [Module Introduction](#module-introduction)
 2. [REST API and The Rest of the course](#rest-api-and-the-rest-of-the-course)
+3. [How Authentication Works on REST API](#how-authentication-works-on-rest-api)
 
 
 <br/>
@@ -107,6 +108,66 @@ redundant, it's still super important.
 
 With that, let's dive in, let's see which project will be work on, and how we
 can work on it.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## How Authentication Works on REST API
+<br/>
+
+![chapter-24-3.gif](./images/gif/chapter-24-3.gif "How authentication works on REST API")
+<br/>
+
+How does authentication work in REST API? Well, obviously we still have our
+client and server; And the client sends authentication data to the server; So
+the `email` and `password`, let's say. In the past we then would have checked
+data on the server; And if it's valid, we would have _established a session_. _We
+don't use a session anymore, because RESTFUL API's are stateless_. They don't
+care about the client.
+
+You learned about that strict decoupling of server and client and every request
+should be treated standalone; That means, every request should have all the data
+it needs to authenticate itself. With a session the server needs to store data
+about the client, the server then stores that a client is authenticated, and
+that's just not how REST API is work; The server will not store anything about
+any client; So we don't store session on REST API, and therefore this approach
+will not be used anymore.
+
+Obviously we will still validate the input on the server we'll still check for
+the validity of the email-password combination; But then instead, we return as
+so-called **_token_** to the client, that token will be generated on the server
+and will hold some information which can only be validated by the server, and
+this token will then be stored in the client, so they're in storage in the
+browser, there are specific storage mechanisms for this, and the client can then
+attach this token to every subsequent request it send to the server.
+
+So this _stored token_ and attached to every request that targets a resource on
+the server which requires authentication that token can only be validated by the
+server, which created on token; And if you change that token on the frontend or
+you try to create it to fake that you are authenticated, that will be detected,
+because the server used a certain algorithm for generating the token, which you
+can't fake because you don't know it or you don't know the private key you use
+by that server for generating the token to be precise.
+
+### What's that Token?
+<br/>
+
+![chapter-24-4.gif](./images/gif/chapter-24-4.gif "What is that token")
+<br/>
+
+The token contains **_JSON data_** or JavaScript data, and the end plus
+**_signature_**, which as I mentioned is generated on the server with a special
+private key which is only stored on the server, and this give us a so-called
+_JSON WEB Token_ (JWT), this JWT is then returned to the client and the
+signature as I explained can only be verified by a server; So _you can't edit or
+create the token on the client_; Well you can, but the server will detect this
+and will treat the token as invalid.
+
+This is how we generate the token or how we do authentication and REST API. We
+have the token, which can be checked by the server, but which does not to be
+stored on the server, and this give us an elegant way of authenticating request
+in a REST API world.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
