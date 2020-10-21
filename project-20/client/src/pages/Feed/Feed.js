@@ -57,7 +57,12 @@ class Feed extends Component {
       this.setState({ postPage: page });
     };
 
-    fetch("http://localhost:8081/feed/posts?page=" + page)
+    fetch("http://localhost:8081/feed/posts?page=" + page, {
+      headers: {
+        // @NOTE: "Bearer " Is a convention to kind of identify the type of token for JWT
+        Authorization: "Bearer " + this.props.token
+      }
+    })
       .then(res => {
 
         if (res.status !== 200) {

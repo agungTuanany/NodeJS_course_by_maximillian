@@ -6,11 +6,12 @@ const { body } = require("express-validator");
 
 // Internal Dependencies
 const feedController = require("./../controllers/feed.js");
+const { jwtAuth } = require("./../middleware/is-auth.js");
 
 const router = express.Router();
 
 // GET /feed/posts
-router.get("/posts", feedController.getPosts);
+router.get("/posts", jwtAuth, feedController.getPosts);
 
 // POST /feed/post
 router.post("/post",
