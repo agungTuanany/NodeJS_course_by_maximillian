@@ -7,7 +7,7 @@ const { body } = require("express-validator");
 // Internal Dependencies
 const feedController = require("./../controllers/feed.js");
 
-const router = express.Router()
+const router = express.Router();
 
 // GET /feed/posts
 router.get("/posts", feedController.getPosts);

@@ -66,14 +66,17 @@ app.use("/auth", authRoutes);
 
 // General error handling
 app.use((error, request, response, next) => {
+
     console.log("===> General error handling middleware:", error);
     const status = error.statusCode || 500;
     const message = error.message;
+    const data =error.data;
 
     return response
         .status(status)
         .json({
-            message: message
+            message: message,
+            data: data
         })
 })
 

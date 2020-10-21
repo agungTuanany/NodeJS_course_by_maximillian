@@ -1,7 +1,7 @@
 "use strict"
 
 // 3rd part Dependencies
-const mogoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -22,7 +22,7 @@ const userSchema = new Schema({
     status: {
         type: String,
         required: true
-    }
+    },
     post: [
         {
             type: Schema.Types.ObjectId,
