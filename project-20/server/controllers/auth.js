@@ -3,6 +3,7 @@
 // 3rd party Dependencies
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // Internal Dependencies
 const User = require("./../models/user.js");
@@ -72,23 +73,38 @@ const login = (request, response, next) => {
 
             loadedUser = user;
 
+            console.log("===> loadedUser", loadedUser)
             return bcrypt.compare(password, user.password);
         })
         .then(isEqual => {
 
             if (!isEqual) {
-                const error = new Error("Wrong Passowrd!");
+                const error = new Error("Wrong Password!");
                 error.statusCode = 401;
 
                 throw error;
             };
 
-            // @TODO: JWT authentication
+            const token = jwt.sign(
+                {
+                    email: loadedUser.email,
+                    userId: loadedUser._id.toString()
+                },
+                "somesupersecretsecret",
+                { expiresIn: "1h" }
+            );
+
+            response
+                .status(200)
+                .json({
+                    token: token,
+                    userId: loadedUser._id.toString()
+                });
         })
         .catch(err => {
 
             if (!err.statusCode) {
-            console.log("===> password bycrpt error:", err);
+            console.log("===> login error:", err);
                 err.statusCode = 500;
             };
 

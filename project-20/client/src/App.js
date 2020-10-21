@@ -57,10 +57,22 @@ class App extends Component {
   };
 
   loginHandler = (event, authData) => {
+
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('URL')
+
+    fetch("http://localhost:8081/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        email: authData.email,
+        password: authData.password
+      })
+    })
       .then(res => {
+
         if (res.status === 422) {
           throw new Error('Validation failed.');
         }
@@ -71,6 +83,7 @@ class App extends Component {
         return res.json();
       })
       .then(resData => {
+
         console.log(resData);
         this.setState({
           isAuth: true,
@@ -78,17 +91,20 @@ class App extends Component {
           authLoading: false,
           userId: resData.userId
         });
+
         localStorage.setItem('token', resData.token);
         localStorage.setItem('userId', resData.userId);
         const remainingMilliseconds = 60 * 60 * 1000;
         const expiryDate = new Date(
           new Date().getTime() + remainingMilliseconds
         );
+
         localStorage.setItem('expiryDate', expiryDate.toISOString());
         this.setAutoLogout(remainingMilliseconds);
       })
       .catch(err => {
-        console.log(err);
+
+        console.log("===> loginHandler error:", err);
         this.setState({
           isAuth: false,
           authLoading: false,
