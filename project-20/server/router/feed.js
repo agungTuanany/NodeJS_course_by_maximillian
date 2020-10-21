@@ -15,6 +15,7 @@ router.get("/posts", jwtAuth, feedController.getPosts);
 
 // POST /feed/post
 router.post("/post",
+    jwtAuth,
     [
         body("title")
             .trim()
@@ -26,9 +27,10 @@ router.post("/post",
     feedController.createPost
 );
 
-router.get("/post/:postId", feedController.getPost);
+router.get("/post/:postId", jwtAuth, feedController.getPost);
 
 router.put("/post/:postId",
+    jwtAuth,
     [
         body("title")
             .trim()
@@ -40,6 +42,6 @@ router.put("/post/:postId",
     feedController.updatePost
 );
 
-router.delete("/post/:postId", feedController.deletePost);
+router.delete("/post/:postId", jwtAuth, feedController.deletePost);
 
 module.exports = router;
