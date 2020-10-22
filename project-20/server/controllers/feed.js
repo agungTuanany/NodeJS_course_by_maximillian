@@ -189,7 +189,7 @@ const updatePost = (request, response, next) => {
                 throw error;
             };
 
-            if (post.creator !== request.userId) {
+            if (post.creator.toString() !== request.userId) {
                 const error = new Error("Not autorizhed to update the post!");
                 error.statusCode = 403;
 
@@ -241,7 +241,7 @@ const deletePost = (request, response, next) => {
                 throw error;
             };
 
-            if (post.creator !== request.userId) {
+            if (post.creator.toString() !== request.userId) {
                 const error = new Error("Not autorizhed to delete the post!");
                 error.statusCode = 403;
 
@@ -254,9 +254,18 @@ const deletePost = (request, response, next) => {
         })
         .then(result => {
 
-            console.log("===> deletePost findByIdAndRemove - result:", result);
+            return User.findById(request.userId);
+        })
+        .then(user => {
 
-            return response
+            user.posts.pull(postId);
+
+            return user.save();
+        })
+        .then(result => {
+
+            console.log("===> deletePost findByIdAndRemove - result:", result);
+            response
                 .status(200)
                 .json({
                     message: "Successfully Deleted the post"
