@@ -51,7 +51,7 @@ const createPost = (request, response, next) => {
     const errors = validationResult(request);
 
     if (!errors.isEmpty()) {
-        const error = new Error("Validation falied, please correct the entered data");
+        const error = new Error("Validation failed, please correct the entered data");
         error.statusCode = 422;
 
         console.log("===> errors", errors)
@@ -189,6 +189,13 @@ const updatePost = (request, response, next) => {
                 throw error;
             };
 
+            if (post.creator !== request.userId) {
+                const error = new Error("Not autorizhed to update the post!");
+                error.statusCode = 403;
+
+                throw error;
+            };
+
             if (imageUrl !== post.imageUrl) {
                 clearImage(post.imageUrl)
             };
@@ -234,7 +241,13 @@ const deletePost = (request, response, next) => {
                 throw error;
             };
 
-            // @TODO Check logged in user for auth
+            if (post.creator !== request.userId) {
+                const error = new Error("Not autorizhed to delete the post!");
+                error.statusCode = 403;
+
+                throw error;
+            };
+
             clearImage(post.imageUrl);
 
             return Post.findByIdAndRemove(postId);

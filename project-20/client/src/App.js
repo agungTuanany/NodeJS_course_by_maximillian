@@ -39,17 +39,20 @@ class App extends Component {
       new Date(expiryDate).getTime() - new Date().getTime();
     this.setState({ isAuth: true, token: token, userId: userId });
     this.setAutoLogout(remainingMilliseconds);
-  }
+  };
 
   mobileNavHandler = isOpen => {
+
     this.setState({ showMobileNav: isOpen, showBackdrop: isOpen });
   };
 
   backdropClickHandler = () => {
+
     this.setState({ showBackdrop: false, showMobileNav: false, error: null });
   };
 
   logoutHandler = () => {
+
     this.setState({ isAuth: false, token: null });
     localStorage.removeItem('token');
     localStorage.removeItem('expiryDate');
@@ -114,8 +117,10 @@ class App extends Component {
   };
 
   signupHandler = (event, authData) => {
+
     event.preventDefault();
     this.setState({ authLoading: true });
+
     fetch("http://localhost:8081/auth/signup", {
       method: "PUT",
       headers: {
@@ -133,11 +138,13 @@ class App extends Component {
           throw new Error(
             "Validation failed. Make sure the email address isn't used yet!"
           );
-        }
+        };
+
         if (res.status !== 200 && res.status !== 201) {
           console.log('Error!');
           throw new Error('Creating a user failed!');
-        }
+        };
+
         return res.json();
       })
       .then(resData => {
@@ -158,12 +165,15 @@ class App extends Component {
   };
 
   setAutoLogout = milliseconds => {
+
     setTimeout(() => {
+
       this.logoutHandler();
     }, milliseconds);
   };
 
   errorHandler = () => {
+
     this.setState({ error: null });
   };
 
@@ -248,7 +258,7 @@ class App extends Component {
         {routes}
       </Fragment>
     );
-  }
-}
+  };
+};
 
 export default withRouter(App);
