@@ -5,6 +5,7 @@
 1. [Module Introduction](#module-introduction)
 2. [REST API and The Rest of the course](#rest-api-and-the-rest-of-the-course)
 3. [How Authentication Works on REST API](#how-authentication-works-on-rest-api)
+4. [Module Summary](#module-summary)
 
 
 <br/>
@@ -173,3 +174,51 @@ in a REST API world.
 <br/>
 <br/>
 
+## Module Summary
+<br/>
+
+![chapter-24-5.gif](./images/gif/chapter-24-5.gif "Module summary")
+<br/>
+
+That's it for this module, you'll learn that when moving from the _classic
+NodeJS application_ which I don't mean in the sense of how you built it in the
+past; So simply just an application where you rendered using the server, that is
+a classic application, because that's what we started with this course.
+
+So, if you move from such a NodeJS application to REST API, you'll learn that
+most of the server-side does not change. You work with _validation files_, and
+so on, in exactly the same way as you did with the classic approach, only
+request and response data changed, just because there you send JSON data, you
+don't render any views.
+
+You also got more to the HTTP methods available, which you can use to construct
+your API Endpoints.
+
+The most _important take away_ is, that the REST API server does not care about
+the client. The _request are handled in isolation_; So, every request is treated
+as if would arrive for the first time. So we don't use _session_, the REST API
+server does not store any sessions, it does not store any client data.
+
+Now, that has important _implications for authentication_, due to no session
+being used, the authentication works differently. Each request needs to be able
+to send some piece of data, that proves the request is authenticated; and that's
+this JSON Web Token (JWT), which we generated and worked with in this module.
+
+JWT is a common way of storing some authentication information in a token
+a piece of data which you send to the client, which you store on the client, and
+which then gets attached to every outgoing request to a protected resources.
+
+JWT are assigned by the server, and only the server can validate them by using
+a private key, which is only known to the server; hence you can fake or
+manipulate tokens on the client, and that's it for this module.
+
+We now had a detailed look at building REST API; A common form of NodeJS
+application which you need a loot of scenarios and now you have already a very
+broad tool set, which allows you to build extremely versatile and powerful
+NodeJS application.
+
+We're still not done with the course though, there's more to come.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
