@@ -9,6 +9,7 @@ const { validationResult } = require("express-validator");
 
 // Internal Dependencies
 const Post = require("./../models/post.js");
+const User = require("./../models/user.js");
 
 const getPosts = (request, response, next) => {
 
@@ -67,31 +68,46 @@ const createPost = (request, response, next) => {
     const imageUrl = request.file.path;
     const title = request.body.title;
     const content = request.body.content;
+    let creator;
 
     const post = new Post({
         title: title,
         content: content,
         imageUrl: imageUrl,
-        creator: {
-            name: "Donald Humpery"
-        },
+        creator:  request.userId
     })
 
     // Save new post into MongoDB
     post.save()
         .then(result => {
 
-            return response
+            return User.findById(request.userId)
+        })
+        .then(user => {
+
+            creator = user;
+            user.posts.push(post);
+
+            return user.save();
+
+        })
+        .then(result => {
+
+            response
                 .status(201) // @NOTE:201 = resource created successfully
                 .json({
                     message: "Post created successfully",
-                    post: result
+                    post: post,
+                    creator: {
+                        _id: creator._id,
+                        name: creator.name
+                    }
                 });
         })
         .catch(err => {
 
             if (!err.statusCode) {
-            console.log("===> post.save() error:", err);
+            console.log("===> createPost post.save() error:", err);
                 err.statusCode = 500;
             };
 

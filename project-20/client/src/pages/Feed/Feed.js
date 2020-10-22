@@ -85,6 +85,7 @@ class Feed extends Component {
           postsLoading: false
         });
       })
+
       .catch(this.catchError);
   };
 
