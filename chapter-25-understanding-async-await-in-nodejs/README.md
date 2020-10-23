@@ -5,6 +5,7 @@
 1. [Module Introduction](#module-introduction)
 2. [What is Async Await All About](#what-is-async-await-all-about)
 3. [Transforming Then-Catch Block to Async-Await](#transforming-then-catch-block-to-async-await)
+4. [Module Summary](#module-summary)
 
 <br/>
 
@@ -17,12 +18,12 @@ differences is how you handle request and response data; You send JSON data, now
 with that out of the way,
 
 I want to dive into something totally different which is applicable to any
-NodeJS application, not just to RESFUL API. I want to dive into _async-await
+NodeJS application, not just to RESTFUL API. I want to dive into _async-await
 keyword_, which is relatively new JavaScript language feature, which you can
 use, again in any place in your NodeJS code, this does not have to be used in
 a RESTFUL API, you can or can not use it anywhere.
 
-I will explain what's up with this two keywords, how you used them? And why you
+I will explain what is up with this two keywords, how you used them? And why you
 would use them?.
 
 **[⬆ back to top](#table-of-contents)**
@@ -37,11 +38,11 @@ would use them?.
 
 What is async-await all about? Async-await are two keywords, which are part of
 the core JavaScript language. They're not an exclusive part of the NodeJS
-runtime. Async-await also available in modern browser or in Frontend projects.
+runtime. Async-await also available in modern browser or in frontend projects.
 They're not part of NodeJS, but you can use them in NodeJS.
 
-The question of course is, what do these two keyword do?, Async-await allows you
-to write asynchronous request, so request, where you have some operation that
+The question of course is, what do these two keyword do? Async-await allows you
+to write asynchronous request; So request, where you have some operation that
 takes a little while, and comes back later in a synchronous way; And you see
 there is an asterisk `*` after `Synchronous Way*`, because **_async-await it allows
 you to write asynchronous statements in a way that looks synchronous, but still
@@ -159,7 +160,7 @@ you in the next lecture.
 
 We have brief look at how asynchronous code can be identified, and what is
 important about asynchronous code, and that you can see callbacks and promises
-to handle asynchronous code;
+to handle asynchronous code.
 
 Now we learn all that, let me introduce you to async-await. To use that you
 first of all have to _prepend `async` keyword_ in front of a function,
@@ -169,7 +170,7 @@ const getPosts = async (request, response, next) => {
 
 }
 ```
-Where you plain to use the `wait` keyword; So where you want to use these two
+Where you plain to use the `await` keyword; So where you want to use these two
 keyword? They always are used together, **_`async` in front of the function_**,
 then you can tweak `getPost()` function syntax. You can write the `post.find()`
 almost as if it would run synchronously.
@@ -306,6 +307,106 @@ because keep in mind behind the scenes, `next(err)` get converted to `then-catch
 block we used before; But now with that we have transformed this first snippet
 where we used promises to async-await.
 
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
+
+We've using async-await, and there's one important thing I want to highlight
+here for all the `mongoose` operation, which is the primary thing, where we use
+a async-await, you have to understand that `mongoose` is actually with
+operations like `countDocuments()`, or `find()` **_does not return a real
+promise_**, but a **_promise like object_** where you can use `then-catch`
+block; And also async-await is supported by `mongoose`, even though behind the
+scenes it's not a real promise.
+
+Doesn't matter too much for you to be honest, because you use async-await with
+exactly the same way you would use it on a real promise, but I also don't want
+to hide that fact from you.
+
+You could use a real promise by chaining `exec()` after all these `mongoose`
+operations.
+
+```javascript
+try {
+    const totalItems = await Post.find().countDocuments().exec();
+    const post = await Post.find().exec():
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+
+    response
+        .status(200)
+        .json({
+            message: "Successfully fetched the all Posts",
+            posts: posts,
+            totalItems: totalItems
+        });
+
+}
+```
+
+If you do that, then you get back a real promise. We don't need that here,
+because while that promise like object behaves exactly the way we want.
+
+You do have a real promise with the `bcyrpt` library, though when has our
+password,
+
+```javascript
+const signup = async (reques, response, next) => {
+
+    //....
+    //....
+
+    try {
+
+        const hashedPasswrod =  await bcyrpt.hash(password, 12);
+
+        const user = new User ({
+            email: email,
+            name: name,
+            password: hashedPasswrod
+
+        // ...
+        // ...
+        })
+    }
+
+    // ...
+    // ...
+
+}
+```
+
+We get a real promise; And as you can see, well you'll see nothing, you see no
+difference in the way we use `await`, and you also have no difference with you
+previously used `then-catch` block, that's what I mean. You don't need to care
+too much about that, I still did want to mention it.
+
+More importantly, I want you to take away, that a async-await is nice
+alternative to using `then-catch` block, it's not better, its not faster. Behind
+the scenes it's basically the same code. It can more readable to you, but you
+must never forget, that _with using async-await is still are asynchronous
+steps_.  The JavaScript code execution behavior doesn't change because of that.
+
+It does not block execution. It simply wraps all the code after in `await`
+statement in the `then(){}` block, you would have write otherwise. So the `new
+User` is runs inside of the implicit `then()` block `hashedPasswrod` creates.
+This is how you have to think about that.
+
+So, never forget, above asynchronous operations, because that is really
+important to understand; And you can absolutely go with the `then-catch` block
+we used before; So with the old promise style if you prefer it. I like it for
+teaching, because it's clearer that we have _some operation to wait_, and that
+the line after that would execute first. With use async-await does a less clear.
+If you are aware of how async code works, using async-await keyword can simply
+be a nicer syntax to look at and it's up to you which syntax you'll use.
+
+For the rest of course, I'll write new promise or I'll stick to that async-await
+syntax for my NodeJS application, for the ReactJS application, I'll leave the
+code as it is, with `then-catch` block syntax. You could use async-await there
+too, but again this is not ReactJS course. So I will leave it here as it is, for
+NodeJS we'll go with async-await.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
