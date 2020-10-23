@@ -4,6 +4,7 @@
 
 1. [Module Introduction](#module-introduction)
 2. [What is Async Await All About](#what-is-async-await-all-about)
+3. [Transforming Then-Catch Block to Async-Await](#transforming-then-catch-block-to-async-await)
 
 <br/>
 
@@ -149,6 +150,162 @@ readable.
 
 Still it can get more readable with async-await; And that's what I want to show
 you in the next lecture.
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Transforming Then-Catch Block to Async-Await
+
+We have brief look at how asynchronous code can be identified, and what is
+important about asynchronous code, and that you can see callbacks and promises
+to handle asynchronous code;
+
+Now we learn all that, let me introduce you to async-await. To use that you
+first of all have to _prepend `async` keyword_ in front of a function,
+
+```javascript
+const getPosts = async (request, response, next) => {
+
+}
+```
+Where you plain to use the `wait` keyword; So where you want to use these two
+keyword? They always are used together, **_`async` in front of the function_**,
+then you can tweak `getPost()` function syntax. You can write the `post.find()`
+almost as if it would run synchronously.
+
+You can get your `count` a new `const` or variable you create by a awaiting
+`[1] Post.find().countDocuments()`.
+
+```javascript
+const getPost = async (request, response, next) => {
+
+    const currentPage = request.query.page || 1;
+    const perPage = 2;
+    let totalItems;
+
+    totalItems = await Post.find().countDocuments();            [1]
+}
+```
+Then you get rid of `then()` block. You continue to next line, `[2]
+Post.find().skip().limit()`. This gives you back a list of `posts`, you
+currently have in the second `then()` block.
+
+```javascript
+const getPost = async (request, response, next) => {
+
+    const currentPage = request.query.page || 1;
+    const perPage = 2;
+    let totalItems;
+
+    const totalItems = await Post.find().countDocuments();              [1]
+    const post = await Post.find()                                      [2]
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage)
+    ...
+    ...
+}
+```
+
+You again write with create `post` as `const` variable, and assign `await`
+keyword into `[2] Post.find().skip().limit()`, and then the whole statement in
+the `then()` block would be followed; let's _comment out the `catch` block_,
+because that's something we'll care about in a second.
+
+```javascript
+const getPost = async (request, response, next) => {
+
+    const currentPage = request.query.page || 1;
+    const perPage = 2;
+    let totalItems;
+
+    const totalItems = await Post.find().countDocuments();              [1]
+    const post = await Post.find()                                      [2]
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+
+    response
+        .status(200)
+        .json({
+            message: "Successfully fetched the all Posts",
+            posts: posts,
+            totalItems: totalItems
+        })
+
+    //.catch(err => {
+
+    //    if (!err.statusCode) {
+    //        console.log("===> post.find().countDocuments() getPosts error", err);
+    //        err.statusCode = 500;
+    //    };
+    //        next(err);
+    //});
+}
+```
+
+Now, the code has using async-await. It does looks like the normal JavaScript
+code right? But behind the scenes async-await takes your code and transforms it
+into the old `then()` structure we used. So, it uses `then` keyword behind the
+scenes, we just can't see it; We have more convenient way of writing our
+asynchronous code.
+
+I haven't used this in the course, because I think that if you're relatively new
+to JavaScript or NodeJS, this can quickly lead you to think, that async-await in
+the `const totalItems = await Post.find().countDocuments();` works just like the
+other line; And indeed it doesn't.
+
+Always keep in mind, `await` just does some behind the scenes transformation of
+your code. It takes your codes, and adds `then()` block after it (behind the
+scenes), get the result of that operation, and then stores it in `totalItems`,
+and then moves onto the next line.  Execute that inside of the `then(){}` block
+it creates here `[2] const totalItems = await Post.find().countDocuments();`
+implicitly.
+
+So, basically the exact same code we had before, this is done by async-await
+behind the scenes. But, if you know, if you understand this, then this can be
+a syntax you might prefer, you don't have too. You can absolutely use the other
+one with _then-catch_, but you prefer _async-await_.
+
+Back to catching, how do we handle errors now? Well since this now runs almost
+like asynchronous code we use _try-catch_ block.
+
+```javascript
+const getPost = async (request, response, next) => {
+
+    const currentPage = request.query.page || 1;
+    const perPage = 2;
+    let totalItems;
+
+    try {
+        const totalItems = await Post.find().countDocuments();              [1]
+        const post = await Post.find()                                      [2]
+            .skip((currentPage - 1) * perPage)
+            .limit(perPage);
+
+        response
+            .status(200)
+            .json({
+                message: "Successfully fetched the all Posts",
+                posts: posts,
+                totalItems: totalItems
+            });
+    }
+    .catch (err) {
+
+        if (!err.statusCode) {
+            console.log("===> post.find().countDocuments() getPosts error", err);
+            err.statusCode = 500;
+        };
+            next(err);
+    }
+};
+```
+
+So we keep the `cath` block with same logic, and we try assign `next(err)`,
+because keep in mind behind the scenes, `next(err)` get converted to `then-catch`
+block we used before; But now with that we have transformed this first snippet
+where we used promises to async-await.
+
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
