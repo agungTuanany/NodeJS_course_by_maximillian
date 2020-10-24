@@ -105,7 +105,7 @@ from the browser to the server. So there is a request response scenario makes
 perfect sense. But if you have some active notification, you want to get tour
 users, then you all want to integrate WebSockets.
 
-Now, let me showyou how to add WebSockets to your project in the next lecture.
+Now, let me show you how to add WebSockets to your project in the next lecture.
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
