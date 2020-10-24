@@ -1,7 +1,7 @@
 {
-  "name": "project-19-working-with-rest-api",
+  "name": "project-21-understanding-webocket-socket-io",
   "version": "1.0.0",
-  "description": "",
+  "description": "how to use WebSocket and implement real-time Web Service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,7 +17,8 @@
     "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.9",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.5"

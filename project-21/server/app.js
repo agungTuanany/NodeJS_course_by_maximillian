@@ -90,6 +90,12 @@ mongoose.connect(MONGODB_URI,
     .then(result => {
 
         console.log("Succeeds connect with MongoDB database with mongoose")
-        app.listen(port, () => console.log(`You run "project-19" in server running by "Express" in port: "${port}".`));
+        const server = app.listen(port, () => console.log(`You run "project-21" in server running by "Express" in port: "${port}".`));
+        const io = require("socket.io")(server);
+
+        io.on("connection", socket => {
+
+            console.log("Client connecte");
+        });
     })
     .catch(err => console.log(err));
