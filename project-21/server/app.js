@@ -91,7 +91,7 @@ mongoose.connect(MONGODB_URI,
 
         console.log("Succeeds connect with MongoDB database with mongoose")
         const server = app.listen(port, () => console.log(`You run "project-21" in server running by "Express" in port: "${port}".`));
-        const io = require("socket.io")(server);
+        const io = require("./socket.js").init(server);
 
         io.on("connection", socket => {
 
