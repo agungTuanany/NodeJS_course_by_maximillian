@@ -10,6 +10,7 @@ const { validationResult } = require("express-validator");
 // Internal Dependencies
 const Post = require("./../models/post.js");
 const User = require("./../models/user.js");
+const io = require("./../socket.js");
 
 const getPosts = (request, response, next) => {
 
@@ -46,7 +47,7 @@ const getPosts = (request, response, next) => {
         });
 };
 
-const createPost = (request, response, next) => {
+const createPost = async (request, response, next) => {
 
     const errors = validationResult(request);
 
@@ -78,41 +79,36 @@ const createPost = (request, response, next) => {
     })
 
     // Save new post into MongoDB
-    post.save()
-        .then(result => {
-
-            return User.findById(request.userId)
+    try {
+        post.save();
+        const user = await User.findById(request.userId);
+        user.posts.push(post);
+        await user.save();
+        io.getIO().emit("post", {
+            action: "create",
+            post: post
         })
-        .then(user => {
+        response
+            .status(201) // @NOTE:201 = resource created successfully
+            .json({
+                message: "Post created successfully",
+                post: post,
+                creator: {
+                    _id: creator._id,
+                    name: creator.name
+                }
+            });
 
-            creator = user;
-            user.posts.push(post);
-
-            return user.save();
-
-        })
-        .then(result => {
-
-            response
-                .status(201) // @NOTE:201 = resource created successfully
-                .json({
-                    message: "Post created successfully",
-                    post: post,
-                    creator: {
-                        _id: creator._id,
-                        name: creator.name
-                    }
-                });
-        })
-        .catch(err => {
-
-            if (!err.statusCode) {
+    }
+    catch (err) {
+        if (!err.statusCode) {
             console.log("===> createPost post.save() error:", err);
-                err.statusCode = 500;
-            };
+            err.statusCode = 500;
+        };
 
-            next(err);
-        });
+        next(err);
+
+    };
 };
 
 // Fetching single post
