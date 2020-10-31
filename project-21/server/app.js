@@ -95,7 +95,7 @@ mongoose.connect(MONGODB_URI,
 
         io.on("connection", socket => {
 
-            console.log("Client connecte");
+            console.log("socket.io ====> Client connected");
         });
     })
     .catch(err => console.log(err));

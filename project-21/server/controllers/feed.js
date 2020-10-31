@@ -24,6 +24,7 @@ const getPosts = (request, response, next) => {
 
             totalItems = count;
             return Post.find()
+                .populate("creator")
                 .skip((currentPage - 1) * perPage)
                 .limit(perPage)
         })
@@ -82,20 +83,30 @@ const createPost = async (request, response, next) => {
     try {
         post.save();
         const user = await User.findById(request.userId);
+
         user.posts.push(post);
+
         await user.save();
-        io.getIO().emit("post", {
+
+        io.getIO().emit("posts", {
             action: "create",
-            post: post
-        })
+            post: {
+                ...post._doc,
+                creator: {
+                    _id: request.userId,
+                    name: user.name
+                }
+            }
+        });
+
         response
             .status(201) // @NOTE:201 = resource created successfully
             .json({
                 message: "Post created successfully",
                 post: post,
                 creator: {
-                    _id: creator._id,
-                    name: creator.name
+                    _id: user._id,
+                    name: user.name
                 }
             });
 
