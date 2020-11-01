@@ -44,7 +44,7 @@ const getPosts = (request, response, next) => {
                 console.log("===> post.find().countDocuments() getPosts error", err);
                 err.statusCode = 500;
             };
-                next(err);
+            next(err);
         });
 };
 
@@ -118,7 +118,6 @@ const createPost = async (request, response, next) => {
         };
 
         next(err);
-
     };
 };
 
@@ -150,11 +149,11 @@ const getPost = (request, response, next) => {
                 console.log("===> post.findById() getPost error", err);
                 err.statusCode = 500;
             };
-                next(err);
+            next(err);
         });
 };
 
-const updatePost = (request, response, next) => {
+const updatePost = async (request, response, next) => {
 
     const postId = request.params.postId;
     const errors = validationResult(request);
@@ -185,53 +184,52 @@ const updatePost = (request, response, next) => {
         throw error;
     };
 
-    // Update the database
-    Post.findById(postId)
-        .then(post => {
+    try {
+        const post = await Post.findById(postId).populate("creator");
 
-            if (!post) {
-                const error = new Error("Could not find the post");
-                error.status = 404;
+        if (!post) {
+            const error = new Error("Could not find the post");
+            error.status = 404;
 
-                throw error;
-            };
+            throw error;
+        };
 
-            if (post.creator.toString() !== request.userId) {
-                const error = new Error("Not autorizhed to update the post!");
-                error.statusCode = 403;
+        if (post.creator._id.toString() !== request.userId) {
+            const error = new Error("Not autorizhed to update the post!");
+            error.statusCode = 403;
 
-                throw error;
-            };
+            throw error;
+        };
 
-            if (imageUrl !== post.imageUrl) {
-                clearImage(post.imageUrl)
-            };
+        if (imageUrl !== post.imageUrl) {
+            clearImage(post.imageUrl)
+        };
 
-            post.title = title;
-            post.imageUrl = imageUrl;
-            post.content = content;
+        post.title = title;
+        post.imageUrl = imageUrl;
+        post.content = content;
 
-            return post.save();
+        const result = await post.save();
 
-        })
-        .then(result => {
-
-            return response
-                .status(200)
-                .json({
-                    message: "Successfully Updated the Post",
-                    post: result
-                });
-        })
-        .catch(err => {
-
-            if (!err.statusCode) {
-                console.log("===> post.save() error:", err);
-                err.statusCode = 500;
-            };
-
-            next(err);
+        io.getIO().emit("posts", {
+            action: "update",
+            post: result
         });
+        response
+            .status(200)
+            .json({
+                message: "Successfully Updated the Post",
+                post: result
+            });
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            console.log("===> post.save() error:", err);
+            err.statusCode = 500;
+        };
+
+        next(err);
+    };
 };
 
 const deletePost = (request, response, next) => {
