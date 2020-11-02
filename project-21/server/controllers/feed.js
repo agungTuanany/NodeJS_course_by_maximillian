@@ -270,6 +270,10 @@ const deletePost = (request, response, next) => {
         })
         .then(result => {
 
+            io.getIO().emit("posts", {
+                action: "delete",
+                post: postId
+            })
             console.log("===> deletePost findByIdAndRemove - result:", result);
             response
                 .status(200)
