@@ -4,14 +4,16 @@
 const path = require("path");
 
 // 3rd party Dependencies
-const express    = require("express");
-const bodyParser = require("body-parser");
-const mongoose   = require("mongoose");
-const multer     = require("multer");
+const express     = require("express");
+const bodyParser  = require("body-parser");
+const mongoose    = require("mongoose");
+const multer      = require("multer");
+const { graphqlHTTP } = require("express-graphql");
 
 // Internal Dependencies
-const feedRoutes = require("./router/feed.js");
-const authRoutes = require("./router/auth.js");
+const graphqlSchema   = require("./graphql/schema.js");
+const graphqlResolver = require("./graphql/resolvers.js");
+
 
 // Global variables
 const app  = express()
@@ -61,9 +63,6 @@ app.use((request, response, next) => {
     next();
 });
 
-app.use("/feed", feedRoutes);
-app.use("/auth", authRoutes);
-
 // General error handling
 app.use((error, request, response, next) => {
 
@@ -80,6 +79,13 @@ app.use((error, request, response, next) => {
         });
 });
 
+app.use("/graphql",
+    graphqlHTTP({
+        schema: graphqlSchema,
+        rootValue: graphqlResolver,
+        graphiql: true,
+    })
+);
 
 // Mongoose
 mongoose.connect(MONGODB_URI,
@@ -90,12 +96,6 @@ mongoose.connect(MONGODB_URI,
     .then(result => {
 
         console.log("Succeeds connect with MongoDB database with mongoose")
-        const server = app.listen(port, () => console.log(`You run "project-21" in server running by "Express" in port: "${port}".`));
-        const io = require("./socket.js").init(server);
-
-        io.on("connection", socket => {
-
-            console.log("socket.io ====> Client connected");
-        });
+        app.listen(port, () => console.log(`You run "project-22" in server running by "Express" in port: "${port}".`));
     })
     .catch(err => console.log(err));
