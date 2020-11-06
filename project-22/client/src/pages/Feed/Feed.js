@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import openSocket from "socket.io-client";
+// import openSocket from "socket.io-client";
 
 import Post from '../../components/Feed/Post/Post';
 import Button from '../../components/Button/Button';
@@ -43,58 +43,58 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
-    const socket = openSocket("http://localhost:8081");;
+    // const socket = openSocket("http://localhost:8081");;
 
-    socket.on("posts", data => {
+    // socket.on("posts", data => {
 
-      if (data.action === "create") {
-        this.addPost(data.post);
-      }
-      else if (data.action === "update") {
-        this.updatePost(data.post);
-      }
-      else if (data.action === "delete") {
-        this.loadPosts();
-      }
+    //   if (data.action === "create") {
+    //     this.addPost(data.post);
+    //   }
+    //   else if (data.action === "update") {
+    //     this.updatePost(data.post);
+    //   }
+    //   else if (data.action === "delete") {
+    //     this.loadPosts();
+    //   }
 
-    });
+    // });
   };
 
-  addPost = post => {
+  // addPost = post => {
 
-    this.setState(prevState => {
+  //   this.setState(prevState => {
 
-      const updatedPosts = [...prevState.posts];
+  //     const updatedPosts = [...prevState.posts];
 
-      if (prevState.postPage === 1) {
-        updatedPosts.pop();
-        updatedPosts.unshift(post);
-      };
+  //     if (prevState.postPage === 1) {
+  //       updatedPosts.pop();
+  //       updatedPosts.unshift(post);
+  //     };
 
-      return {
-        posts: updatedPosts,
-        totalPosts: prevState.totalPosts + 1
-      };
-    });
-  };
+  //     return {
+  //       posts: updatedPosts,
+  //       totalPosts: prevState.totalPosts + 1
+  //     };
+  //   });
+  // };
 
-  updatePost = post => {
+  // updatePost = post => {
 
-    this.setState(prevState => {
+  //   this.setState(prevState => {
 
-      const updatedPosts = [...prevState.posts];
-      const updatedPostIndex = updatedPosts.findIndex(p => p._id === post._id);
+  //     const updatedPosts = [...prevState.posts];
+  //     const updatedPostIndex = updatedPosts.findIndex(p => p._id === post._id);
 
-      if (updatedPostIndex > -1) {
-        updatedPosts[updatedPostIndex] = post;
-      };
+  //     if (updatedPostIndex > -1) {
+  //       updatedPosts[updatedPostIndex] = post;
+  //     };
 
-      return {
-        posts: updatedPosts
-      };
+  //     return {
+  //       posts: updatedPosts
+  //     };
 
-    });
-  };
+  //   });
+  // };
 
   loadPosts = direction => {
 
