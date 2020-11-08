@@ -2,13 +2,36 @@
  * Define GraphQL logic to executed for incoming queries
  *
  */
-const bcrypt = require("bcryptjs");
 
+// 3rd party Dependencies
+const bcrypt = require("bcryptjs");
+const validator = require("validator");
+
+// Internal Dependencies
 const User = require("./../models/user.js");
 
 module.exports = {
     createUser: async function({ userInput }, request) {
         // const email = args.userInput.email;
+
+        const errors = [];
+
+        if (!validator.isEmail(userInput.email)) {
+            errors.push({ message: "Email is invalid" })
+        }
+
+        if (
+            validator.isEmpty(userInput.password) ||
+            validator.isLength(userInput.password, { min: 5  })
+        ) {
+            errors.push({ message: "Password too short!" });
+        }
+
+        if (errors.length > 0) {
+            const error = new Error("Invalid input");
+            throw error;
+        }
+
         const exisistingUser = await User.findOne({ email: userInput.email });
 
         if (exisistingUser) {
