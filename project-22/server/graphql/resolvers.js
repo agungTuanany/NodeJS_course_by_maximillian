@@ -6,6 +6,7 @@
 // 3rd party Dependencies
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
 
 // Internal Dependencies
 const User = require("./../models/user.js");
@@ -54,5 +55,39 @@ module.exports = {
             ...createdUser._doc,
             _id: createdUser._id.toString()
         }
+    },
+
+    login: async function({ email, password }) {
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            const error = new Error(`user witha email: ${email} not found `);
+            error.code = 401;        // 401 =  Not authenticated
+
+            throw error;
+        };
+
+        const passwordIsEqual = await bcrypt.compare(password, user.password);
+
+        if (!passwordIsEqual) {
+            const error = new Error("Password is incorrect");
+            error.code = 401;
+
+            throw error;
+        };
+
+        const token = jwt.sign(
+        {
+            userId: user._id.toString(),
+            email: user.email
+        },
+            "somesupersecretsecret",
+            { expiresIn: "1h" }
+        );
+
+        return {
+            token: token,
+            userId: user._id.toString()
+        };
     }
 };
