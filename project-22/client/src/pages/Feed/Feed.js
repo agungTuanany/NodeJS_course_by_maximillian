@@ -201,31 +201,58 @@ class Feed extends Component {
     formData.append("content", postData.content);
     formData.append("image", postData.image);
 
-    let url = "http://localhost:8081/feed/post";
-    let method = "POST";
+    // let url = "http://localhost:8081/feed/post";
+    // let method = "POST";
 
-    if (this.state.editPost) {
-      url = "http://localhost:8081/feed/post/" + this.state.editPost._id;
-      method = "PUT";
-    };
+    // if (this.state.editPost) {
+    //   url = "http://localhost:8081/feed/post/" + this.state.editPost._id;
+    //   method = "PUT";
+    // };
 
-    fetch(url, {
-      method: method,
-      body: formData,
+    let graphqlQuery = {
+      query: `
+        mutation {
+          createPost(postInput: {title: "${postData.title}", conent: "${postData.content}", imageUrl: "someImage"}) {
+            _id
+            title
+            content
+            imageUrl
+            creator {
+              name
+            }
+            createdAt
+          }
+        }
+      `
+    }
+
+    fetch("http://localhost:8081/graphql", {
+      method: "POST",
+      body: JSON.stringify(graphqlQuery),
       headers: {
-        Authorization: "Bearer " + this.props.token
+        Authorization: "Bearer " + this.props.token,
+        "Content-Type": "application/json"
       }
     })
       .then(res => {
 
-        if (res.status !== 200 && res.status !== 201) {
+        // if (res.status !== 200 && res.status !== 201) {
 
-          console.log("===> response.status", res.status)
-          throw new Error('Creating or editing a post failed!');
-        }
+        //   console.log("===> response.status", res.status)
+        //   throw new Error('Creating or editing a post failed!');
+        // }
+
         return res.json();
       })
       .then(resData => {
+
+        if (resData.errors && resData.errors[0].status === 422) {
+          throw new Error("Validation failed. Make sure the email address isn't used yet!");
+        }
+
+        if (resData.errors) {
+          throw new Error("User login failed");
+        }
 
         console.log("===> finishEditHandler resData:", resData);
 
