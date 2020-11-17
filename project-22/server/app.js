@@ -13,7 +13,7 @@ const { graphqlHTTP } = require("express-graphql");
 // Internal Dependencies
 const graphqlSchema   = require("./graphql/schema.js");
 const graphqlResolver = require("./graphql/resolvers.js");
-const auth = require("./middleware/auth.js");
+const { jwtAuth } = require('./middleware/auth.js');
 
 
 // Global variables
@@ -84,7 +84,7 @@ app.use((error, request, response, next) => {
         });
 });
 
-app.use(auth);
+app.use(jwtAuth);
 
 app.use("/graphql",
     graphqlHTTP({
