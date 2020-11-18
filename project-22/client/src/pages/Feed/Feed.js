@@ -114,31 +114,57 @@ class Feed extends Component {
       this.setState({ postPage: page });
     };
 
-    fetch("http://localhost:8081/feed/posts?page=" + page, {
+    const graphqlQuery = {
+      query: `
+        {
+          posts {
+            posts {
+              _id
+              title
+              content
+              creator {
+                post
+              }
+              createdAt
+            }
+          totalPost
+          }
+        }
+      `
+    }
+
+    fetch("localhost://8081/graphql", {
+      method: "POST",
       headers: {
         // @NOTE: "Bearer " Is a convention to kind of identify the type of token for JWT
-        Authorization: "Bearer " + this.props.token
-      }
+        Authorization: "Bearer " + this.props.token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(graphqlQuery)
     })
       .then(res => {
 
-        if (res.status !== 200) {
-          throw new Error('Failed to fetch posts.');
-        };
+        // if (res.status !== 200) {
+        //   throw new Error('Failed to fetch posts.');
+        // };
 
         return res.json();
       })
       .then(resData => {
 
+        if (resData.errors) {
+          throw new Error("Fetching Post failed!");
+        }
+
         this.setState({
-          posts: resData.posts.map(post => {
+          posts: resData.data.posts.posts.map(post => {
 
             return {
               ...post,
               imagePath: post.imageUrl
             }
           }),
-          totalPosts: resData.totalItems,
+          totalPosts: resData.data.posts.totalPosts,
           postsLoading: false
         });
       })
@@ -266,20 +292,20 @@ class Feed extends Component {
 
         this.setState(prevState => {
 
-          // let updatedPosts = [...prevState.posts];
-          // if (prevState.editPost) {
-          //   const postIndex = prevState.posts.findIndex(
-          //     p => p._id === prevState.editPost._id
-          //   );
-          //   updatedPosts[postIndex] = post;
-          // }
+          let updatedPosts = [...prevState.posts];
+          if (prevState.editPost) {
+            const postIndex = prevState.posts.findIndex(
+              p => p._id === prevState.editPost._id
+            );
 
-          // else if (prevState.posts.length < 2) {
-          //   updatedPosts = prevState.posts.concat(post);
-          // }
+            updatedPosts[postIndex] = post;
+          }
+          else {
+            updatedPosts.unshift(post);
+          };
 
           return {
-            // posts: updatedPosts,
+            posts: updatedPosts,
             isEditing: false,
             editPost: null,
             editLoading: false
