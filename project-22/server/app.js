@@ -2,6 +2,7 @@
 
 // Core Dependencies
 const path = require("path");
+const fs = require("fs");
 
 // 3rd party Dependencies
 const express     = require("express");
@@ -86,6 +87,26 @@ app.use((error, request, response, next) => {
 
 app.use(jwtAuth);
 
+app.put("/post-image", (request, response, next) => {
+
+    if (!.request.isAuth) {
+        throw new Error("User requesting into post-image is not authenticated");
+    };
+
+    if (!request.file) {
+        return response.status(200)
+            .json({ message: "Error No file provided!" });
+    };
+
+    if (request.body.oldPath) {
+        clearImage(request.body.oldPath);
+    };
+
+    return response.status(2001)
+        .json({ message: "Success Stored image file", filePath: request.file.path })
+});
+
+
 app.use("/graphql",
     graphqlHTTP({
         schema: graphqlSchema,
@@ -121,3 +142,15 @@ mongoose.connect(MONGODB_URI,
         app.listen(port, () => console.log(`You run "project-22" in server running by "Express" in port: "${port}".`));
     })
     .catch(err => console.log(err));
+
+// Helper function
+const clearImage = filePath => {
+
+    filePath = path.join(__dirname, "..", filePath);
+
+    fs.unlink(filePath, error => {
+
+        // @TODO: Handle the error correctly
+        console.log("clearImage error:", error);
+    });
+};
