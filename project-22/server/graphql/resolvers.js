@@ -182,5 +182,33 @@ module.exports = {
             }),
             totalPosts: totalPosts
         };
+    },
+
+    post: async function({id}, request) {
+
+        if (!request.isAuth) {
+            const error = new Error("User Not authenticated for creating a post");
+            error.code = 401;
+
+            throw error;
+        };
+
+        const post = await Post.findById(id).populate("creator");
+
+        if (!post) {
+            const error = new Error("No single post found!");
+            error.code = 404;
+
+            throw error;
+        };
+
+        return {
+            ...post._doc,
+            _id: post._id.toString(),
+            createdAt: post.createdAt.toISOString(),
+            updatedAt: post.updatedAt.toISOString()
+        }
     }
+
+
 };
