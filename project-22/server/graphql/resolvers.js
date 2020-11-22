@@ -208,6 +208,67 @@ module.exports = {
             createdAt: post.createdAt.toISOString(),
             updatedAt: post.updatedAt.toISOString()
         }
+    },
+
+    updatePost: async function({id, postInput}, request) {
+
+        if (!request.isAuth) {
+            const error = new Error("User Not authenticated for creating a post");
+            error.code = 401;
+
+            throw error;
+        };
+
+        const post = await Post.findById(id).populate("creator");
+
+        if (!post) {
+            const error = new Error("No single post found!");
+            error.code = 404;
+
+            throw error;
+        };
+
+        if (!post.creator._id.toString() === request.userId.toString()) {
+            const error = new Error("Not authorized to edit the post!");
+            error.code = 403;
+
+            throw error;
+        };
+
+        const errors = [];
+
+        if (!validator.isEmail(userInput.email)) {
+            errors.push({ message: "Email is invalid" })
+        };
+
+        if (
+            validator.isEmpty(userInput.password) ||
+            validator.isLength(userInput.password, { min: 5  })
+        ) {
+            errors.push({ message: "Password too short!" });
+        };
+
+        if (errors.length > 0) {
+            const error = new Error("Invalid input");
+            error.data = errors;
+            error.code = 422;
+            throw error;
+        };
+        post.title = postInput.title;
+        post.content = postInput.content;
+
+        if (postInput.imageUrl !== "undefined") {
+            post.imageUrl = postInput.imageUrl;
+        };
+
+        const updatedPost = await post.save();
+
+        return {
+            ...updatedPost._doc,
+            _id: updatePost.id.toString(),
+            createdAt: updatedPost.createdAt.toISOString(),
+            updatedAt: updatedPost.updatedAt.toISOString()
+        };
     }
 
 
