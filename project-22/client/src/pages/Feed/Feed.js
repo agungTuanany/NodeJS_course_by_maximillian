@@ -241,6 +241,7 @@ class Feed extends Component {
     })
       .then(response => response.json())
       .then(fileResponseData => {
+
         const imageUrl = fileResponseData.filePath;
         let graphqlQuery = {
           query: `
@@ -262,7 +263,7 @@ class Feed extends Component {
         };
 
         if (this.state.editPost) {
-          graphqlQuery= {
+          graphqlQuery = {
             query: `
             mutation {
                 updatePost(id:"${this.state.editPost._id}",
@@ -374,21 +375,33 @@ class Feed extends Component {
   deletePostHandler = postId => {
 
     this.setState({ postsLoading: true });
-    fetch("http://localhost:8081/feed/post/" + postId, {
-      method: "DELETE",
+    const graphqlQuery = {
+      query: `
+        {
+          mutation {
+            deletePost(id: "${postId}")
+          }
+        }
+      `
+    };
+
+    fetch("http://localhost:8081/graphql", {
+      method: "POST",
       headers: {
-        Authorization: "Bearer " + this.props.token
-      }
+        Authorization: "Bearer " + this.props.token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(graphqlQuery)
     })
       .then(res => {
-
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Deleting a post failed!');
-        };
 
         return res.json();
       })
       .then(resData => {
+
+        if (resData.errors) {
+          throw new Error("User failed to delete a post!");
+        }
 
         console.log(resData);
 

@@ -2,7 +2,6 @@
 
 // Core Dependencies
 const path = require("path");
-const fs = require("fs");
 
 // 3rd party Dependencies
 const express     = require("express");
@@ -15,6 +14,7 @@ const { graphqlHTTP } = require("express-graphql");
 const graphqlSchema   = require("./graphql/schema.js");
 const graphqlResolver = require("./graphql/resolvers.js");
 const { jwtAuth } = require('./middleware/auth.js');
+const { clearImage } = require("./util/file.js");
 
 
 // Global variables
@@ -89,7 +89,7 @@ app.use(jwtAuth);
 
 app.put("/post-image", (request, response, next) => {
 
-    if (!.request.isAuth) {
+    if (!request.isAuth) {
         throw new Error("User requesting into post-image is not authenticated");
     };
 
@@ -143,14 +143,3 @@ mongoose.connect(MONGODB_URI,
     })
     .catch(err => console.log(err));
 
-// Helper function
-const clearImage = filePath => {
-
-    filePath = path.join(__dirname, "..", filePath);
-
-    fs.unlink(filePath, error => {
-
-        // @TODO: Handle the error correctly
-        console.log("clearImage error:", error);
-    });
-};

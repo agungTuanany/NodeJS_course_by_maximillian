@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 // Internal Dependencies
 const User = require("./../models/user.js");
 const Post = require("./../models/post.js");
+const { clearImage } = require("./../util/file.js");
 
 module.exports = {
     createUser: async function({ userInput }, request) {
@@ -228,7 +229,7 @@ module.exports = {
             throw error;
         };
 
-        if (!post.creator._id.toString() === request.userId.toString()) {
+        if (post.creator._id.toString() !== request.userId.toString()) {
             const error = new Error("Not authorized to edit the post!");
             error.code = 403;
 
@@ -269,7 +270,42 @@ module.exports = {
             createdAt: updatedPost.createdAt.toISOString(),
             updatedAt: updatedPost.updatedAt.toISOString()
         };
-    }
+    },
 
+    deletePost: async function({id}, request) {
+
+        if (!request.isAuth) {
+            const error = new Error("User Not authenticated for creating a post");
+            error.code = 401;
+
+            throw error;
+        };
+
+        const post = await Post.findById(id);
+
+        if (!post) {
+            const error = new Error("No single post found!");
+            error.code = 404;
+
+            throw error;
+        };
+
+        if (post.creator.toString() !== request.userId.toString()) {
+            const error = new Error("Not authorized to delete the post!");
+            error.code = 403;
+
+            throw error;
+        };
+
+        clearImage(post.ImageUrl);
+        await Post.findByIdAndRemove(id);
+
+        const user = await User.findById(request.userId);
+
+        user.post.pull(id);
+        await user.save();
+
+        return true;
+    }
 
 };
