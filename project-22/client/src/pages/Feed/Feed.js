@@ -381,6 +381,7 @@ class Feed extends Component {
         this.setState(prevState => {
 
           let updatedPosts = [...prevState.posts];
+          let updatedTotalPosts = prevState.totalPosts;
 
           if (prevState.editPost) {
             const postIndex = prevState.posts.findIndex(
@@ -390,7 +391,12 @@ class Feed extends Component {
             updatedPosts[postIndex] = post;
           }
           else {
-            updatedPosts.pop();
+            updatedTotalPosts++;
+
+            if (prevState.post.length >= 2) {
+              updatedPosts.pop();
+            };
+
             updatedPosts.unshift(post);
           };
 
@@ -398,7 +404,8 @@ class Feed extends Component {
             posts: updatedPosts,
             isEditing: false,
             editPost: null,
-            editLoading: false
+            editLoading: false,
+            totalPosts: updatedTotalPosts
           };
         });
       })
