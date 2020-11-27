@@ -3,6 +3,7 @@
 ## Table of Contents
 1. [Module Introduction](#module-introduction)
 2. [What Is GraphQL](#what-is-graphql)
+3. [Module Summary](#module-summary)
 
 <br/>
 
@@ -225,6 +226,12 @@ NOTE:, POST for getting data, that is the most confusing thing you typically
 have when diving into GraphQL. Yes, this is what we do, this is what is OK here,
 because, we describe that data we want to get in the request body.
 
+
+**[⬆ back to top](#table-of-contents)**
+<br/>
+<br/>
+
+## Module Summary
 
 **[⬆ back to top](#table-of-contents)**
 <br/>
