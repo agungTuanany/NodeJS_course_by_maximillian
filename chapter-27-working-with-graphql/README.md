@@ -233,6 +233,8 @@ because, we describe that data we want to get in the request body.
 
 ## Module Summary
 
+![chapter-27-9.gif](./images/gif/chapter-27-9.gif "Module Summary")
+
 **[⬆ back to top](#table-of-contents)**
 <br/>
 <br/>
