@@ -15,7 +15,9 @@ const path = require("path");
 
 // 3rd party Dependencies
 const PDFDocument = require("pdfkit");
-const stripe = require('stripe')('sk_test_cVADl5LfP2UhZsHwYj2u6W6Q');
+
+// const stripe = require('stripe')('sk_test_cVADl5LfP2UhZsHwYj2u6W6Q');
+const stripe = require("stripe")(`${process.env.STRIPE_KEY}`);
 
 // Internal Dependencies
 const Product = require("./../models/product.js");

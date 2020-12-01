@@ -18,13 +18,15 @@ const rootDir          = require("./lib/path.js");
 const User             = require("./models/user.js");
 const errorController  = require("./controllers/error.js");
 
+
 // Global variables
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 // @TODO: move this credential into .env
 // MongoDB Session
-const MONGODB_URI = "mongodb+srv://daun:bMSKaebmN7o4Tmsk@udemy-nodejs-maximillia.tz0sa.mongodb.net/mongooseShop?retryWrites=true&w=majority"
+// const MONGODB_URI = "mongodb+srv://daun:bMSKaebmN7o4Tmsk@udemy-nodejs-maximillia.tz0sa.mongodb.net/mongooseShop?retryWrites=true&w=majority"
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@udemy-nodejs-maximillia.tz0sa.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
 const store = new MongoDBStore({
     uri: MONGODB_URI,
     collection: "sessions"
@@ -150,6 +152,7 @@ mongoose.connect(MONGODB_URI,
     })
     .then(result => {
 
+        console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
         console.log("Succeeds connect with MongoDB database with mongoose")
         app.listen(port, () => console.log(`You run "project-18" in server running by "Express" in port: "${port}".`));
     })

@@ -1,0 +1,9 @@
+{
+  "env": {
+    "MONGO_USER": "daun",
+    "MONGO_PASSWORD": "bMSKaebmN7o4Tmsk",
+    "MONGO_DEFAULT_DATABASE": "mongooseShop",
+    "STRIPE_KEY": "sk_test_cVADl5LfP2UhZsHwYj2u6W6Q",
+    "PORT": ""
+  }
+}
