@@ -12,6 +12,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf         = require("csurf");
 const flash        = require("connect-flash");
 const multer       = require("multer");
+const helmet       = require("helmet");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
@@ -64,6 +65,9 @@ app.set("views", "views"); // Config explicitly
 const adminRoutes = require("./routes/admin.js");
 const shopRoutes  = require("./routes/shop.js");
 const authRoutes  = require("./routes/auth.js");
+
+// Setup secure response headers after all the middleware
+app.use(helmet());
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
