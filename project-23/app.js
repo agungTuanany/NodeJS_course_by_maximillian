@@ -13,6 +13,7 @@ const csrf         = require("csurf");
 const flash        = require("connect-flash");
 const multer       = require("multer");
 const helmet       = require("helmet");
+const compression  = require("compression");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
@@ -68,6 +69,7 @@ const authRoutes  = require("./routes/auth.js");
 
 // Setup secure response headers after all the middleware
 app.use(helmet());
+app.use(compression());
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
