@@ -2,6 +2,7 @@
 
 // Core Dependencies
 const path = require("path");
+const fs   = require("fs")
 
 // 3rd party Dependencies
 const express      = require("express");
@@ -14,6 +15,7 @@ const flash        = require("connect-flash");
 const multer       = require("multer");
 const helmet       = require("helmet");
 const compression  = require("compression");
+const morgan       = require("morgan");
 
 // Internal Dependencies
 const rootDir          = require("./lib/path.js");
@@ -67,9 +69,12 @@ const adminRoutes = require("./routes/admin.js");
 const shopRoutes  = require("./routes/shop.js");
 const authRoutes  = require("./routes/auth.js");
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), { flags: "a" });
+
 // Setup secure response headers after all the middleware
 app.use(helmet());
 app.use(compression());
+app.use(morgan("combined", { stream: accessLogStream }))
 
 // Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
